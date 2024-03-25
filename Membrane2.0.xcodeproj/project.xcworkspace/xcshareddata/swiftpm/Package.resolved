@@ -1,0 +1,33 @@
+{
+  "originHash" : "c61ac0d86897b96b12e2d42f910b0ec9fcde422af2226ae99bf84c497eddc0e2",
+  "pins" : [
+    {
+      "identity" : "keychainaccess",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/kishikawakatsumi/KeychainAccess",
+      "state" : {
+        "branch" : "master",
+        "revision" : "e0c7eebc5a4465a3c4680764f26b7a61f567cdaf"
+      }
+    },
+    {
+      "identity" : "nvactivityindicatorview",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/ninjaprox/NVActivityIndicatorView",
+      "state" : {
+        "revision" : "bcb52371f2259254bac6690f92bb474a61768c47",
+        "version" : "5.1.1"
+      }
+    },
+    {
+      "identity" : "swiftygif",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/kirualex/SwiftyGif",
+      "state" : {
+        "revision" : "d6d26061d6553a493781ad3df4a8e275c43fc373",
+        "version" : "5.4.4"
+      }
+    }
+  ],
+  "version" : 3
+}

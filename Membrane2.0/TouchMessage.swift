@@ -6,6 +6,7 @@
 //
 
 import Foundation
+
 struct TouchMessage: Codable{
     var text: String
 }
