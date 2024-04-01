@@ -175,6 +175,12 @@ class EditUserInfoViewController: UIViewController{
 
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        nameTextField.becomeFirstResponder()
+        navigationController?.setNavigationBarHidden(false, animated: false)
+    }
+    
     private func animateImage() {
         UIView.animate(withDuration: 1, animations : {
             self.saveIndicatorImage.alpha = 1
@@ -198,7 +204,7 @@ class EditUserInfoViewController: UIViewController{
     }
         
     @objc
-    func nameEditButtonTapped() {
+    private func nameEditButtonTapped() {
         guard let newName = nameTextField.text, !newName.isEmpty else{
             errorAlert(tittle: "Ошибка", message: "Новый логин не может быть пустым")
             return
@@ -224,7 +230,7 @@ class EditUserInfoViewController: UIViewController{
     }
     
     @objc
-    func passwordButtonTapped() {
+    private func passwordButtonTapped() {
         isPasswordHidden.toggle()
         oldPasswordTextField.isSecureTextEntry.toggle()
         newPasswordTextField.isSecureTextEntry.toggle()
@@ -236,14 +242,14 @@ class EditUserInfoViewController: UIViewController{
     }
     
     @objc
-    func passwordEditButtonTapped() {
+    private func passwordEditButtonTapped() {
         guard let oldPassword = oldPasswordTextField.text, let newPassword = newPasswordTextField.text, !oldPassword.isEmpty, !newPassword.isEmpty else{
             errorAlert(tittle: "Ошибка", message: "Старый и новый пароли не должны быть пустыми")
             return
         }
         
         if !isPasswordStrongEnough(password: newPassword){
-            errorAlert(tittle: "Ошибка", message: "Новый пароль недостаточно сложный")
+            errorAlert(tittle: "Новый пароль недостаточно сложный", message: "Пароль должен содежать цифру, заглавную букву и содержать как мининмум 6 символов")
             return
         }
         
@@ -270,7 +276,7 @@ class EditUserInfoViewController: UIViewController{
     }
     
     @objc
-    func changeAvatarButtonTapped() {
+    private func changeAvatarButtonTapped() {
         let viewController = ChooseShapeViewController()
         viewController.selectShapeHandler = {shapeIndex, gradientIndex in
             self.navigationController?.popViewController(animated: true)

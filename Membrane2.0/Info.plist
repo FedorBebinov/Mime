@@ -13,15 +13,17 @@
 			</array>
 		</dict>
 	</array>
-	<key>UIAppFonts</key>
-	<array>
-		<string>MartianMono_Condensed-Regular.ttf</string>
-	</array>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
+	<key>UIAppFonts</key>
+	<array>
+		<string>MartianMono_Condensed-Regular.ttf</string>
+	</array>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

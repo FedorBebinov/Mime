@@ -1,7 +1,9 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13122.16" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
+    <device id="retina6_0" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13104.12"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22684"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -11,15 +13,150 @@
             <objects>
                 <viewController id="01J-lp-oVM" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" xcode11CocoaTouchSystemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zhx-uk-JN7">
+                                <rect key="frame" x="158" y="720.66666666666663" width="73" height="12"/>
+                                <attributedString key="attributedText">
+                                    <fragment content="Programmers">
+                                        <attributes>
+                                            <color key="NSColor" red="0.21176470588235294" green="0.21176470588235294" blue="0.21176470588235294" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                            <font key="NSFont" size="10" name="MartianMonoCondensed-Regular"/>
+                                            <font key="NSOriginalFont" size="12" name="MartianMonoCondensed-Regular"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
+                                        </attributes>
+                                    </fragment>
+                                </attributedString>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6Ot-7O-4fP">
+                                <rect key="frame" x="165" y="765" width="60" height="12"/>
+                                <attributedString key="attributedText">
+                                    <fragment content="Designers">
+                                        <attributes>
+                                            <color key="NSColor" red="0.21176470589999999" green="0.21176470589999999" blue="0.21176470589999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                            <font key="NSFont" size="10" name="MartianMonoCondensed-Regular"/>
+                                            <font key="NSOriginalFont" size="12" name="MartianMonoCondensed-Regular"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
+                                        </attributes>
+                                    </fragment>
+                                </attributedString>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9dh-YE-QxT">
+                                <rect key="frame" x="60" y="739" width="114" height="12"/>
+                                <attributedString key="attributedText">
+                                    <fragment content="Фёдор Бебинов (iOS)">
+                                        <attributes>
+                                            <color key="NSColor" red="0.55294117647058827" green="0.55294117647058827" blue="0.55294117647058827" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                            <font key="NSFont" size="10" name="MartianMonoCondensed-Regular"/>
+                                            <font key="NSOriginalFont" size="12" name="MartianMonoCondensed-Regular"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
+                                        </attributes>
+                                    </fragment>
+                                </attributedString>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bT2-Ay-bmr">
+                                <rect key="frame" x="198" y="739" width="132" height="12"/>
+                                <attributedString key="attributedText">
+                                    <fragment content="Павел Джалев (backend)">
+                                        <attributes>
+                                            <color key="NSColor" red="0.55294117647058827" green="0.55294117647058827" blue="0.55294117647058827" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                            <font key="NSFont" size="10" name="MartianMonoCondensed-Regular"/>
+                                            <font key="NSOriginalFont" size="12" name="MartianMonoCondensed-Regular"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
+                                        </attributes>
+                                    </fragment>
+                                </attributedString>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lLN-hz-Ypx">
+                                <rect key="frame" x="30" y="783" width="102" height="12"/>
+                                <attributedString key="attributedText">
+                                    <fragment content="Мила Галиаскарова">
+                                        <attributes>
+                                            <color key="NSColor" red="0.55294117647058827" green="0.55294117647058827" blue="0.55294117647058827" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                            <font key="NSFont" size="10" name="MartianMonoCondensed-Regular"/>
+                                            <font key="NSOriginalFont" size="12" name="MartianMonoCondensed-Regular"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
+                                        </attributes>
+                                    </fragment>
+                                </attributedString>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6fr-6a-SvL">
+                                <rect key="frame" x="152" y="783" width="90" height="12"/>
+                                <attributedString key="attributedText">
+                                    <fragment content="Семён Злотников">
+                                        <attributes>
+                                            <color key="NSColor" red="0.55294117647058827" green="0.55294117647058827" blue="0.55294117647058827" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                            <font key="NSFont" size="10" name="MartianMonoCondensed-Regular"/>
+                                            <font key="NSOriginalFont" size="10" name="MartianMonoCondensed-Regular"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
+                                        </attributes>
+                                    </fragment>
+                                </attributedString>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6TQ-t6-jqM">
+                                <rect key="frame" x="276" y="783" width="84" height="12"/>
+                                <attributedString key="attributedText">
+                                    <fragment content="Лиза Коркунова">
+                                        <attributes>
+                                            <color key="NSColor" red="0.55294117647058827" green="0.55294117647058827" blue="0.55294117647058827" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                            <font key="NSFont" size="10" name="MartianMonoCondensed-Regular"/>
+                                            <font key="NSOriginalFont" size="10" name="MartianMonoCondensed-Regular"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
+                                        </attributes>
+                                    </fragment>
+                                </attributedString>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="mimeLaunch" translatesAutoresizingMaskIntoConstraints="NO" id="NM5-kL-dVy">
+                                <rect key="frame" x="75" y="248.00000000000003" width="240" height="292.66666666666674"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="240" id="Mog-EI-cRE"/>
+                                    <constraint firstAttribute="height" constant="292.67000000000002" id="taR-UT-qKn"/>
+                                    <constraint firstAttribute="width" constant="240" id="wfT-k5-9IM"/>
+                                </constraints>
+                            </imageView>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                        <color key="backgroundColor" red="0.074509803921568626" green="0.074509803921568626" blue="0.074509803921568626" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                        <constraints>
+                            <constraint firstItem="6TQ-t6-jqM" firstAttribute="top" secondItem="bT2-Ay-bmr" secondAttribute="bottom" constant="32" id="0cZ-Yg-rH9"/>
+                            <constraint firstItem="bT2-Ay-bmr" firstAttribute="leading" secondItem="9dh-YE-QxT" secondAttribute="trailing" constant="8" id="1yV-Ue-4xe"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="6Ot-7O-4fP" secondAttribute="trailing" constant="165" id="3Yo-Sw-Tyv"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="zhx-uk-JN7" secondAttribute="trailing" constant="159" id="4s0-Hh-Hbd"/>
+                            <constraint firstItem="9dh-YE-QxT" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="60" id="AKf-EG-ZwD"/>
+                            <constraint firstItem="6Ot-7O-4fP" firstAttribute="top" secondItem="zhx-uk-JN7" secondAttribute="bottom" constant="32.329999999999998" id="BXu-Lc-EQ8"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="bT2-Ay-bmr" secondAttribute="trailing" constant="60" id="ESq-iQ-vdz"/>
+                            <constraint firstItem="lLN-hz-Ypx" firstAttribute="top" secondItem="9dh-YE-QxT" secondAttribute="bottom" constant="32" id="G70-zH-DUW"/>
+                            <constraint firstItem="6TQ-t6-jqM" firstAttribute="leading" secondItem="6fr-6a-SvL" secondAttribute="trailing" constant="12" id="JTr-DS-v6e"/>
+                            <constraint firstItem="zhx-uk-JN7" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="158" id="JWx-mE-91H"/>
+                            <constraint firstItem="6Ot-7O-4fP" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="165" id="KTW-gO-zTc"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="6TQ-t6-jqM" secondAttribute="trailing" constant="30" id="LZm-0f-UKV"/>
+                            <constraint firstItem="6fr-6a-SvL" firstAttribute="leading" secondItem="lLN-hz-Ypx" secondAttribute="trailing" constant="12" id="MCx-Qw-wzh"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="6TQ-t6-jqM" secondAttribute="bottom" constant="15" id="T3U-tl-7AO"/>
+                            <constraint firstItem="NM5-kL-dVy" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="75" id="VXU-cH-7DB"/>
+                            <constraint firstItem="NM5-kL-dVy" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="201" id="WtP-br-RZX"/>
+                            <constraint firstItem="zhx-uk-JN7" firstAttribute="top" secondItem="NM5-kL-dVy" secondAttribute="bottom" constant="180" id="Z5Z-e2-Zbu"/>
+                            <constraint firstItem="6fr-6a-SvL" firstAttribute="top" secondItem="6Ot-7O-4fP" secondAttribute="bottom" constant="6" id="bVY-g5-RfB"/>
+                            <constraint firstItem="lLN-hz-Ypx" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="30" id="bhv-u6-bSf"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="6fr-6a-SvL" secondAttribute="bottom" constant="15" id="eZs-U7-j96"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="lLN-hz-Ypx" secondAttribute="bottom" constant="15" id="jvx-9p-Gke"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="NM5-kL-dVy" secondAttribute="trailing" constant="75" id="y3K-Uf-6Ov"/>
+                        </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="53" y="375"/>
+            <point key="canvasLocation" x="52.307692307692307" y="374.64454976303318"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="mimeLaunch" width="239.66667175292969" height="292.66665649414062"/>
+    </resources>
 </document>

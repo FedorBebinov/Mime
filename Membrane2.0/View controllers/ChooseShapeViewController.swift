@@ -81,19 +81,24 @@ class ChooseShapeViewController: UIViewController {
         NSLayoutConstraint.activate([colorButtonsStackView.centerXAnchor.constraint(equalTo: view.centerXAnchor), colorButtonsStackView.bottomAnchor.constraint(equalTo: doneButton.topAnchor, constant: -20)])
     }
     
-    func updateShape(){
+    override func viewWillAppear(_ animated: Bool) {
+        navigationController?.setNavigationBarHidden(true, animated: animated)
+        super.viewWillAppear(animated)
+    }
+    
+    private func updateShape(){
         let shape = shapes[shapeIndex]
         avatarView.avatarImageView.image = shape.image
         avatarView.maskLayer.contents = avatarView.avatarImageView.image?.cgImage
     }
     
-    func updateGradient(){
+    private func updateGradient(){
         let gradient = gradients[gradientIndex]
         avatarView.apply(gradient: gradient)
     }
     
     @objc
-    func doneButtonTapped(){
+    private func doneButtonTapped(){
         let avatar: AvatarData = AvatarData(type: shapes[shapeIndex].rawValue, color: gradients[gradientIndex].name)
         Task {
             do {
@@ -113,13 +118,13 @@ class ChooseShapeViewController: UIViewController {
     }
     
     @objc
-    func rightButtonTapped(){
+    private func rightButtonTapped(){
         shapeIndex = (shapeIndex + 1) % 5
         updateShape()
     }
     
     @objc
-    func leftButtonTapped(){
+    private func leftButtonTapped(){
         shapeIndex = shapeIndex - 1
         if shapeIndex < 0 {
             shapeIndex = shapes.count - 1
@@ -128,31 +133,31 @@ class ChooseShapeViewController: UIViewController {
     }
     
     @objc
-    func pinkWhiteButtonTapped(){
+    private func pinkWhiteButtonTapped(){
         gradientIndex = 0
         updateGradient()
     }
     
     @objc
-    func grayWhiteButtonTapped(){
+    private func grayWhiteButtonTapped(){
         gradientIndex = 1
         updateGradient()
     }
     
     @objc
-    func pinkOrangeButtonTapped(){
+    private func pinkOrangeButtonTapped(){
         gradientIndex = 2
         updateGradient()
     }
     
     @objc
-    func yellowOrangeButtonTapped(){
+    private func yellowOrangeButtonTapped(){
         gradientIndex = 3
         updateGradient()
     }
     
     @objc
-    func purplePinkButtonTapped(){
+    private func purplePinkButtonTapped(){
         gradientIndex = 4
         updateGradient()
     }

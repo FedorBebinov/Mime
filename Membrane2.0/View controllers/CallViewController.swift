@@ -33,7 +33,7 @@ class CallViewController: UIViewController, MessageServiceDelegate {
     
     private lazy var roomIdButton = MainFactory.separatedButton(text: "Номер комнаты:")
     
-    private lazy var shareButton = MainFactory.systemButton(systemName: "square.and.arrow.up")
+    private lazy var shareButton = MainFactory.imageButton(imageName: "shareButton")
     
     private lazy var topSeparator = MainFactory.separator()
     
@@ -57,7 +57,7 @@ class CallViewController: UIViewController, MessageServiceDelegate {
         return stackView
     }()
     
-    var isUserInRoom = false {
+    private var isUserInRoom = false {
         didSet{
             if isUserInRoom {
                 doorImage.image = UIImage(named: "activeDoor")
@@ -120,7 +120,7 @@ class CallViewController: UIViewController, MessageServiceDelegate {
         view.addSubview(shareButton)
         shareButton.isHidden = isEnter
         shareButton.addTarget(self, action: #selector(shareButtonTapped), for: .touchUpInside)
-        NSLayoutConstraint.activate([shareButton.leadingAnchor.constraint(equalTo: roomIdButton.trailingAnchor, constant: 10), shareButton.centerYAnchor.constraint(equalTo: roomIdButton.centerYAnchor)])
+        NSLayoutConstraint.activate([shareButton.leadingAnchor.constraint(equalTo: roomIdButton.trailingAnchor, constant: 15), shareButton.centerYAnchor.constraint(equalTo: roomIdButton.centerYAnchor)])
         
         view.addSubview(onboardingLabel)
         onboardingLabel.isHidden = !isOnboarding
@@ -151,30 +151,31 @@ class CallViewController: UIViewController, MessageServiceDelegate {
         view.addGestureRecognizer(zoomGesture)
     }
     
-    @objc func handleTap(_ sender: UITapGestureRecognizer?) {
+    @objc private func handleTap(_ sender: UITapGestureRecognizer?) {
         let tapCoordinate = sender?.location(in: view) ?? .zero
         drawGesture(gesture: .touch, center: tapCoordinate)
+        playSound(named: "touch", type: "mp3")
         sendMessage(center: tapCoordinate, gesture: .touch)
         
         if isOnboarding && tapCounter == 0 {
             let seconds = 1.5
             DispatchQueue.main.asyncAfter(deadline: .now() + seconds) {
-                self.onboardingLabel.text = "Отлично! Теперь попробуйте долго удерживать палец на одном месте экрана для распознания жеста жеста\"Зажатие\""
+                self.onboardingLabel.text = "Отлично! Теперь попробуйте долго удерживать палец на одном месте экрана для распознания жеста\"Зажатие\""
                 self.tapCounter += 1
             }
         }
     }
     
-    @objc func handlePinch(_ sender: UIPanGestureRecognizer?) {
+    @objc private func handlePinch(_ sender: UIPanGestureRecognizer?) {
         if sender?.state == .began {
             print("handlePinch")
             let tapCoordinate = sender?.location(in: view) ?? .zero
             drawGesture(gesture: .zoom, center: tapCoordinate)
-            playSound(named: "zoomSound", type: "mp3")
+            playSound(named: "zoom", type: "mp3")
             sendMessage(center: tapCoordinate, gesture: .zoom)
             
             if isOnboarding && tapCounter == 2 {
-                let seconds = 7.0
+                let seconds = 6.7
                 DispatchQueue.main.asyncAfter(deadline: .now() + seconds) {
                     self.onboardingLabel.text = "А теперь попробуйте повторить жест другого пользователя, для появления реакции"
                     self.tapCounter += 1
@@ -183,8 +184,8 @@ class CallViewController: UIViewController, MessageServiceDelegate {
             } 
             if isOnboarding && tapCounter == 3{
                 didComplete = true
-                self.messageService.playVibration(forResourse: "zoomSound", duration: 7.0)
-                let seconds = 7.0
+                self.messageService.playVibration(forResourse: "zoom", duration: 7.0)
+                let seconds = 6.7
                 DispatchQueue.main.asyncAfter(deadline: .now() + seconds) {
                     self.onboardingLabel.text = "Поздравляем, обучение пройдено! Приятного времяприпровождения в пространстве Mime"
                     self.tapCounter += 1
@@ -194,21 +195,57 @@ class CallViewController: UIViewController, MessageServiceDelegate {
         }
     }
     
-    @objc func handleLongPress(_ sender: UILongPressGestureRecognizer?) {
+    @objc private func handleLongPress(_ sender: UILongPressGestureRecognizer?) {
         if sender?.state == .began {
             let tapCoordinate = sender?.location(in: view) ?? .zero
             drawGesture(gesture: .longPress, center: tapCoordinate)
-            playSound(named: "longPressSound", type: "mp3")
+            playSound(named: "long", type: "mp3")
             sendMessage(center: tapCoordinate, gesture: .longPress)
             
             if isOnboarding && tapCounter == 1 {
                 let seconds = 3.0
                 DispatchQueue.main.asyncAfter(deadline: .now() + seconds) {
-                    self.onboardingLabel.text = "У вас отлично получается! Теперь попробуйте отвести пальцы друг от друга, словно пытаетесь увеличить контент на экране для распознания жеста жеста\"Зум\""
+                    self.onboardingLabel.text = "У вас отлично получается! Теперь попробуйте отвести пальцы друг от друга, словно пытаетесь увеличить контент на экране для распознания жеста\"Зум\""
                 }
                 tapCounter += 1
             }
         }
+    }
+    
+    @objc
+    private func quitDoorButtonTapped(){
+        messageService.disconnect()
+        navigationController?.popViewController(animated: true)
+    }
+    
+    @objc
+    private func gesturesButtonTapped(){
+        navigationController?.pushViewController(GesturesViewController(), animated: true)
+    }
+    
+    @objc
+    private func roomIdButtonTapped(){
+        if let roomId = roomId{
+            UIPasteboard.general.string = roomId
+            animateCopyLabel()
+        }
+    }
+    
+    @objc
+    private func shareButtonTapped(){
+        guard let roomId = self.roomId else{
+            return
+        }
+        
+        let content = "Привет! Заходи в мою комнату в приложении Mime mime://room/\(roomId)" /* если приложение не установлено, сначала скачай его по ссылке: https://apps.apple.com/ru/app/microsoft-word/id462054704?mt=12"*/
+        
+        let activityVC = UIActivityViewController.init(activityItems: [content], applicationActivities: nil)
+        present(activityVC, animated: true)
+    }
+    
+    @objc
+    private func backMenuButtonTapped(){
+        navigationController?.pushViewController(MenuViewController(isOnboarding: false), animated: true)
     }
     
     private func drawGesture(gesture: Message.GestureType, center: CGPoint){
@@ -220,7 +257,7 @@ class CallViewController: UIViewController, MessageServiceDelegate {
             case .touch:
                 gifName = "touch.gif"
             case .zoom:
-                gifName = "zoom.gif"
+                gifName = "zoom_fast.gif"
             }
             let gif = try UIImage(gifName: gifName)
             let gifView = UIImageView(gifImage: gif, loopCount: 1)
@@ -236,7 +273,7 @@ class CallViewController: UIViewController, MessageServiceDelegate {
     private func drawCenterZoomGif()
     {
         do {
-            let gifName = "zoom.gif"
+            let gifName = "zoom_fast.gif"
             let gif = try UIImage(gifName: gifName)
             let zoomGif = UIImageView(gifImage: gif, loopCount: .max)
             zoomGif.delegate = self
@@ -280,42 +317,6 @@ class CallViewController: UIViewController, MessageServiceDelegate {
         }
     }
     
-    @objc
-    func quitDoorButtonTapped(){
-        messageService.disconnect()
-        navigationController?.popViewController(animated: true)
-    }
-    
-    @objc
-    func gesturesButtonTapped(){
-        navigationController?.pushViewController(GesturesViewController(), animated: true)
-    }
-    
-    @objc
-    func roomIdButtonTapped(){
-        if let roomId = roomId{
-            UIPasteboard.general.string = roomId
-            animateCopyLabel()
-        }
-    }
-    
-    @objc
-    func shareButtonTapped(){
-        guard let roomId = self.roomId else{
-            return
-        }
-        
-        let content = "Привет! Заходи в мою комнату в приложении Mime mime://room/\(roomId) если приложение не установлено, сначала скачай его по ссылке: https://apps.apple.com/ru/app/microsoft-word/id462054704?mt=12"
-        
-        let activityVC = UIActivityViewController.init(activityItems: [content], applicationActivities: nil)
-        present(activityVC, animated: true)
-    }
-    
-    @objc
-    func backMenuButtonTapped(){
-        navigationController?.pushViewController(MenuViewController(isOnboarding: false), animated: true)
-    }
-    
     func didConnectToRoomId(roomId: String) {
         DispatchQueue.main.async {
             let attributes: [NSAttributedString.Key: Any] = [.font: UIFont.fontWithSize(size: 15)!]
@@ -339,7 +340,7 @@ class CallViewController: UIViewController, MessageServiceDelegate {
     
     func failedConnectToRoom() {
         DispatchQueue.main.async {
-            let allert = UIAlertController(title: "Ошибка", message: "Неправильный номер комнаты, попробуйте ещё раз", preferredStyle: .alert)
+            let allert = UIAlertController(title: "Ошибка", message: "Комнаты с таким кодом не существует. Попробуйте ещё раз", preferredStyle: .alert)
             allert.addAction(UIAlertAction(title: "OK", style: .default, handler: { _ in
                 self.navigationController?.popViewController(animated: true)
             }))
@@ -361,9 +362,7 @@ class CallViewController: UIViewController, MessageServiceDelegate {
             self.doorImage.image = UIImage(named: "activeDoor")
             self.doorImage.layer.shadowColor = CGColor(red: 236/255, green: 140/255, blue: 105/255, alpha: 1)
             self.doorImage.layer.shadowRadius = 15.0
-            //self.doorImage..clipsToBounds = true
             self.doorImage.layer.shadowOpacity = 1
-            //self.doorImage..layer.shadowOffset = CGSize(width: 3.5, height: 3.5)
             let animation = CABasicAnimation(keyPath: "shadowOpacity")
             animation.fromValue = self.doorImage.layer.shadowOpacity
             animation.toValue = 0.0

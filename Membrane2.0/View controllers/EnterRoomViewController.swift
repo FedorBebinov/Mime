@@ -39,7 +39,7 @@ class EnterRoomViewController: UIViewController {
     }
     
     @objc
-    func doneButtonTapped(){
+    private func doneButtonTapped(){
         guard let roomNumber = roomNumberTextField.text else{
             let allert = UIAlertController(title: "Ошибка", message: "Код комнаты не может быть пустым", preferredStyle: .alert)
             allert.addAction(UIAlertAction(title: "Ok", style: .default))

@@ -90,7 +90,7 @@ class MenuViewController: UIViewController {
     }
     
     @objc
-    func changingButtonTapped(){
+    private func changingButtonTapped(){
         isActive.toggle()
         
         let animator = UIViewPropertyAnimator(duration: 0.5, curve: .linear)
@@ -119,27 +119,27 @@ class MenuViewController: UIViewController {
     }
     
     @objc
-    func profileButtonTapped(){
+    private func profileButtonTapped(){
         navigationController?.pushViewController(UserProfileViewController(), animated: true)
     }
     
     @objc
-    func enterRoomButtonTapped(){
+    private func enterRoomButtonTapped(){
         navigationController?.pushViewController(EnterRoomViewController(), animated: true)
     }
     
     @objc
-    func createRoomButtonTapped(){
+    private func createRoomButtonTapped(){
         navigationController?.pushViewController(CallViewController(isEnter: false, isOnboarding: false, roomId: nil), animated: true)
     }
     
     @objc
-    func gesturesButtonTapped(){
+    private func gesturesButtonTapped(){
         navigationController?.pushViewController(GesturesViewController(), animated: true)
     }
     
     @objc
-    func skipOnboardingButtonTapped(){
+    private func skipOnboardingButtonTapped(){
         isOnboarding = false
         skipOnboardingButton.isHidden = !isOnboarding
         topSeparator.isHidden = !isOnboarding
@@ -156,20 +156,20 @@ class MenuViewController: UIViewController {
 
     
     @objc
-    func nextButtonTapped(){
+    private func nextButtonTapped(){
         switch tapCounter{
         case 1:
             gesturesButton.isEnabled = false
             profileButton.isEnabled = true
-            textLabel.text = "Кнопка \"Профиль\" открывает всю информацию о вашем аккаунте с возомжностью ее редактировать"
+            textLabel.text = "Кнопка \"Профиль\" открывает всю информацию о вашем аккаунте с возможностью ее редактировать"
         case 2:
             profileButton.isEnabled = false
             createRoomButton.isEnabled = true
-            textLabel.text = "Кнопка \"Создать комнату\" создает комнату, к которой может присоединиться ваш собеседник. Во время ожидания можно потренитровать использование жестов"
+            textLabel.text = "Кнопка \"Создать комнату\" создает комнату, к которой может присоединиться ваш собеседник. Во время ожидания можно потренировать использование жестов"
         case 3:
             createRoomButton.isEnabled = false
             enterRoomButton.isEnabled = true
-            textLabel.text = "Кнопка \"Войти в комнату\" позволяет войти в комнаут, созданную вашим собеседником с помощью переданного кода"
+            textLabel.text = "Кнопка \"Войти в комнату\" позволяет войти в комнату, созданную вашим собеседником с помощью переданного кода"
         case 4:
             navigationController?.pushViewController(CallViewController(isEnter: true, isOnboarding: true, roomId: nil), animated: true)
         default:

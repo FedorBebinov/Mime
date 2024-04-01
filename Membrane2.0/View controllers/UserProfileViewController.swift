@@ -10,7 +10,7 @@ import NVActivityIndicatorView
 
 class UserProfileViewController: UIViewController {
     
-    let service = NetworkService()
+    private let service = NetworkService()
     
     private lazy var logoutButton = MainFactory.mainButton(text: "Выйти из профиля")
     
@@ -31,6 +31,7 @@ class UserProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .backgroundColor
+        navigationController?.navigationBar.tintColor = .white
         
         view.addSubview(logoutButton)
         view.addSubview(nameLabel)
@@ -86,13 +87,13 @@ class UserProfileViewController: UIViewController {
     }
     
     @objc
-    func logoutButtonTapped(){
+    private func logoutButtonTapped(){
         service.deleteToken()
         navigationController?.setViewControllers([StartViewController()], animated: true)
     }
     
     @objc
-    func editButtonTapped(){
+    private func editButtonTapped(){
         navigationController?.pushViewController(EditUserInfoViewController(), animated: true)
     }
 }

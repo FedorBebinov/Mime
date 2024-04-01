@@ -24,18 +24,17 @@ class AuthorizationViewController: UIViewController {
     
     private lazy var bottomSeparator = MainFactory.separator()
     
-    private lazy var nameTextField = MainFactory.textFieldWithPlaceholder(placeholder: "Логин")
+    private lazy var nameTextField = MainFactory.textFieldLogin(placeholder: "Логин")
     
-    private lazy var passwordTextField = MainFactory.textFieldWithPlaceholder(placeholder: "Пароль")
+    private lazy var passwordTextField = MainFactory.textFieldLogin(placeholder: "Пароль")
     
     private lazy var actionButton = MainFactory.mainButton(text: buttonText)
     
     private lazy var passwordButton = MainFactory.imageButton(imageName: "showPassword")
     
-    let isLogin: Bool
-    let labelText: String
-    let buttonText: String
-    
+    private let isLogin: Bool
+    private let labelText: String
+    private let buttonText: String
     
     init(isLogin: Bool) {
         self.isLogin = isLogin
@@ -56,12 +55,13 @@ class AuthorizationViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .backgroundColor
+        navigationController?.navigationBar.tintColor = .white
         
         view.addSubview(nameLabel)
-        NSLayoutConstraint.activate([nameLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30), nameLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30), nameLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 35)])
+        NSLayoutConstraint.activate([nameLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30), nameLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30), nameLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10)])
         
         view.addSubview(nameTextField)
-        NSLayoutConstraint.activate([nameTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30), nameTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30), nameTextField.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 98), nameTextField.heightAnchor.constraint(equalToConstant: 50)])
+        NSLayoutConstraint.activate([nameTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30), nameTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30), nameTextField.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 88), nameTextField.heightAnchor.constraint(equalToConstant: 50)])
         
         view.addSubview(passwordTextField)
         passwordTextField.isSecureTextEntry = true
@@ -92,11 +92,12 @@ class AuthorizationViewController: UIViewController {
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(false, animated: false)
         nameTextField.becomeFirstResponder()
     }
     
     private func isPasswordStrongEnough(password: String) -> Bool {
-        let passRegEx = "(?=[^a-z]*[a-z])(?=[^0-9]*[0-9])[a-zA-Z0-9!@#$%^&*]{8,}"
+        let passRegEx = "(?=[^a-z]*[a-z])(?=[^0-9]*[0-9])[a-zA-Z0-9!@#$%^&*]{6,}"
         let passwordTest = NSPredicate(format: "SELF MATCHES %@", passRegEx)
         return passwordTest.evaluate(with: password)
     }
@@ -110,14 +111,14 @@ class AuthorizationViewController: UIViewController {
     }
     
     @objc
-    func actionButtonTapped(){
+    private func actionButtonTapped(){
         guard let name = nameTextField.text, let password = passwordTextField.text, !name.isEmpty, !password.isEmpty else{
             errorAlert(tittle: "Ошибка", message: "Логин и пароль не должны быть пустыми")
             return
         }
         
         guard isPasswordStrongEnough(password: password) else{
-            errorAlert(tittle: "Пароль недостаточно сложный", message: "Пароль должен содежать цифру, заглавную букву и содержать как мининмум 8 символов")
+            errorAlert(tittle: "Пароль недостаточно сложный", message: "Пароль должен содежать цифру, заглавную букву и содержать как мининмум 6 символов")
             return
         }
             let user: UserData = UserData(username: name, password: password)
@@ -176,7 +177,7 @@ class AuthorizationViewController: UIViewController {
     }
     
     @objc
-    func passwordButtonTapped(){
+    private func passwordButtonTapped(){
         isPasswordHidden.toggle()
         passwordTextField.isSecureTextEntry.toggle()
         if isPasswordHidden{

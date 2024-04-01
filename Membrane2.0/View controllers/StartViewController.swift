@@ -45,12 +45,12 @@ class StartViewController: UIViewController{
     
     
     @objc
-    func loginButtonTapped(){
+    private func loginButtonTapped(){
         navigationController?.pushViewController(AuthorizationViewController(isLogin: true), animated: true)
     }
     
     @objc
-    func registerButtonTapped(){
+    private func registerButtonTapped(){
         navigationController?.pushViewController(AuthorizationViewController(isLogin: false), animated: true)
     }
 }

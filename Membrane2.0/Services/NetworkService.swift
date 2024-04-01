@@ -172,7 +172,7 @@ class NetworkService{
         isAuthorized = false
     }
     
-    func validate(_ response: URLResponse) throws{
+    private func validate(_ response: URLResponse) throws{
         if let httpResponse = response as? HTTPURLResponse {
             if httpResponse.statusCode >= 400 {
                 throw BackendError.badResponse
