@@ -37,9 +37,9 @@
 		859287E12B9A1B6A0067F1D2 /* NVActivityIndicatorView in Frameworks */ = {isa = PBXBuildFile; productRef = 859287E02B9A1B6A0067F1D2 /* NVActivityIndicatorView */; };
 		85B009722BAB3CB500E3D6EB /* UIViewController + dismissKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85B009712BAB3CB400E3D6EB /* UIViewController + dismissKeyboard.swift */; };
 		85B009742BB1EC9B00E3D6EB /* zoom7.gif in Resources */ = {isa = PBXBuildFile; fileRef = 85B009732BB1EC9B00E3D6EB /* zoom7.gif */; };
-		85B009782BB1F95800E3D6EB /* touch.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 85B009772BB1F95800E3D6EB /* touch.mp3 */; };
-		85B0097A2BB1F95C00E3D6EB /* long.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 85B009792BB1F95C00E3D6EB /* long.mp3 */; };
-		85B0097C2BB1FE9500E3D6EB /* zoom.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 85B0097B2BB1FE9500E3D6EB /* zoom.mp3 */; };
+		85B009782BB1F95800E3D6EB /* touchSound.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 85B009772BB1F95800E3D6EB /* touchSound.mp3 */; };
+		85B0097A2BB1F95C00E3D6EB /* longPressSound.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 85B009792BB1F95C00E3D6EB /* longPressSound.mp3 */; };
+		85B0097C2BB1FE9500E3D6EB /* zoomSound.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 85B0097B2BB1FE9500E3D6EB /* zoomSound.mp3 */; };
 		85E9FA232A93C163000BD5B8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85E9FA222A93C163000BD5B8 /* AppDelegate.swift */; };
 		85E9FA252A93C163000BD5B8 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85E9FA242A93C163000BD5B8 /* SceneDelegate.swift */; };
 		85E9FA272A93C163000BD5B8 /* AuthorizationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85E9FA262A93C163000BD5B8 /* AuthorizationViewController.swift */; };
@@ -78,9 +78,9 @@
 		859287D82B961C780067F1D2 /* NewUsername.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewUsername.swift; sourceTree = "<group>"; };
 		85B009712BAB3CB400E3D6EB /* UIViewController + dismissKeyboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController + dismissKeyboard.swift"; sourceTree = "<group>"; };
 		85B009732BB1EC9B00E3D6EB /* zoom7.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = zoom7.gif; sourceTree = "<group>"; };
-		85B009772BB1F95800E3D6EB /* touch.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = touch.mp3; sourceTree = "<group>"; };
-		85B009792BB1F95C00E3D6EB /* long.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = long.mp3; sourceTree = "<group>"; };
-		85B0097B2BB1FE9500E3D6EB /* zoom.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = zoom.mp3; sourceTree = "<group>"; };
+		85B009772BB1F95800E3D6EB /* touchSound.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = touchSound.mp3; sourceTree = "<group>"; };
+		85B009792BB1F95C00E3D6EB /* longPressSound.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = longPressSound.mp3; sourceTree = "<group>"; };
+		85B0097B2BB1FE9500E3D6EB /* zoomSound.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = zoomSound.mp3; sourceTree = "<group>"; };
 		85E9FA1F2A93C163000BD5B8 /* Mime.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mime.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		85E9FA222A93C163000BD5B8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		85E9FA242A93C163000BD5B8 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -164,9 +164,9 @@
 		859287DA2B96236C0067F1D2 /* Sounds */ = {
 			isa = PBXGroup;
 			children = (
-				85B009792BB1F95C00E3D6EB /* long.mp3 */,
-				85B0097B2BB1FE9500E3D6EB /* zoom.mp3 */,
-				85B009772BB1F95800E3D6EB /* touch.mp3 */,
+				85B009792BB1F95C00E3D6EB /* longPressSound.mp3 */,
+				85B0097B2BB1FE9500E3D6EB /* zoomSound.mp3 */,
+				85B009772BB1F95800E3D6EB /* touchSound.mp3 */,
 			);
 			path = Sounds;
 			sourceTree = "<group>";
@@ -302,14 +302,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				856B0C082BA9E50E0027F04E /* touch.gif in Resources */,
-				85B009782BB1F95800E3D6EB /* touch.mp3 in Resources */,
+				85B009782BB1F95800E3D6EB /* touchSound.mp3 in Resources */,
 				85E9FA2F2A93C164000BD5B8 /* LaunchScreen.storyboard in Resources */,
 				85B009742BB1EC9B00E3D6EB /* zoom7.gif in Resources */,
-				85B0097C2BB1FE9500E3D6EB /* zoom.mp3 in Resources */,
+				85B0097C2BB1FE9500E3D6EB /* zoomSound.mp3 in Resources */,
 				856B0C052BA471640027F04E /* zoom_fast.gif in Resources */,
 				85E9FA422A97B9EC000BD5B8 /* MartianMono_Condensed-Regular.ttf in Resources */,
 				856B0C092BA9E50E0027F04E /* longPress.gif in Resources */,
-				85B0097A2BB1F95C00E3D6EB /* long.mp3 in Resources */,
+				85B0097A2BB1F95C00E3D6EB /* longPressSound.mp3 in Resources */,
 				85E9FA2C2A93C164000BD5B8 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
