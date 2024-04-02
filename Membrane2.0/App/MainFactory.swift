@@ -13,7 +13,7 @@ final class MainFactory{
     static func mainButton(text: String) -> UIButton {
         let button: UIButton = UIButton()
         button.backgroundColor = .buttonColor
-        let attributes: [NSAttributedString.Key: Any] = [.font: UIFont.fontWithSize(size: 22)!]
+        let attributes: [NSAttributedString.Key: Any] = [.font: UIFont.fontWithSize(size: 18)!]
         let attributedString = NSAttributedString(string: text, attributes: attributes)
         button.layer.cornerRadius = 40
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -27,7 +27,7 @@ final class MainFactory{
     static func separatedButton(text: String) -> UIButton {
         let button: UIButton = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        let attributes: [NSAttributedString.Key: Any] = [.font: UIFont.fontWithSize(size: 15)!]
+        let attributes: [NSAttributedString.Key: Any] = [.font: UIFont.fontWithSize(size: 12)!]
         let attributedString = NSAttributedString(string: text, attributes: attributes)
         button.setAttributedTitle(attributedString, for: .normal)
         button.setTitleColor(.textColor, for: .normal)
@@ -84,7 +84,7 @@ final class MainFactory{
     static func editButton() -> UIButton {
         let button: UIButton = UIButton()
         button.backgroundColor = .backgroundColor
-        let attributes: [NSAttributedString.Key: Any] = [.font: UIFont.fontWithSize(size: 15)!]
+        let attributes: [NSAttributedString.Key: Any] = [.font: UIFont.fontWithSize(size: 12)!]
         let attributedString = NSAttributedString(string: "Изменить", attributes: attributes)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setAttributedTitle(attributedString, for: .normal)
@@ -95,7 +95,7 @@ final class MainFactory{
     // MARK: - Text Fields
     static func textField() -> UITextField {
         let nameTextField = UITextField()
-        nameTextField.font = .fontWithSize(size: 25)
+        nameTextField.font = .fontWithSize(size: 18)
         nameTextField.translatesAutoresizingMaskIntoConstraints = false
         nameTextField.textColor = .textColor
         nameTextField.tintColor = nameTextField.textColor
@@ -104,7 +104,7 @@ final class MainFactory{
     
     static func passwordTextField(placeholder: String) -> UITextField {
         let nameTextField = UITextField()
-        nameTextField.font = .fontWithSize(size: 25)
+        nameTextField.font = .fontWithSize(size: 18)
         nameTextField.translatesAutoresizingMaskIntoConstraints = false
         nameTextField.textColor = .textColor
         nameTextField.tintColor = nameTextField.textColor
@@ -115,7 +115,7 @@ final class MainFactory{
     
     static func textFieldWithPlaceholder(placeholder: String) -> UITextField {
         let nameTextField = UITextField()
-        nameTextField.font = .fontWithSize(size: 40)
+        nameTextField.font = .fontWithSize(size: 18)
         nameTextField.translatesAutoresizingMaskIntoConstraints = false
         nameTextField.textColor = .textColor
         nameTextField.tintColor = nameTextField.textColor
@@ -125,7 +125,7 @@ final class MainFactory{
     
     static func textFieldLogin(placeholder: String) -> UITextField {
         let nameTextField = UITextField()
-        nameTextField.font = .fontWithSize(size: 33)
+        nameTextField.font = .fontWithSize(size: 18)
         nameTextField.translatesAutoresizingMaskIntoConstraints = false
         nameTextField.textColor = .textColor
         nameTextField.tintColor = nameTextField.textColor
@@ -135,7 +135,7 @@ final class MainFactory{
     
     static func textFieldWithSmallPlaceholder(placeholder: String) -> UITextField {
         let nameTextField = UITextField()
-        nameTextField.font = .fontWithSize(size: 25)
+        nameTextField.font = .fontWithSize(size: 18)
         nameTextField.translatesAutoresizingMaskIntoConstraints = false
         nameTextField.textColor = .textColor
         nameTextField.tintColor = nameTextField.textColor
@@ -147,7 +147,7 @@ final class MainFactory{
     static func topLabel(text: String) -> UILabel {
         let label = UILabel()
         label.text = text
-        label.font = .fontWithSize(size: 23)
+        label.font = .fontWithSize(size: 18)
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .textColor
         return label
@@ -166,7 +166,7 @@ final class MainFactory{
     static func changeLabel(text: String) -> UILabel {
         let label = UILabel()
         label.text = text
-        label.font = .fontWithSize(size: 25)
+        label.font = .fontWithSize(size: 18)
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .changeLabelColor
         return label
@@ -175,7 +175,7 @@ final class MainFactory{
     static func miniLabel(text: String) ->UILabel {
         let label = UILabel()
         label.text = text
-        label.font = .fontWithSize(size: 15)
+        label.font = .fontWithSize(size: 12)
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .separatorColor
         return label

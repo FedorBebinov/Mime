@@ -154,7 +154,7 @@ class CallViewController: UIViewController, MessageServiceDelegate {
     @objc private func handleTap(_ sender: UITapGestureRecognizer?) {
         let tapCoordinate = sender?.location(in: view) ?? .zero
         drawGesture(gesture: .touch, center: tapCoordinate)
-        playSound(named: "touch", type: "mp3")
+        playSound(named: "touchSound", type: "mp3")
         sendMessage(center: tapCoordinate, gesture: .touch)
         
         if isOnboarding && tapCounter == 0 {
@@ -171,7 +171,7 @@ class CallViewController: UIViewController, MessageServiceDelegate {
             print("handlePinch")
             let tapCoordinate = sender?.location(in: view) ?? .zero
             drawGesture(gesture: .zoom, center: tapCoordinate)
-            playSound(named: "zoom", type: "mp3")
+            playSound(named: "zoomSound", type: "mp3")
             sendMessage(center: tapCoordinate, gesture: .zoom)
             
             if isOnboarding && tapCounter == 2 {
@@ -184,7 +184,7 @@ class CallViewController: UIViewController, MessageServiceDelegate {
             } 
             if isOnboarding && tapCounter == 3{
                 didComplete = true
-                self.messageService.playVibration(forResourse: "zoom", duration: 7.0)
+                self.messageService.playVibration(forResourse: "zoomSound", duration: 7.0)
                 let seconds = 6.7
                 DispatchQueue.main.asyncAfter(deadline: .now() + seconds) {
                     self.onboardingLabel.text = "Поздравляем, обучение пройдено! Приятного времяприпровождения в пространстве Mime"
@@ -199,7 +199,7 @@ class CallViewController: UIViewController, MessageServiceDelegate {
         if sender?.state == .began {
             let tapCoordinate = sender?.location(in: view) ?? .zero
             drawGesture(gesture: .longPress, center: tapCoordinate)
-            playSound(named: "long", type: "mp3")
+            playSound(named: "longPressSound", type: "mp3")
             sendMessage(center: tapCoordinate, gesture: .longPress)
             
             if isOnboarding && tapCounter == 1 {
