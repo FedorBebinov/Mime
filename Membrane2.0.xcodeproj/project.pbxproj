@@ -30,6 +30,8 @@
 		853B4E472B85967A00198532 /* MyErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853B4E462B85967A00198532 /* MyErrors.swift */; };
 		853B4E492B8C013C00198532 /* PasswordData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853B4E482B8C013B00198532 /* PasswordData.swift */; };
 		853B4E4B2B8C942600198532 /* GesturesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853B4E4A2B8C942600198532 /* GesturesViewController.swift */; };
+		855B42992BBC4ECE006E58AB /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 855B42972BBC4ECE006E58AB /* Localizable.strings */; };
+		855B429C2BBC656B006E58AB /* UIDevice + Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 855B429B2BBC656B006E58AB /* UIDevice + Notification.swift */; };
 		856B0C052BA471640027F04E /* zoom_fast.gif in Resources */ = {isa = PBXBuildFile; fileRef = 856B0C042BA471640027F04E /* zoom_fast.gif */; };
 		856B0C082BA9E50E0027F04E /* touch.gif in Resources */ = {isa = PBXBuildFile; fileRef = 856B0C062BA9E50D0027F04E /* touch.gif */; };
 		856B0C092BA9E50E0027F04E /* longPress.gif in Resources */ = {isa = PBXBuildFile; fileRef = 856B0C072BA9E50E0027F04E /* longPress.gif */; };
@@ -72,6 +74,9 @@
 		853B4E462B85967A00198532 /* MyErrors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyErrors.swift; sourceTree = "<group>"; };
 		853B4E482B8C013B00198532 /* PasswordData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordData.swift; sourceTree = "<group>"; };
 		853B4E4A2B8C942600198532 /* GesturesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GesturesViewController.swift; sourceTree = "<group>"; };
+		855B42982BBC4ECE006E58AB /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		855B429A2BBC4FAC006E58AB /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
+		855B429B2BBC656B006E58AB /* UIDevice + Notification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIDevice + Notification.swift"; sourceTree = "<group>"; };
 		856B0C042BA471640027F04E /* zoom_fast.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = zoom_fast.gif; sourceTree = "<group>"; };
 		856B0C062BA9E50D0027F04E /* touch.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = touch.gif; sourceTree = "<group>"; };
 		856B0C072BA9E50E0027F04E /* longPress.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = longPress.gif; sourceTree = "<group>"; };
@@ -177,6 +182,7 @@
 				85B009712BAB3CB400E3D6EB /* UIViewController + dismissKeyboard.swift */,
 				853B4DC72A97C0DA00198532 /* UIFont + AppFonts.swift */,
 				85E9FA382A9502FF000BD5B8 /* UIColor + AppColors.swift */,
+				855B429B2BBC656B006E58AB /* UIDevice + Notification.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -221,6 +227,7 @@
 				853B4E322B7C0F0800198532 /* Gifs */,
 				85E9FA2D2A93C164000BD5B8 /* LaunchScreen.storyboard */,
 				85E9FA302A93C164000BD5B8 /* Info.plist */,
+				855B42972BBC4ECE006E58AB /* Localizable.strings */,
 			);
 			path = Membrane2.0;
 			sourceTree = "<group>";
@@ -280,6 +287,7 @@
 			knownRegions = (
 				en,
 				Base,
+				ru,
 			);
 			mainGroup = 85E9FA162A93C163000BD5B8;
 			packageReferences = (
@@ -303,6 +311,7 @@
 			files = (
 				856B0C082BA9E50E0027F04E /* touch.gif in Resources */,
 				85B009782BB1F95800E3D6EB /* touchSound.mp3 in Resources */,
+				855B42992BBC4ECE006E58AB /* Localizable.strings in Resources */,
 				85E9FA2F2A93C164000BD5B8 /* LaunchScreen.storyboard in Resources */,
 				85B009742BB1EC9B00E3D6EB /* zoom7.gif in Resources */,
 				85B0097C2BB1FE9500E3D6EB /* zoomSound.mp3 in Resources */,
@@ -334,6 +343,7 @@
 				853B4DD92B6A9F1900198532 /* Gradient.swift in Sources */,
 				853B4DDF2B6EB57D00198532 /* EditUserInfoViewController.swift in Sources */,
 				85E9FA252A93C163000BD5B8 /* SceneDelegate.swift in Sources */,
+				855B429C2BBC656B006E58AB /* UIDevice + Notification.swift in Sources */,
 				853B4E1C2B7761B600198532 /* AvatarData.swift in Sources */,
 				85E9FA372A9500F3000BD5B8 /* ChooseShapeViewController.swift in Sources */,
 				853B4DCE2B20A2F000198532 /* UserData.swift in Sources */,
@@ -355,6 +365,15 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
+		855B42972BBC4ECE006E58AB /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				855B42982BBC4ECE006E58AB /* en */,
+				855B429A2BBC4FAC006E58AB /* ru */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
 		85E9FA2D2A93C164000BD5B8 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -370,6 +389,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -431,6 +451,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";

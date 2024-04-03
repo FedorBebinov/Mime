@@ -8,7 +8,13 @@
 import UIKit
 
 extension UIColor{
-    static let backgroundColor = UIColor(red: 19/255, green: 19/255, blue: 19/255, alpha: 1)
+    //static let backgroundColor = UIColor(red: 19/255, green: 19/255, blue: 19/255, alpha: 1)
+    static let backgroundColor = UIColor { traitCollection in
+        //if traitCollection.userInterfaceStyle == .dark {
+            return UIColor(red: 19/255, green: 19/255, blue: 19/255, alpha: 1)
+        //}
+        //return .white
+    }
     static let textColor = UIColor(red: 245/255, green: 245/255, blue: 245/255, alpha: 1)
     static let buttonColor = UIColor(red: 31/255, green: 31/255, blue: 31/255, alpha: 1)
     static let borderColor = UIColor(red: 54/255, green: 54/255, blue: 54/255, alpha: 1)

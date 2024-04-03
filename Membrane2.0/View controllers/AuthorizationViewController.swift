@@ -24,7 +24,7 @@ class AuthorizationViewController: UIViewController {
     
     private lazy var bottomSeparator = MainFactory.separator()
     
-    private lazy var nameTextField = MainFactory.textFieldLogin(placeholder: "Логин")
+    private lazy var nameTextField = MainFactory.textFieldLogin(placeholder: NSLocalizedString("login", comment: ""))
     
     private lazy var passwordTextField = MainFactory.textFieldLogin(placeholder: "Пароль")
     

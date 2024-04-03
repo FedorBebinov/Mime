@@ -87,6 +87,9 @@ class CallViewController: UIViewController, MessageServiceDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .backgroundColor
+        NotificationCenter.default.addObserver(forName: UIDevice.deviceDidShakeNotification, object: nil, queue: .main) { _ in
+            print("shake")
+        }
                 
         if let roomId = self.roomId {
             messageService.connectToRoomId(roomId: roomId)
@@ -149,6 +152,9 @@ class CallViewController: UIViewController, MessageServiceDelegate {
         
         let zoomGesture = UIPinchGestureRecognizer(target: self, action: #selector(self.handlePinch(_ :)))
         view.addGestureRecognizer(zoomGesture)
+        
+        let moveGesture = UIPanGestureRecognizer(target: self, action: #selector(self.handlePan(_ :)))
+        view.addGestureRecognizer(moveGesture)
     }
     
     @objc private func handleTap(_ sender: UITapGestureRecognizer?) {
@@ -212,6 +218,30 @@ class CallViewController: UIViewController, MessageServiceDelegate {
         }
     }
     
+    @objc private func handlePan(_ sender: UIPanGestureRecognizer?) {
+        guard let sender else {
+            return
+        }
+        switch sender.state {
+        case .possible:
+            break
+        case .began:
+            print("pan began")
+        case .changed:
+            print(sender.location(in: self.view))
+            //drawGesture(gesture: .touch, center: sender.location(in: self.view))
+            drawDot(center: sender.location(in: self.view))
+        case .ended:
+            print("pan ended")
+        case .cancelled:
+            break
+        case .failed:
+            break
+        case .recognized:
+            break
+        }
+    }
+    
     @objc
     private func quitDoorButtonTapped(){
         messageService.disconnect()
@@ -267,6 +297,29 @@ class CallViewController: UIViewController, MessageServiceDelegate {
             view.insertSubview(gifView, belowSubview: topElementsStackView)
         } catch {
             print(error)
+        }
+    }
+    
+    private func drawDot(center: CGPoint) {
+        let view = UIView(frame: CGRect(x: 0, y: 0, width: 40, height: 40))
+        view.backgroundColor = .gray
+        view.layer.shadowColor = UIColor.gray.cgColor
+        view.layer.shadowRadius = 5.0
+        view.layer.shadowOpacity = 1
+        view.layer.cornerRadius = 20
+        view.center = center
+        self.view.addSubview(view)
+        let seconds = 1.5
+        /*DispatchQueue.main.asyncAfter(deadline: .now() + seconds) {
+            view.removeFromSuperview()
+        }*/
+        let animator = UIViewPropertyAnimator(duration: seconds, curve: .linear) {
+            view.alpha = 0
+            view.transform = .init(scaleX: 0.1, y: 0.1)
+        }
+        animator.startAnimation()
+        animator.addCompletion { _ in
+            view.removeFromSuperview()
         }
     }
     
