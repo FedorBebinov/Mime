@@ -9,6 +9,8 @@ import UIKit
 
 class MenuViewController: UIViewController {
     
+    private let notificationService = NotificationService.shared
+    
     private var isOnboarding: Bool
     
     private var isActive = false
@@ -56,6 +58,7 @@ class MenuViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .backgroundColor
+        notificationService.addNotification()
         
         view.addSubview(menuStackView)
         view.addSubview(skipOnboardingButton)

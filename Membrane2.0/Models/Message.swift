@@ -8,8 +8,8 @@
 import Foundation
 
 struct Message: Codable {
-    let x: Double
-    let y: Double
+    
+    let points: [Point]
     let gesture: GestureType
     let date: Date
     
@@ -17,5 +17,10 @@ struct Message: Codable {
         case touch
         case longPress
         case zoom
+    }
+    
+    struct Point: Codable {
+        let x: Double
+        let y: Double
     }
 }

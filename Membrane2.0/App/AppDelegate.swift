@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Amplitude
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -13,7 +14,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        // Enable sending automatic session events
+         Amplitude.instance().defaultTracking.sessions = true
+         // Initialize SDK
+         Amplitude.instance().initializeApiKey("API_KEY")
+         // Set userId
+        Amplitude.instance().setUserId("userId")
+         // Log an event
+         Amplitude.instance().logEvent("app_start")
+
         return true
     }
 

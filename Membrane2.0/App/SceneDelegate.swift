@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import UserNotifications
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
@@ -28,6 +29,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         }
             window.makeKeyAndVisible()
             self.window = window
+        UNUserNotificationCenter.current().requestAuthorization(options: [.sound, .badge, .alert]) { success, error in
+            if success {
+                print("success")
+            } else if let error {
+                print(error)
+            }
+        }
+        print("Message: ", AchievementService.shared.messageAchievement.unlocked)
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {

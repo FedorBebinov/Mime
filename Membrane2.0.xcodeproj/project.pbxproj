@@ -32,6 +32,9 @@
 		853B4E4B2B8C942600198532 /* GesturesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853B4E4A2B8C942600198532 /* GesturesViewController.swift */; };
 		855B42992BBC4ECE006E58AB /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 855B42972BBC4ECE006E58AB /* Localizable.strings */; };
 		855B429C2BBC656B006E58AB /* UIDevice + Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 855B429B2BBC656B006E58AB /* UIDevice + Notification.swift */; };
+		855B429E2BBDA641006E58AB /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 855B429D2BBDA641006E58AB /* NotificationService.swift */; };
+		855B42A12BBF0A11006E58AB /* Amplitude in Frameworks */ = {isa = PBXBuildFile; productRef = 855B42A02BBF0A11006E58AB /* Amplitude */; };
+		855B42A32BC3D2B3006E58AB /* AchievementService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 855B42A22BC3D2B3006E58AB /* AchievementService.swift */; };
 		856B0C052BA471640027F04E /* zoom_fast.gif in Resources */ = {isa = PBXBuildFile; fileRef = 856B0C042BA471640027F04E /* zoom_fast.gif */; };
 		856B0C082BA9E50E0027F04E /* touch.gif in Resources */ = {isa = PBXBuildFile; fileRef = 856B0C062BA9E50D0027F04E /* touch.gif */; };
 		856B0C092BA9E50E0027F04E /* longPress.gif in Resources */ = {isa = PBXBuildFile; fileRef = 856B0C072BA9E50E0027F04E /* longPress.gif */; };
@@ -77,6 +80,8 @@
 		855B42982BBC4ECE006E58AB /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		855B429A2BBC4FAC006E58AB /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		855B429B2BBC656B006E58AB /* UIDevice + Notification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIDevice + Notification.swift"; sourceTree = "<group>"; };
+		855B429D2BBDA641006E58AB /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
+		855B42A22BC3D2B3006E58AB /* AchievementService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AchievementService.swift; sourceTree = "<group>"; };
 		856B0C042BA471640027F04E /* zoom_fast.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = zoom_fast.gif; sourceTree = "<group>"; };
 		856B0C062BA9E50D0027F04E /* touch.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = touch.gif; sourceTree = "<group>"; };
 		856B0C072BA9E50E0027F04E /* longPress.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = longPress.gif; sourceTree = "<group>"; };
@@ -105,6 +110,7 @@
 			files = (
 				853B4DD72B6A919000198532 /* KeychainAccess in Frameworks */,
 				853B4E142B728CC800198532 /* SwiftyGif in Frameworks */,
+				855B42A12BBF0A11006E58AB /* Amplitude in Frameworks */,
 				859287E12B9A1B6A0067F1D2 /* NVActivityIndicatorView in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -128,6 +134,8 @@
 			children = (
 				853B4DCF2B20BF6A00198532 /* NetworkService.swift */,
 				853B4E2D2B7BC44D00198532 /* MessageService.swift */,
+				855B429D2BBDA641006E58AB /* NotificationService.swift */,
+				855B42A22BC3D2B3006E58AB /* AchievementService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -260,6 +268,7 @@
 				853B4DD62B6A919000198532 /* KeychainAccess */,
 				853B4E132B728CC800198532 /* SwiftyGif */,
 				859287E02B9A1B6A0067F1D2 /* NVActivityIndicatorView */,
+				855B42A02BBF0A11006E58AB /* Amplitude */,
 			);
 			productName = Membrane2.0;
 			productReference = 85E9FA1F2A93C163000BD5B8 /* Mime.app */;
@@ -294,6 +303,7 @@
 				853B4DD52B6A919000198532 /* XCRemoteSwiftPackageReference "KeychainAccess" */,
 				853B4E122B728CC800198532 /* XCRemoteSwiftPackageReference "SwiftyGif" */,
 				859287DF2B9A1B6A0067F1D2 /* XCRemoteSwiftPackageReference "NVActivityIndicatorView" */,
+				855B429F2BBF0A11006E58AB /* XCRemoteSwiftPackageReference "Amplitude-iOS" */,
 			);
 			productRefGroup = 85E9FA202A93C163000BD5B8 /* Products */;
 			projectDirPath = "";
@@ -351,6 +361,7 @@
 				85E9FA392A9502FF000BD5B8 /* UIColor + AppColors.swift in Sources */,
 				853B4E092B726B0100198532 /* MainFactory.swift in Sources */,
 				853B4E2E2B7BC44D00198532 /* MessageService.swift in Sources */,
+				855B42A32BC3D2B3006E58AB /* AchievementService.swift in Sources */,
 				853B4DD02B20BF6A00198532 /* NetworkService.swift in Sources */,
 				85B009722BAB3CB500E3D6EB /* UIViewController + dismissKeyboard.swift in Sources */,
 				853B4E472B85967A00198532 /* MyErrors.swift in Sources */,
@@ -358,6 +369,7 @@
 				853B4DD42B6A8C7700198532 /* TokenData.swift in Sources */,
 				853B4E4B2B8C942600198532 /* GesturesViewController.swift in Sources */,
 				853B4E382B7D1C2400198532 /* UserInfo.swift in Sources */,
+				855B429E2BBDA641006E58AB /* NotificationService.swift in Sources */,
 				859287D92B961C780067F1D2 /* NewUsername.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -599,6 +611,14 @@
 				minimumVersion = 5.0.0;
 			};
 		};
+		855B429F2BBF0A11006E58AB /* XCRemoteSwiftPackageReference "Amplitude-iOS" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/amplitude/Amplitude-iOS";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 		859287DF2B9A1B6A0067F1D2 /* XCRemoteSwiftPackageReference "NVActivityIndicatorView" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/ninjaprox/NVActivityIndicatorView";
@@ -619,6 +639,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 853B4E122B728CC800198532 /* XCRemoteSwiftPackageReference "SwiftyGif" */;
 			productName = SwiftyGif;
+		};
+		855B42A02BBF0A11006E58AB /* Amplitude */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 855B429F2BBF0A11006E58AB /* XCRemoteSwiftPackageReference "Amplitude-iOS" */;
+			productName = Amplitude;
 		};
 		859287E02B9A1B6A0067F1D2 /* NVActivityIndicatorView */ = {
 			isa = XCSwiftPackageProductDependency;

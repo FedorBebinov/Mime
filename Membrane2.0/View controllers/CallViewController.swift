@@ -144,24 +144,51 @@ class CallViewController: UIViewController, MessageServiceDelegate {
     }
     
     private func addGestures() {
-        let singleTap = UITapGestureRecognizer(target: self, action: #selector(self.handleTap(_:)))
+        let singleTap = UITapGestureRecognizer(target: self, action: #selector(self.handleTap))
         view.addGestureRecognizer(singleTap)
         
-        let longPress = UILongPressGestureRecognizer(target: self, action:  #selector(self.handleLongPress(_:)))
+        let twoFingersTap = UITapGestureRecognizer(target: self, action: #selector(self.handleTwoFingersTap))
+        twoFingersTap.numberOfTouchesRequired = 2
+        view.addGestureRecognizer(twoFingersTap)
+        
+        let longPress = UILongPressGestureRecognizer(target: self, action:  #selector(self.handleLongPress))
         view.addGestureRecognizer(longPress)
         
-        let zoomGesture = UIPinchGestureRecognizer(target: self, action: #selector(self.handlePinch(_ :)))
+        let zoomGesture = UIPinchGestureRecognizer(target: self, action: #selector(self.handlePinch))
         view.addGestureRecognizer(zoomGesture)
         
-        let moveGesture = UIPanGestureRecognizer(target: self, action: #selector(self.handlePan(_ :)))
+        let moveGesture = UIPanGestureRecognizer(target: self, action: #selector(self.handlePan))
         view.addGestureRecognizer(moveGesture)
     }
     
     @objc private func handleTap(_ sender: UITapGestureRecognizer?) {
-        let tapCoordinate = sender?.location(in: view) ?? .zero
-        drawGesture(gesture: .touch, center: tapCoordinate)
+        guard let sender else {
+            return
+        }
+        let tapCoordinate = sender.location(in: view)
+        drawGesture(gesture: .touch, points: [tapCoordinate])
         playSound(named: "touchSound", type: "mp3")
-        sendMessage(center: tapCoordinate, gesture: .touch)
+        sendMessage(points: [tapCoordinate], gesture: .touch)
+        
+        if isOnboarding && tapCounter == 0 {
+            let seconds = 1.5
+            DispatchQueue.main.asyncAfter(deadline: .now() + seconds) {
+                self.onboardingLabel.text = "Отлично! Теперь попробуйте долго удерживать палец на одном месте экрана для распознания жеста\"Зажатие\""
+                self.tapCounter += 1
+            }
+        }
+    }
+    
+    @objc private func handleTwoFingersTap(_ sender: UITapGestureRecognizer?) {
+        guard let sender else {
+            return
+        }
+        var points = [CGPoint]()
+        points.append(sender.location(ofTouch: 0, in: view))
+        points.append(sender.location(ofTouch: 1, in: view))
+        drawGesture(gesture: .touch, points: points)
+        playSound(named: "touchSound", type: "mp3")
+        sendMessage(points: points, gesture: .touch)
         
         if isOnboarding && tapCounter == 0 {
             let seconds = 1.5
@@ -176,9 +203,9 @@ class CallViewController: UIViewController, MessageServiceDelegate {
         if sender?.state == .began {
             print("handlePinch")
             let tapCoordinate = sender?.location(in: view) ?? .zero
-            drawGesture(gesture: .zoom, center: tapCoordinate)
+            drawGesture(gesture: .zoom, points: [tapCoordinate])
             playSound(named: "zoomSound", type: "mp3")
-            sendMessage(center: tapCoordinate, gesture: .zoom)
+            sendMessage(points: [tapCoordinate], gesture: .zoom)
             
             if isOnboarding && tapCounter == 2 {
                 let seconds = 6.7
@@ -204,9 +231,9 @@ class CallViewController: UIViewController, MessageServiceDelegate {
     @objc private func handleLongPress(_ sender: UILongPressGestureRecognizer?) {
         if sender?.state == .began {
             let tapCoordinate = sender?.location(in: view) ?? .zero
-            drawGesture(gesture: .longPress, center: tapCoordinate)
+            drawGesture(gesture: .longPress, points: [tapCoordinate])
             playSound(named: "longPressSound", type: "mp3")
-            sendMessage(center: tapCoordinate, gesture: .longPress)
+            sendMessage(points: [tapCoordinate], gesture: .longPress)
             
             if isOnboarding && tapCounter == 1 {
                 let seconds = 3.0
@@ -278,7 +305,7 @@ class CallViewController: UIViewController, MessageServiceDelegate {
         navigationController?.pushViewController(MenuViewController(isOnboarding: false), animated: true)
     }
     
-    private func drawGesture(gesture: Message.GestureType, center: CGPoint){
+    private func drawGesture(gesture: Message.GestureType, points: [CGPoint]){
         do {
             let gifName: String
             switch gesture{
@@ -289,12 +316,14 @@ class CallViewController: UIViewController, MessageServiceDelegate {
             case .zoom:
                 gifName = "zoom_fast.gif"
             }
-            let gif = try UIImage(gifName: gifName)
-            let gifView = UIImageView(gifImage: gif, loopCount: 1)
-            gifView.delegate = self
-            gifView.frame = CGRect(x: 0, y: 0, width: 1110 / 5, height: 1110 / 5)
-            gifView.center = center
-            view.insertSubview(gifView, belowSubview: topElementsStackView)
+            for point in points {
+                let gif = try UIImage(gifName: gifName)
+                let gifView = UIImageView(gifImage: gif, loopCount: 1)
+                gifView.delegate = self
+                gifView.frame = CGRect(x: 0, y: 0, width: 1110 / 5, height: 1110 / 5)
+                gifView.center = point
+                view.insertSubview(gifView, belowSubview: topElementsStackView)
+            }
         } catch {
             print(error)
         }
@@ -381,14 +410,20 @@ class CallViewController: UIViewController, MessageServiceDelegate {
     
     func didReceiveMessage(message: Message) {
         DispatchQueue.main.async {
-            let coordiante = CGPoint(x: self.view.frame.width * message.x, y: self.view.frame.height * message.y)
-            self.drawGesture(gesture: message.gesture, center: coordiante)
+            let points = message.points.map { messagePoint in
+                CGPoint(x: self.view.frame.width * messagePoint.x, y: self.view.frame.height * messagePoint.y)
+            }
+            self.drawGesture(gesture: message.gesture, points: points)
         }
     }
     
-    func sendMessage(center: CGPoint, gesture: Message.GestureType) {
-        let message = Message(x: center.x  / self.view.frame.width, y: center.y / self.view.frame.height, gesture: gesture, date: .now)
+    func sendMessage(points: [CGPoint], gesture: Message.GestureType) {
+        let messagePoints = points.map { cgPoint in
+            return Message.Point(x: cgPoint.x / self.view.frame.width, y: cgPoint.y / self.view.frame.height)
+        }
+        let message = Message(points: messagePoints, gesture: gesture, date: .now)
         messageService.sendMessage(message: message)
+        AchievementService.shared.trackSendMessage()
     }
     
     func failedConnectToRoom() {
