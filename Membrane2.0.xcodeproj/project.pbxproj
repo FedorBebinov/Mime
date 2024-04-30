@@ -35,6 +35,14 @@
 		855B429E2BBDA641006E58AB /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 855B429D2BBDA641006E58AB /* NotificationService.swift */; };
 		855B42A12BBF0A11006E58AB /* Amplitude in Frameworks */ = {isa = PBXBuildFile; productRef = 855B42A02BBF0A11006E58AB /* Amplitude */; };
 		855B42A32BC3D2B3006E58AB /* AchievementService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 855B42A22BC3D2B3006E58AB /* AchievementService.swift */; };
+		855B42A52BC81DB6006E58AB /* RoomInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 855B42A42BC81DB6006E58AB /* RoomInfo.swift */; };
+		855B42A72BC82519006E58AB /* LastInterlocutors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 855B42A62BC82519006E58AB /* LastInterlocutors.swift */; };
+		855B42A92BCB2169006E58AB /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 855B42A82BCB2169006E58AB /* SettingsViewController.swift */; };
+		855B42AB2BCD81A6006E58AB /* AvatarId.swift in Sources */ = {isa = PBXBuildFile; fileRef = 855B42AA2BCD81A6006E58AB /* AvatarId.swift */; };
+		855B42AD2BD3FC02006E58AB /* DonationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 855B42AC2BD3FC02006E58AB /* DonationViewController.swift */; };
+		855B42AF2BD74A0A006E58AB /* AchievementsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 855B42AE2BD74A0A006E58AB /* AchievementsViewController.swift */; };
+		855B42B12BE00058006E58AB /* NameAvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 855B42B02BE00058006E58AB /* NameAvatarView.swift */; };
+		855B42B32BE0D4FA006E58AB /* UserAvatarData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 855B42B22BE0D4FA006E58AB /* UserAvatarData.swift */; };
 		856B0C052BA471640027F04E /* zoom_fast.gif in Resources */ = {isa = PBXBuildFile; fileRef = 856B0C042BA471640027F04E /* zoom_fast.gif */; };
 		856B0C082BA9E50E0027F04E /* touch.gif in Resources */ = {isa = PBXBuildFile; fileRef = 856B0C062BA9E50D0027F04E /* touch.gif */; };
 		856B0C092BA9E50E0027F04E /* longPress.gif in Resources */ = {isa = PBXBuildFile; fileRef = 856B0C072BA9E50E0027F04E /* longPress.gif */; };
@@ -82,6 +90,14 @@
 		855B429B2BBC656B006E58AB /* UIDevice + Notification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIDevice + Notification.swift"; sourceTree = "<group>"; };
 		855B429D2BBDA641006E58AB /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
 		855B42A22BC3D2B3006E58AB /* AchievementService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AchievementService.swift; sourceTree = "<group>"; };
+		855B42A42BC81DB6006E58AB /* RoomInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomInfo.swift; sourceTree = "<group>"; };
+		855B42A62BC82519006E58AB /* LastInterlocutors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LastInterlocutors.swift; sourceTree = "<group>"; };
+		855B42A82BCB2169006E58AB /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		855B42AA2BCD81A6006E58AB /* AvatarId.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarId.swift; sourceTree = "<group>"; };
+		855B42AC2BD3FC02006E58AB /* DonationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DonationViewController.swift; sourceTree = "<group>"; };
+		855B42AE2BD74A0A006E58AB /* AchievementsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AchievementsViewController.swift; sourceTree = "<group>"; };
+		855B42B02BE00058006E58AB /* NameAvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NameAvatarView.swift; sourceTree = "<group>"; };
+		855B42B22BE0D4FA006E58AB /* UserAvatarData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAvatarData.swift; sourceTree = "<group>"; };
 		856B0C042BA471640027F04E /* zoom_fast.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = zoom_fast.gif; sourceTree = "<group>"; };
 		856B0C062BA9E50D0027F04E /* touch.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = touch.gif; sourceTree = "<group>"; };
 		856B0C072BA9E50E0027F04E /* longPress.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = longPress.gif; sourceTree = "<group>"; };
@@ -150,10 +166,15 @@
 				853B4E1B2B7761B600198532 /* AvatarData.swift */,
 				853B4DD32B6A8C7700198532 /* TokenData.swift */,
 				853B4E372B7D1C2400198532 /* UserInfo.swift */,
-				853B4DCB2A9CF73600198532 /* AvatarView.swift */,
 				853B4E462B85967A00198532 /* MyErrors.swift */,
 				853B4E482B8C013B00198532 /* PasswordData.swift */,
 				859287D82B961C780067F1D2 /* NewUsername.swift */,
+				855B42A42BC81DB6006E58AB /* RoomInfo.swift */,
+				855B42A62BC82519006E58AB /* LastInterlocutors.swift */,
+				855B42AA2BCD81A6006E58AB /* AvatarId.swift */,
+				853B4DCB2A9CF73600198532 /* AvatarView.swift */,
+				855B42B02BE00058006E58AB /* NameAvatarView.swift */,
+				855B42B22BE0D4FA006E58AB /* UserAvatarData.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -170,6 +191,9 @@
 				853B4E062B719C1A00198532 /* CallViewController.swift */,
 				853B4E292B79949000198532 /* EnterRoomViewController.swift */,
 				853B4E4A2B8C942600198532 /* GesturesViewController.swift */,
+				855B42A82BCB2169006E58AB /* SettingsViewController.swift */,
+				855B42AC2BD3FC02006E58AB /* DonationViewController.swift */,
+				855B42AE2BD74A0A006E58AB /* AchievementsViewController.swift */,
 			);
 			path = "View controllers";
 			sourceTree = "<group>";
@@ -344,8 +368,10 @@
 				853B4DD22B20D55500198532 /* StartViewController.swift in Sources */,
 				853B4E1A2B775D9C00198532 /* AvatarImage.swift in Sources */,
 				853B4DC82A97C0DA00198532 /* UIFont + AppFonts.swift in Sources */,
+				855B42B12BE00058006E58AB /* NameAvatarView.swift in Sources */,
 				85E9FA272A93C163000BD5B8 /* AuthorizationViewController.swift in Sources */,
 				853B4DCC2A9CF73600198532 /* AvatarView.swift in Sources */,
+				855B42AB2BCD81A6006E58AB /* AvatarId.swift in Sources */,
 				85E9FA232A93C163000BD5B8 /* AppDelegate.swift in Sources */,
 				853B4E302B7BCB7600198532 /* Message.swift in Sources */,
 				853B4E072B719C1B00198532 /* CallViewController.swift in Sources */,
@@ -357,16 +383,22 @@
 				853B4E1C2B7761B600198532 /* AvatarData.swift in Sources */,
 				85E9FA372A9500F3000BD5B8 /* ChooseShapeViewController.swift in Sources */,
 				853B4DCE2B20A2F000198532 /* UserData.swift in Sources */,
+				855B42AF2BD74A0A006E58AB /* AchievementsViewController.swift in Sources */,
+				855B42AD2BD3FC02006E58AB /* DonationViewController.swift in Sources */,
 				853B4DDB2B6BEE3B00198532 /* MenuViewController.swift in Sources */,
+				855B42A52BC81DB6006E58AB /* RoomInfo.swift in Sources */,
 				85E9FA392A9502FF000BD5B8 /* UIColor + AppColors.swift in Sources */,
 				853B4E092B726B0100198532 /* MainFactory.swift in Sources */,
 				853B4E2E2B7BC44D00198532 /* MessageService.swift in Sources */,
+				855B42A72BC82519006E58AB /* LastInterlocutors.swift in Sources */,
 				855B42A32BC3D2B3006E58AB /* AchievementService.swift in Sources */,
 				853B4DD02B20BF6A00198532 /* NetworkService.swift in Sources */,
 				85B009722BAB3CB500E3D6EB /* UIViewController + dismissKeyboard.swift in Sources */,
 				853B4E472B85967A00198532 /* MyErrors.swift in Sources */,
+				855B42B32BE0D4FA006E58AB /* UserAvatarData.swift in Sources */,
 				853B4E492B8C013C00198532 /* PasswordData.swift in Sources */,
 				853B4DD42B6A8C7700198532 /* TokenData.swift in Sources */,
+				855B42A92BCB2169006E58AB /* SettingsViewController.swift in Sources */,
 				853B4E4B2B8C942600198532 /* GesturesViewController.swift in Sources */,
 				853B4E382B7D1C2400198532 /* UserInfo.swift in Sources */,
 				855B429E2BBDA641006E58AB /* NotificationService.swift in Sources */,
@@ -530,6 +562,7 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Dark;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -558,6 +591,7 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Dark;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

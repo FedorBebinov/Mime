@@ -82,7 +82,7 @@ class EditUserInfoViewController: UIViewController{
             }
         }
         
-        navigationController?.navigationBar.tintColor = .white
+        navigationController?.navigationBar.tintColor = .textColor
         
         view.addSubview(editLabel)
         NSLayoutConstraint.activate([editLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30), editLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30), editLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 35)])

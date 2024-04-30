@@ -11,6 +11,7 @@ enum AuthorizationError: Error {
     case userAlreadyExists
     case userDoesNotExist
     case wrongPassword
+    case noToken
 }
 
 enum PasswordError: Error {

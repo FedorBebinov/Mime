@@ -12,7 +12,7 @@ class UserProfileViewController: UIViewController {
     
     private let service = NetworkService()
     
-    private lazy var logoutButton = MainFactory.mainButton(text: "Выйти из профиля")
+    private lazy var achievementsButton = MainFactory.mainButton(text: "Мои достижения")
     
     private let activityIndicatorView = NVActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: 100, height: 100), type: .ballScaleRippleMultiple, color: .textColor, padding: nil)
     
@@ -33,7 +33,7 @@ class UserProfileViewController: UIViewController {
         view.backgroundColor = .backgroundColor
         navigationController?.navigationBar.tintColor = .white
         
-        view.addSubview(logoutButton)
+        view.addSubview(achievementsButton)
         view.addSubview(nameLabel)
         view.addSubview(avatarView)
         view.addSubview(editButton)
@@ -42,17 +42,17 @@ class UserProfileViewController: UIViewController {
         editButton.addTarget(self, action: #selector(editButtonTapped), for: .touchUpInside)
         
                 
-        logoutButton.addTarget(self, action: #selector(logoutButtonTapped), for: .touchUpInside)
-        logoutButton.setTitleColor(.systemRed, for: .normal)
+        achievementsButton.addTarget(self, action: #selector(achievementsButtonTapped), for: .touchUpInside)
         
         activityIndicatorView.translatesAutoresizingMaskIntoConstraints = false
         
-        NSLayoutConstraint.activate([logoutButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -99), logoutButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20), logoutButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20), logoutButton.heightAnchor.constraint(equalToConstant: 80),  nameLabel.bottomAnchor.constraint(equalTo: logoutButton.topAnchor, constant: -110), nameLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor), avatarView.centerXAnchor.constraint(equalTo: view.centerXAnchor), avatarView.bottomAnchor.constraint(equalTo: nameLabel.topAnchor, constant: -70), editButton.heightAnchor.constraint(equalToConstant: 55), editButton.widthAnchor.constraint(equalToConstant: 55), editButton.bottomAnchor.constraint(equalTo: nameLabel.topAnchor, constant: -30), editButton.centerXAnchor.constraint(equalTo: view.centerXAnchor), activityIndicatorView.centerXAnchor.constraint(equalTo: view.centerXAnchor), activityIndicatorView.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -75)])
+        NSLayoutConstraint.activate([achievementsButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -99), achievementsButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20), achievementsButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20), achievementsButton.heightAnchor.constraint(equalToConstant: 80),  nameLabel.bottomAnchor.constraint(equalTo: achievementsButton.topAnchor, constant: -110), nameLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor), avatarView.centerXAnchor.constraint(equalTo: view.centerXAnchor), avatarView.bottomAnchor.constraint(equalTo: nameLabel.topAnchor, constant: -70), editButton.heightAnchor.constraint(equalToConstant: 55), editButton.widthAnchor.constraint(equalToConstant: 55), editButton.bottomAnchor.constraint(equalTo: nameLabel.topAnchor, constant: -30), editButton.centerXAnchor.constraint(equalTo: view.centerXAnchor), activityIndicatorView.centerXAnchor.constraint(equalTo: view.centerXAnchor), activityIndicatorView.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -75)])
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(false, animated: false)
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "settingsButton"), style: .plain, target: self, action: #selector(settingsButtonTapped))
         activityIndicatorView.startAnimating()
         nameLabel.text = ""
         avatarView.avatarImageView.image = nil
@@ -87,13 +87,17 @@ class UserProfileViewController: UIViewController {
     }
     
     @objc
-    private func logoutButtonTapped(){
-        service.deleteToken()
-        navigationController?.setViewControllers([StartViewController()], animated: true)
+    private func achievementsButtonTapped(){
+        navigationController?.pushViewController(AchievementsViewController(), animated: true)
     }
     
     @objc
     private func editButtonTapped(){
         navigationController?.pushViewController(EditUserInfoViewController(), animated: true)
+    }
+    
+    @objc
+    private func settingsButtonTapped(){
+        navigationController?.pushViewController(SettingsViewController(), animated: true)
     }
 }

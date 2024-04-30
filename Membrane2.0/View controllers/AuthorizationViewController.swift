@@ -55,7 +55,7 @@ class AuthorizationViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .backgroundColor
-        navigationController?.navigationBar.tintColor = .white
+        navigationController?.navigationBar.tintColor = .textColor
         
         view.addSubview(nameLabel)
         NSLayoutConstraint.activate([nameLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30), nameLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30), nameLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10)])

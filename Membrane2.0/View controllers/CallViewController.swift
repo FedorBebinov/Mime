@@ -393,7 +393,9 @@ class CallViewController: UIViewController, MessageServiceDelegate {
         let url = URL(fileURLWithPath: path)
         do {
             audioPlayer = try AVAudioPlayer(contentsOf: url)
-            audioPlayer.play()
+            if UserDefaults.standard.bool(forKey: "SoundActive"){
+                audioPlayer.play()
+            }
         } catch {
             print("couldn't load the file")
         }

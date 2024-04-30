@@ -17,7 +17,9 @@ class MenuViewController: UIViewController {
     
     private var tapCounter = 0
     
-    private lazy var gesturesButton = MainFactory.menuButton(text: "Жесты")
+    private var nameAvatarViews = [NameAvatarView]()
+    
+    private lazy var donateButton = MainFactory.menuButton(text: "Поддержать проект")
     
     private lazy var profileButton = MainFactory.menuButton(text: "Профиль")
     
@@ -38,7 +40,7 @@ class MenuViewController: UIViewController {
     private lazy var nextButton = MainFactory.mainButton(text: "Далее")
     
     private lazy var menuStackView: UIStackView = {
-        var stackView = UIStackView(arrangedSubviews: [gesturesButton, profileButton, changingButton, createRoomButton, enterRoomButton])
+        var stackView = UIStackView(arrangedSubviews: [donateButton, profileButton, changingButton, createRoomButton, enterRoomButton])
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .vertical
         stackView.spacing = 25
@@ -74,7 +76,7 @@ class MenuViewController: UIViewController {
         nextButton.isHidden = true
         
         
-        gesturesButton.addTarget(self, action: #selector(gesturesButtonTapped), for: .touchUpInside)
+        donateButton.addTarget(self, action: #selector(donateButtonTapped), for: .touchUpInside)
         profileButton.addTarget(self, action: #selector(profileButtonTapped), for: .touchUpInside)
         changingButton.addTarget(self, action: #selector(changingButtonTapped), for: .touchUpInside)
         createRoomButton.addTarget(self, action: #selector(createRoomButtonTapped), for: .touchUpInside)
@@ -82,14 +84,69 @@ class MenuViewController: UIViewController {
         nextButton.addTarget(self, action: #selector(nextButtonTapped), for: .touchUpInside)
         skipOnboardingButton.addTarget(self, action: #selector(skipOnboardingButtonTapped), for: .touchUpInside)
         
+        addNameAvatarViews()
+        
         NSLayoutConstraint.activate([menuStackView.centerYAnchor.constraint(equalTo: view.centerYAnchor), menuStackView.centerXAnchor.constraint(equalTo: view.centerXAnchor), skipOnboardingButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -5), skipOnboardingButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 100), skipOnboardingButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -100), topSeparator.bottomAnchor.constraint(equalTo: skipOnboardingButton.topAnchor), topSeparator.heightAnchor.constraint(equalToConstant: 1), topSeparator.leadingAnchor.constraint(equalTo: skipOnboardingButton.leadingAnchor), topSeparator.trailingAnchor.constraint(equalTo: skipOnboardingButton.trailingAnchor), bottomSeparator.topAnchor.constraint(equalTo: skipOnboardingButton.bottomAnchor), bottomSeparator.heightAnchor.constraint(equalToConstant: 1), bottomSeparator.leadingAnchor.constraint(equalTo: skipOnboardingButton.leadingAnchor), bottomSeparator.trailingAnchor.constraint(equalTo: skipOnboardingButton.trailingAnchor), textLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 40), textLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30), textLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30), nextButton.bottomAnchor.constraint(equalTo: topSeparator.topAnchor, constant: -20), nextButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20), nextButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20), nextButton.heightAnchor.constraint(equalToConstant: 80)])
         
-        NSLayoutConstraint.activate([gesturesButton.heightAnchor.constraint(equalToConstant: 51), profileButton.heightAnchor.constraint(equalToConstant: 51), createRoomButton.heightAnchor.constraint(equalToConstant: 51), enterRoomButton.heightAnchor.constraint(equalToConstant: 51), changingButton.heightAnchor.constraint(equalToConstant: 55), changingButton.widthAnchor.constraint(equalToConstant: 55)])
+        NSLayoutConstraint.activate([donateButton.heightAnchor.constraint(equalToConstant: 51), profileButton.heightAnchor.constraint(equalToConstant: 51), createRoomButton.heightAnchor.constraint(equalToConstant: 51), enterRoomButton.heightAnchor.constraint(equalToConstant: 51), changingButton.heightAnchor.constraint(equalToConstant: 55), changingButton.widthAnchor.constraint(equalToConstant: 55)])
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(true, animated: true)
+    }
+    
+    private func addNameAvatarViews(){
+        for (index, interlocutor) in interlocutotors.enumerated() {
+            let avatarView = NameAvatarView()
+            avatarView.tapHandler = {
+                self.navigationController?.pushViewController(CallViewController(isEnter: true, isOnboarding: false, roomId: interlocutor.roomId), animated: true)
+            }
+            avatarView.name.text = interlocutor.name
+            view.addSubview(avatarView)
+            avatarView.layer.shadowColor = CGColor(red: 236/255, green: 140/255, blue: 105/255, alpha: 1)
+            avatarView.layer.shadowRadius = 15.0
+            avatarView.layer.shadowOpacity = 1
+            avatarView.translatesAutoresizingMaskIntoConstraints = false
+            switch index {
+            case 0:
+                NSLayoutConstraint.activate([
+                    avatarView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 55),
+                    avatarView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: -70)])
+                
+                avatarView.transform = .init(rotationAngle: 0.55).scaledBy(x: 0.8, y: 0.8)
+                
+            case 1:
+                NSLayoutConstraint.activate([
+                    avatarView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 55),
+                    avatarView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 70)])
+            
+                avatarView.transform = .init(rotationAngle: 0.17).scaledBy(x: 0.8, y: 0.8)
+                
+            case 2:
+                NSLayoutConstraint.activate([
+                    avatarView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 0),
+                    avatarView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: -70)])
+                
+                avatarView.transform = .init(rotationAngle: -0.31).scaledBy(x: 0.8, y: 0.8)
+                
+            case 3:
+                NSLayoutConstraint.activate([
+                    avatarView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 0),
+                    avatarView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 70)])
+                
+                avatarView.transform = .init(rotationAngle: -0.26).scaledBy(x: 0.8, y: 0.8)
+            default:
+                break
+            }
+            
+            if let gradient = gradients.first(where: { gradient in gradient.name == interlocutor.gradientName}) {
+                avatarView.apply(gradient: gradient)
+        }
+            avatarView.avatarImageView.image = AvatarImage(rawValue: interlocutor.avatarType)?.image
+            avatarView.maskLayer.contents = avatarView.avatarImageView.image?.cgImage
+            nameAvatarViews.append(avatarView)
+        }
     }
     
     @objc
@@ -98,10 +155,13 @@ class MenuViewController: UIViewController {
         
         let animator = UIViewPropertyAnimator(duration: 0.5, curve: .linear)
         animator.addAnimations {
-            self.gesturesButton.isHidden = !self.isActive
+            self.donateButton.isHidden = !self.isActive
             self.profileButton.isHidden = !self.isActive
             self.createRoomButton.isHidden = !self.isActive
             self.enterRoomButton.isHidden = !self.isActive
+            for nameAvatarView in self.nameAvatarViews {
+                nameAvatarView.alpha = self.isActive ? 0 : 1
+            }
             if self.isActive{
                 self.changingButton.setImage(UIImage(named: "cancel"), for: .normal)
             } else {
@@ -142,6 +202,11 @@ class MenuViewController: UIViewController {
     }
     
     @objc
+    private func donateButtonTapped(){
+        navigationController?.pushViewController(DonationViewController(), animated: true)
+    }
+    
+    @objc
     private func skipOnboardingButtonTapped(){
         isOnboarding = false
         skipOnboardingButton.isHidden = !isOnboarding
@@ -150,7 +215,7 @@ class MenuViewController: UIViewController {
         textLabel.isHidden = !isOnboarding
         nextButton.isHidden = true
         
-        gesturesButton.isEnabled = true
+        donateButton.isEnabled = true
         profileButton.isEnabled = true
         createRoomButton.isEnabled = true
         enterRoomButton.isEnabled = true
@@ -162,7 +227,7 @@ class MenuViewController: UIViewController {
     private func nextButtonTapped(){
         switch tapCounter{
         case 1:
-            gesturesButton.isEnabled = false
+            donateButton.isEnabled = false
             profileButton.isEnabled = true
             textLabel.text = "Кнопка \"Профиль\" открывает всю информацию о вашем аккаунте с возможностью ее редактировать"
         case 2:

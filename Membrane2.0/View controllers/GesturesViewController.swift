@@ -21,7 +21,7 @@ class GesturesViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .backgroundColor
         
-        navigationController?.navigationBar.tintColor = .white
+        navigationController?.navigationBar.tintColor = .textColor
         
         view.addSubview(mainTextLabel)
         view.addSubview(touchImageView)

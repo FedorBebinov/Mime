@@ -11,10 +11,11 @@ import CoreHaptics
 
 class MessageService: NSObject, URLSessionWebSocketDelegate {
     
-    let baseUrl = "ws://34.32.59.134:8080"
+    let baseUrl = "ws://127.0.0.1:8080"
     let keychain = Keychain(service: "ru.hse.Mime")
     let zoomLength = 7.0
     let longPressLength = 2.5
+    let networkService = NetworkService()
     
     lazy var engine: CHHapticEngine? = {
         let hapticCapability = CHHapticEngine.capabilitiesForHardware()
@@ -62,9 +63,9 @@ class MessageService: NSObject, URLSessionWebSocketDelegate {
             case .success(let success):
                 switch success{
                 case .string(let string):
+                    let decoder = JSONDecoder()
                     print(string)
                     if string.hasPrefix("{") {
-                        let decoder = JSONDecoder()
                         do {
                             let message = try decoder.decode(Message.self, from: Data(string.utf8))
                             self.delegate?.didReceiveMessage(message: message)
@@ -77,12 +78,24 @@ class MessageService: NSObject, URLSessionWebSocketDelegate {
                         }
                     } else{
                         let components = string.components(separatedBy: " ")
-                        if components[0] == "RoomId:"{
-                            self.delegate?.didConnectToRoomId(roomId: components[1])
-                        } else if components[0] == "There"{
-                            self.delegate?.secondUserConnected()
-                        } else if string.hasSuffix("joined the room"){
-                            self.delegate?.secondUserConnected()
+                        if components[0] == "RoomStatusUpdate:"{
+                            do {
+                                let jsonData = string.suffix(from: string.firstIndex(of: "{")!)
+                                print(jsonData)
+                                let roomInfo: RoomInfo = try decoder.decode(RoomInfo.self, from: Data(jsonData.utf8))
+                                if roomInfo.otherUser != "nil" {
+                                    self.delegate?.secondUserConnected()
+                                    //interlocutotors.append(roomInfo.otherUser)
+                                    Task {
+                                        let otherUserInfo = try await self.networkService.getUserInfoById(id: roomInfo.otherUser)
+                                        print(otherUserInfo.username)
+                                    }
+                                } else {
+                                    self.delegate?.didConnectToRoomId(roomId: roomInfo.roomId)
+                                }
+                            } catch {
+                                print(error)
+                            }
                         } else if string.hasSuffix("left the room"){
                             self.delegate?.secondUserDisconnected()
                         }
@@ -179,10 +192,12 @@ class MessageService: NSObject, URLSessionWebSocketDelegate {
                     CHHapticDynamicParameter(parameterID: .hapticReleaseTimeControl, value: 0.7, relativeTime: 0)
                 ]
             )
-            let player = try engine.makePlayer(with: pattern)
-            
-            try engine.start()
-            try player.start(atTime: 0)
+            if UserDefaults.standard.bool(forKey: "HapticsActive"){
+                let player = try engine.makePlayer(with: pattern)
+                
+                try engine.start()
+                try player.start(atTime: 0)
+            }
         } catch{
             print(error)
         }

@@ -22,6 +22,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         
         let window = UIWindow(windowScene: windowScene)
+        if UserDefaults.standard.bool(forKey: "WhiteTheme") {
+            window.overrideUserInterfaceStyle = .light
+        } else {
+            window.overrideUserInterfaceStyle = .dark
+        }
         if service.isAuthorized{
             window.rootViewController = UINavigationController(rootViewController: MenuViewController(isOnboarding: false))
         }else {

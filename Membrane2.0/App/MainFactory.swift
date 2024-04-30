@@ -34,6 +34,16 @@ final class MainFactory{
         return button
     }
     
+    static func deleteButton(text: String) -> UIButton {
+        let button: UIButton = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        let attributes: [NSAttributedString.Key: Any] = [.font: UIFont.fontWithSize(size: 18)!]
+        let attributedString = NSAttributedString(string: text, attributes: attributes)
+        button.setAttributedTitle(attributedString, for: .normal)
+        button.setTitleColor(.red, for: .normal)
+        return button
+    }
+    
     static func imageButton(imageName: String) -> UIButton {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -92,6 +102,12 @@ final class MainFactory{
         return button
     }
     
+    static func switchButton() -> UISwitch {
+        let switchButton = UISwitch()
+        switchButton.translatesAutoresizingMaskIntoConstraints = false
+        return switchButton
+    }
+    
     // MARK: - Text Fields
     static func textField() -> UITextField {
         let nameTextField = UITextField()
@@ -148,6 +164,15 @@ final class MainFactory{
         let label = UILabel()
         label.text = text
         label.font = .fontWithSize(size: 18)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textColor = .textColor
+        return label
+    }
+    
+    static func textLabel(text: String) -> UILabel {
+        let label = UILabel()
+        label.text = text
+        label.font = .fontWithSize(size: 12)
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .textColor
         return label

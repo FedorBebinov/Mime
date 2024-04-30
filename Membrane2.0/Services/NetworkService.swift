@@ -11,7 +11,7 @@ import KeychainAccess
 class NetworkService{
     
     var isAuthorized: Bool = false
-    let baseURL = "http://34.32.59.134:8080"
+    let baseURL = "http://localhost:8080"
     let keychain = Keychain(service: "ru.hse.Mime")
     
     init(){
@@ -160,6 +160,37 @@ class NetworkService{
         let decoder: JSONDecoder = JSONDecoder()
         let avatar = try decoder.decode(AvatarData.self, from: data)
         return avatar
+    }
+    
+    func getUserInfoById(id: String) async throws -> UserAvatarData {
+        guard let token = keychain["token"] else{
+            print("no token")
+            throw AuthorizationError.noToken
+        }
+        let url:URL = URL(string: "\(baseURL)v1/user/info/\(id)")!
+        var request: URLRequest = URLRequest(url:url)
+        request.httpMethod = "GET"
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        let (data, response) = try await URLSession.shared.data(for: request)
+        try validate(response)
+        let decoder: JSONDecoder = JSONDecoder()
+        let userInfo = try decoder.decode(UserAvatarData.self, from: data)
+        return userInfo
+    }
+    
+    func deleteAccount() {
+        guard let token = keychain["token"] else{
+            print("no token")
+            return
+        }
+        let url:URL = URL(string: "\(baseURL)/v1/user/0")!
+        var request: URLRequest = URLRequest(url:url)
+        request.httpMethod = "PUT"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        let encoder: JSONEncoder = JSONEncoder()
+        //request.httpBody = try encoder.encode(data)
+        //let (_, response) = try await URLSession.shared.data(for: request)
     }
     
     func saveToken(token: String){

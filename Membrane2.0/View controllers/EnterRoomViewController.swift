@@ -20,7 +20,7 @@ class EnterRoomViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .backgroundColor
-        navigationController?.navigationBar.tintColor = .white
+        navigationController?.navigationBar.tintColor = .textColor
         
         view.addSubview(typeNumberLabel)
         view.addSubview(roomNumberTextField)
