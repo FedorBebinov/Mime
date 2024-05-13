@@ -20,9 +20,19 @@ class ChooseShapeViewController: UIViewController {
                                                                                                                
     private lazy var avatarView = MainFactory.avatarView()
     
-    private lazy var rightButton = MainFactory.imageButton(imageName: "rightArrow")
+    private lazy var rightButton: UIButton = {
+        let image = UIImage(resource: .rightArrow).withRenderingMode(.alwaysTemplate)
+        let button = MainFactory.imageButton(image: image)
+        button.tintColor = .textColor
+        return button
+    }()
     
-    private lazy var leftButton = MainFactory.imageButton(imageName: "leftArrow")
+    private lazy var leftButton: UIButton = {
+        let image = UIImage(resource: .leftArrow).withRenderingMode(.alwaysTemplate)
+        let button = MainFactory.imageButton(image: image)
+        button.tintColor = .textColor
+        return button
+    }()
     
     private lazy var pinkWhiteButton = MainFactory.imageButton(imageName: "pinkWhiteCircle")
     
@@ -34,9 +44,9 @@ class ChooseShapeViewController: UIViewController {
     
     private lazy var purplePinkButton = MainFactory.imageButton(imageName: "purplePinkCircle")
     
-    private lazy var doneButton = MainFactory.mainButton(text: "Готово")
+    private lazy var doneButton = MainFactory.mainButton(text: NSLocalizedString("doneGotov", comment: ""))
     
-    private lazy var chooseShapeLabel = MainFactory.topLabel(text: "Выберите свою фигуру")
+    private lazy var chooseShapeLabel = MainFactory.topLabel(text: NSLocalizedString("chooseFigure", comment: ""))
     
     private lazy var colorButtonsStackView: UIStackView = {
         var stackView = UIStackView(arrangedSubviews: [pinkWhiteButton, grayWhiteButton, pinkOrangeButton, yellowOrangeButton, purplePinkButton])

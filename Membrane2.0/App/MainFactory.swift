@@ -20,7 +20,7 @@ final class MainFactory{
         button.setAttributedTitle(attributedString, for: .normal)
         button.layer.borderColor = UIColor.borderColor.cgColor
         button.layer.borderWidth = 1.5
-        button.setTitleColor(.textColor, for: .normal)
+        button.setTitleColor(.buttonTextColor, for: .normal)
         return button
     }
     
@@ -31,6 +31,30 @@ final class MainFactory{
         let attributedString = NSAttributedString(string: text, attributes: attributes)
         button.setAttributedTitle(attributedString, for: .normal)
         button.setTitleColor(.textColor, for: .normal)
+        return button
+    }
+    
+    static func separatedRoomButton(text: String) -> UIButton {
+        let button: UIButton = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        let attributes: [NSAttributedString.Key: Any] = [.font: UIFont.fontWithSize(size: 12)!]
+        let attributedString = NSAttributedString(string: text, attributes: attributes)
+        button.setAttributedTitle(attributedString, for: .normal)
+        button.setTitleColor(.buttonTextColor, for: .normal)
+        return button
+    }
+    
+    static func separatedBigButton(text: String) -> UIButton {
+        let button: UIButton = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        let white:UIColor = .textColor
+        let gray: UIColor = .separatorColor
+        let attributesNormal: [NSAttributedString.Key: Any] = [.font: UIFont.fontWithSize(size: 14)!, .foregroundColor: white]
+        let attributesDisabled: [NSAttributedString.Key: Any] = [.font: UIFont.fontWithSize(size: 14)!, .foregroundColor: gray]
+        let normalString = NSAttributedString(string: text, attributes: attributesNormal)
+        let diasabledString = NSAttributedString(string: text, attributes: attributesDisabled)
+        button.setAttributedTitle(normalString, for: .normal)
+        button.setAttributedTitle(diasabledString, for: .disabled)
         return button
     }
     
@@ -48,6 +72,13 @@ final class MainFactory{
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setImage(UIImage(named: imageName), for: .normal)
+        return button
+    }
+    
+    static func imageButton(image: UIImage) -> UIButton {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setImage(image, for: .normal)
         return button
     }
         
@@ -77,7 +108,7 @@ final class MainFactory{
     static func menuButton(text: String) -> UIButton {
         var config = UIButton.Configuration.plain()
         config.contentInsets = NSDirectionalEdgeInsets(top: 14, leading: 30, bottom: 14, trailing: 30)
-        config.baseForegroundColor = .textColor
+        config.baseForegroundColor = .buttonTextColor
         let button = UIButton(configuration: config)
         button.layer.cornerRadius = 25
         let attributes: [NSAttributedString.Key: Any] = [.font: UIFont.fontWithSize(size: 18)!]
@@ -115,6 +146,7 @@ final class MainFactory{
         nameTextField.translatesAutoresizingMaskIntoConstraints = false
         nameTextField.textColor = .textColor
         nameTextField.tintColor = nameTextField.textColor
+        nameTextField.autocorrectionType = .no
         return nameTextField
     }
     
@@ -126,6 +158,7 @@ final class MainFactory{
         nameTextField.tintColor = nameTextField.textColor
         nameTextField.isSecureTextEntry = true
         nameTextField.placeholder = placeholder
+        nameTextField.autocorrectionType = .no
         return nameTextField
     }
     
@@ -136,6 +169,7 @@ final class MainFactory{
         nameTextField.textColor = .textColor
         nameTextField.tintColor = nameTextField.textColor
         nameTextField.placeholder = placeholder
+        nameTextField.autocorrectionType = .no
         return nameTextField
     }
     
@@ -146,6 +180,7 @@ final class MainFactory{
         nameTextField.textColor = .textColor
         nameTextField.tintColor = nameTextField.textColor
         nameTextField.placeholder = placeholder
+        nameTextField.autocorrectionType = .no
         return nameTextField
     }
     
@@ -156,6 +191,7 @@ final class MainFactory{
         nameTextField.textColor = .textColor
         nameTextField.tintColor = nameTextField.textColor
         nameTextField.placeholder = placeholder
+        nameTextField.autocorrectionType = .no
         return nameTextField
     }
     
@@ -187,6 +223,16 @@ final class MainFactory{
         label.textColor = .textColor
         return label
     }
+
+    static func gestureRoomTextLabel(text: String) -> UILabel {
+        let label = UILabel()
+        label.text = text
+        label.font = .fontWithSize(size: 18)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.numberOfLines = 6
+        label.textColor = UIColor(red: 245/255, green: 245/255, blue: 245/255, alpha: 1)
+        return label
+    }
     
     static func changeLabel(text: String) -> UILabel {
         let label = UILabel()
@@ -211,7 +257,7 @@ final class MainFactory{
         label.text = text
         label.font = .fontWithSize(size: 15)
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.textColor = .textColor
+        label.textColor = UIColor(red: 245/255, green: 245/255, blue: 245/255, alpha: 1)
         label.alpha = 0
         return label
     }
@@ -242,6 +288,13 @@ final class MainFactory{
         image.translatesAutoresizingMaskIntoConstraints = false
         image.image = UIImage(named: name)
         return image
+    }
+    
+    static func imageView(image: UIImage) -> UIImageView {
+        let imageView = UIImageView()
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.image = image
+        return imageView
     }
     
     static func doorImageView() ->UIImageView {

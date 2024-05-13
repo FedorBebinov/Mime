@@ -17,6 +17,7 @@ struct Message: Codable {
         case touch
         case longPress
         case zoom
+        case pan
     }
     
     struct Point: Codable {

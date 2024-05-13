@@ -19,25 +19,25 @@ class MenuViewController: UIViewController {
     
     private var nameAvatarViews = [NameAvatarView]()
     
-    private lazy var donateButton = MainFactory.menuButton(text: "Поддержать проект")
+    private lazy var donateButton = MainFactory.menuButton(text: NSLocalizedString("supportProject", comment: ""))
     
-    private lazy var profileButton = MainFactory.menuButton(text: "Профиль")
+    private lazy var profileButton = MainFactory.menuButton(text: NSLocalizedString("profile", comment: ""))
     
     private lazy var changingButton = MainFactory.circleButton(imageName: "plus")
     
-    private lazy var createRoomButton = MainFactory.menuButton(text: "Создать комнату")
+    private lazy var createRoomButton = MainFactory.menuButton(text: NSLocalizedString("createRoom", comment: ""))
     
-    private lazy var enterRoomButton = MainFactory.menuButton(text: "Войти в комнату")
+    private lazy var enterRoomButton = MainFactory.menuButton(text: NSLocalizedString("enterRoom", comment: ""))
     
-    private lazy var skipOnboardingButton = MainFactory.separatedButton(text: "Пропустить обучение")
+    private lazy var skipOnboardingButton = MainFactory.separatedButton(text: NSLocalizedString("skipTutorial", comment: ""))
     
     private lazy var topSeparator = MainFactory.separator()
     
     private lazy var bottomSeparator = MainFactory.separator()
     
-    private lazy var textLabel = MainFactory.gestureTextLabel(text: "Добро пожаловать в Mime! Нажмите кнопку, чтобы начать общаться")
+    private lazy var textLabel = MainFactory.gestureTextLabel(text: NSLocalizedString("welcome", comment: ""))
     
-    private lazy var nextButton = MainFactory.mainButton(text: "Далее")
+    private lazy var nextButton = MainFactory.mainButton(text: NSLocalizedString("next", comment: ""))
     
     private lazy var menuStackView: UIStackView = {
         var stackView = UIStackView(arrangedSubviews: [donateButton, profileButton, changingButton, createRoomButton, enterRoomButton])
@@ -62,6 +62,9 @@ class MenuViewController: UIViewController {
         view.backgroundColor = .backgroundColor
         notificationService.addNotification()
         
+        /*var interlocutors = [LastInterlocutors(name: "OGTarget", avatarType: "door" , gradientName: "grayWhite", roomId: "SASD"), LastInterlocutors(name: "IlyaBB", avatarType: "drum" , gradientName: "purplePink", roomId: "SASD"), LastInterlocutors(name: "NekMMM", avatarType: "shield" , gradientName: "pinkWhite", roomId: "SASD"), LastInterlocutors(name: "Fedorer", avatarType: "spinner" , gradientName: "yellowOrange", roomId: "SASD")]
+        UserDefaults.standard.interlocutors = interlocutors*/
+        
         view.addSubview(menuStackView)
         view.addSubview(skipOnboardingButton)
         view.addSubview(topSeparator)
@@ -84,8 +87,6 @@ class MenuViewController: UIViewController {
         nextButton.addTarget(self, action: #selector(nextButtonTapped), for: .touchUpInside)
         skipOnboardingButton.addTarget(self, action: #selector(skipOnboardingButtonTapped), for: .touchUpInside)
         
-        addNameAvatarViews()
-        
         NSLayoutConstraint.activate([menuStackView.centerYAnchor.constraint(equalTo: view.centerYAnchor), menuStackView.centerXAnchor.constraint(equalTo: view.centerXAnchor), skipOnboardingButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -5), skipOnboardingButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 100), skipOnboardingButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -100), topSeparator.bottomAnchor.constraint(equalTo: skipOnboardingButton.topAnchor), topSeparator.heightAnchor.constraint(equalToConstant: 1), topSeparator.leadingAnchor.constraint(equalTo: skipOnboardingButton.leadingAnchor), topSeparator.trailingAnchor.constraint(equalTo: skipOnboardingButton.trailingAnchor), bottomSeparator.topAnchor.constraint(equalTo: skipOnboardingButton.bottomAnchor), bottomSeparator.heightAnchor.constraint(equalToConstant: 1), bottomSeparator.leadingAnchor.constraint(equalTo: skipOnboardingButton.leadingAnchor), bottomSeparator.trailingAnchor.constraint(equalTo: skipOnboardingButton.trailingAnchor), textLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 40), textLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30), textLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30), nextButton.bottomAnchor.constraint(equalTo: topSeparator.topAnchor, constant: -20), nextButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20), nextButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20), nextButton.heightAnchor.constraint(equalToConstant: 80)])
         
         NSLayoutConstraint.activate([donateButton.heightAnchor.constraint(equalToConstant: 51), profileButton.heightAnchor.constraint(equalToConstant: 51), createRoomButton.heightAnchor.constraint(equalToConstant: 51), enterRoomButton.heightAnchor.constraint(equalToConstant: 51), changingButton.heightAnchor.constraint(equalToConstant: 55), changingButton.widthAnchor.constraint(equalToConstant: 55)])
@@ -94,46 +95,55 @@ class MenuViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(true, animated: true)
+        addNameAvatarViews()
+        AchievementService.shared.checkAppLaunch()
     }
     
     private func addNameAvatarViews(){
-        for (index, interlocutor) in interlocutotors.enumerated() {
+        
+        for nameAvatarView in nameAvatarViews {
+            nameAvatarView.removeFromSuperview()
+        }
+        nameAvatarViews.removeAll()
+
+        for (index, interlocutor) in UserDefaults.standard.interlocutors.enumerated() {
             let avatarView = NameAvatarView()
+            avatarView.alpha = self.isActive ? 0 : 1
             avatarView.tapHandler = {
                 self.navigationController?.pushViewController(CallViewController(isEnter: true, isOnboarding: false, roomId: interlocutor.roomId), animated: true)
             }
             avatarView.name.text = interlocutor.name
             view.addSubview(avatarView)
             avatarView.layer.shadowColor = CGColor(red: 236/255, green: 140/255, blue: 105/255, alpha: 1)
-            avatarView.layer.shadowRadius = 15.0
+            avatarView.layer.shadowRadius = 10.0
             avatarView.layer.shadowOpacity = 1
             avatarView.translatesAutoresizingMaskIntoConstraints = false
             switch index {
             case 0:
                 NSLayoutConstraint.activate([
                     avatarView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 55),
-                    avatarView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: -70)])
+                    avatarView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: -100)])
                 
                 avatarView.transform = .init(rotationAngle: 0.55).scaledBy(x: 0.8, y: 0.8)
                 
             case 1:
                 NSLayoutConstraint.activate([
                     avatarView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 55),
-                    avatarView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 70)])
+                    avatarView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 100)])
             
                 avatarView.transform = .init(rotationAngle: 0.17).scaledBy(x: 0.8, y: 0.8)
                 
             case 2:
                 NSLayoutConstraint.activate([
                     avatarView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 0),
-                    avatarView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: -70)])
+                    avatarView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: -100)])
                 
                 avatarView.transform = .init(rotationAngle: -0.31).scaledBy(x: 0.8, y: 0.8)
                 
             case 3:
                 NSLayoutConstraint.activate([
                     avatarView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 0),
-                    avatarView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 70)])
+                    avatarView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 100)])
                 
                 avatarView.transform = .init(rotationAngle: -0.26).scaledBy(x: 0.8, y: 0.8)
             default:
@@ -171,7 +181,7 @@ class MenuViewController: UIViewController {
         animator.startAnimation()
         
         if isOnboarding && tapCounter == 0 {
-            textLabel.text = "Кнопка \"Жесты\" является кнопкой помощи, в которой описаны все жесты, применяемые в приложении"
+            textLabel.text = NSLocalizedString("menuSupport", comment: "")
             profileButton.isEnabled = false
             createRoomButton.isEnabled = false
             enterRoomButton.isEnabled = false
@@ -229,15 +239,15 @@ class MenuViewController: UIViewController {
         case 1:
             donateButton.isEnabled = false
             profileButton.isEnabled = true
-            textLabel.text = "Кнопка \"Профиль\" открывает всю информацию о вашем аккаунте с возможностью ее редактировать"
+            textLabel.text = NSLocalizedString("menuProfile", comment: "")
         case 2:
             profileButton.isEnabled = false
             createRoomButton.isEnabled = true
-            textLabel.text = "Кнопка \"Создать комнату\" создает комнату, к которой может присоединиться ваш собеседник. Во время ожидания можно потренировать использование жестов"
+            textLabel.text = NSLocalizedString("menuCreateRoom", comment: "")
         case 3:
             createRoomButton.isEnabled = false
             enterRoomButton.isEnabled = true
-            textLabel.text = "Кнопка \"Войти в комнату\" позволяет войти в комнату, созданную вашим собеседником с помощью переданного кода"
+            textLabel.text = NSLocalizedString("menuJoinRoom", comment: "")
         case 4:
             navigationController?.pushViewController(CallViewController(isEnter: true, isOnboarding: true, roomId: nil), animated: true)
         default:

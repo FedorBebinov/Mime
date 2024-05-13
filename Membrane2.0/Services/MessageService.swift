@@ -11,7 +11,7 @@ import CoreHaptics
 
 class MessageService: NSObject, URLSessionWebSocketDelegate {
     
-    let baseUrl = "ws://127.0.0.1:8080"
+    let baseUrl = "ws://34.32.64.24:8080"
     let keychain = Keychain(service: "ru.hse.Mime")
     let zoomLength = 7.0
     let longPressLength = 2.5
@@ -85,10 +85,24 @@ class MessageService: NSObject, URLSessionWebSocketDelegate {
                                 let roomInfo: RoomInfo = try decoder.decode(RoomInfo.self, from: Data(jsonData.utf8))
                                 if roomInfo.otherUser != "nil" {
                                     self.delegate?.secondUserConnected()
-                                    //interlocutotors.append(roomInfo.otherUser)
+                                    AchievementService.shared.trackCalls(username: roomInfo.otherUser)
                                     Task {
-                                        let otherUserInfo = try await self.networkService.getUserInfoById(id: roomInfo.otherUser)
-                                        print(otherUserInfo.username)
+                                        do {
+                                            let otherUserInfo = try await self.networkService.getUserInfoById(id: roomInfo.otherUser)
+                                            let newUser = LastInterlocutors(name: otherUserInfo.username, avatarType: otherUserInfo.figureType, gradientName: otherUserInfo.figureColor, roomId: roomInfo.roomId)
+                                            var interlocutors = UserDefaults.standard.interlocutors
+                                            if interlocutors.contains(where: { interlocutor in
+                                                interlocutor.name == newUser.name
+                                            }) == false {
+                                                interlocutors.append(newUser)
+                                                if interlocutors.count == 5 {
+                                                    interlocutors.removeFirst()
+                                                }
+                                                UserDefaults.standard.interlocutors = interlocutors
+                                            }
+                                        } catch {
+                                            print(error)
+                                        }
                                     }
                                 } else {
                                     self.delegate?.didConnectToRoomId(roomId: roomInfo.roomId)
@@ -139,12 +153,11 @@ class MessageService: NSObject, URLSessionWebSocketDelegate {
 
     func urlSession(_ session: URLSession, webSocketTask: URLSessionWebSocketTask, didOpenWithProtocol protocol: String?) {
         print("Connected to server")
-        ping()
+        //ping()
     }
     
     func urlSession(_ session: URLSession, webSocketTask: URLSessionWebSocketTask, didCloseWith closeCode: URLSessionWebSocketTask.CloseCode, reason: Data?) {
         print(closeCode)
-        print(reason)
     }
     
     func playZoomVibrationIfNeeded(){
@@ -166,7 +179,8 @@ class MessageService: NSObject, URLSessionWebSocketDelegate {
         if lastReceivedMessage.gesture == .longPress,
            Date.now.timeIntervalSince(lastReceivedMessage.date) <= longPressLength,
            lastSentMessage.gesture == .longPress,
-           Date.now.timeIntervalSince(lastSentMessage.date) <= longPressLength {
+           Date.now.timeIntervalSince(lastSentMessage.date) <= longPressLength,
+           lastReceivedMessage.points.count == lastSentMessage.points.count {
             playVibration(forResourse: "longPressSound", duration: longPressLength)
         }
     }

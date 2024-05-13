@@ -9,22 +9,30 @@ import UIKit
 
 class DonationViewController: UIViewController {
     
-    private lazy var supportLabel = MainFactory.topLabel(text: "Поддрежать проект")
+    private lazy var supportLabel = MainFactory.topLabel(text: NSLocalizedString("supportProject", comment: ""))
     
-    private lazy var textPic = MainFactory.imageView(name: "supportText")
+    private lazy var textPic: UIImageView = {
+        let image = UIImage(resource: .supportText).withRenderingMode(.alwaysTemplate)
+        let imageView = MainFactory.imageView(image: image)
+        imageView.tintColor = .textColor
+        return imageView
+    }()
     
     private lazy var teamPic = MainFactory.imageView(name: "authorsDonate")
     
-    private lazy var donateButton = MainFactory.mainButton(text: "Поддержать авторов")
+    private lazy var donateButton = MainFactory.mainButton(text: NSLocalizedString("supportAuthors", comment: ""))
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .backgroundColor
+        navigationController?.navigationBar.tintColor = .textColor
         
         view.addSubview(supportLabel)
         view.addSubview(textPic)
         view.addSubview(donateButton)
         view.addSubview(teamPic)
+        
+        donateButton.addTarget(self, action: #selector(donateButtonTapped), for: .touchUpInside)
         
         NSLayoutConstraint.activate([
             supportLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
@@ -42,12 +50,19 @@ class DonationViewController: UIViewController {
             donateButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             donateButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             donateButton.heightAnchor.constraint(equalToConstant: 80),
-            donateButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -99)
+            donateButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16)
         ])
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(false, animated: animated)
+    }
+    
+    @objc
+    func donateButtonTapped(){
+        if let url = URL(string: "https://www.donationalerts.com/r/mimeapp"){
+            UIApplication.shared.open(url)
+        }
     }
 }

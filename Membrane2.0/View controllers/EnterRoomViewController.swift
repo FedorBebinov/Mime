@@ -9,13 +9,13 @@ import UIKit
 
 class EnterRoomViewController: UIViewController {
     
-    private lazy var typeNumberLabel = MainFactory.topLabel(text: "Введите номер комнаты")
+    private lazy var typeNumberLabel = MainFactory.topLabel(text: NSLocalizedString("enterRoomNumber", comment: ""))
     
-    private lazy var roomNumberTextField = MainFactory.textFieldWithPlaceholder(placeholder: "Номер комнаты")
+    private lazy var roomNumberTextField = MainFactory.textFieldWithPlaceholder(placeholder: NSLocalizedString("roomNumber", comment: ""))
     
     private lazy var separator = MainFactory.separator()
     
-    private lazy var doneButton = MainFactory.mainButton(text: "Готово")
+    private lazy var doneButton = MainFactory.mainButton(text: NSLocalizedString("doneGotov", comment: ""))
     
     override func viewDidLoad() {
         super.viewDidLoad()

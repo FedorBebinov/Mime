@@ -31,17 +31,19 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             window.rootViewController = UINavigationController(rootViewController: MenuViewController(isOnboarding: false))
         }else {
             window.rootViewController = UINavigationController(rootViewController: StartViewController())
+            //window.rootViewController = UINavigationController(rootViewController: MenuViewController(isOnboarding: false))
         }
             window.makeKeyAndVisible()
             self.window = window
-        UNUserNotificationCenter.current().requestAuthorization(options: [.sound, .badge, .alert]) { success, error in
-            if success {
-                print("success")
-            } else if let error {
-                print(error)
-            }
+        
+        if UserDefaults.standard.firstLaunchDateSeconds == 0 {
+            UserDefaults.standard.firstLaunchDateSeconds = Date.now.timeIntervalSince1970
         }
-        print("Message: ", AchievementService.shared.messageAchievement.unlocked)
+
+        UserDefaults.standard.register(defaults: ["WhiteTheme": true,
+                                                  "HapticsActive": true,
+                                                  "SoundActive": true])
+
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {

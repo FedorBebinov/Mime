@@ -11,7 +11,7 @@ import KeychainAccess
 class NetworkService{
     
     var isAuthorized: Bool = false
-    let baseURL = "http://localhost:8080"
+    let baseURL = "http://34.32.64.24:8080"
     let keychain = Keychain(service: "ru.hse.Mime")
     
     init(){
@@ -41,7 +41,7 @@ class NetworkService{
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         let encoder: JSONEncoder = JSONEncoder()
         request.httpBody = try encoder.encode(data)
-        let (data, response) = try await URLSession.shared.data(for: request)
+        let (responseData, response) = try await URLSession.shared.data(for: request)
         if let httpResponse = response as? HTTPURLResponse {
             if httpResponse.statusCode == 404 {
                 throw AuthorizationError.userDoesNotExist
@@ -50,8 +50,9 @@ class NetworkService{
             }
             try validate(response)
             let decoder: JSONDecoder = JSONDecoder()
-            let tokenData = try decoder.decode(TokenData.self, from: data)
+            let tokenData = try decoder.decode(TokenData.self, from: responseData)
             saveToken(token: tokenData.token)
+            UserDefaults.standard.set(data.username, forKey: "Username")
         }
     }
     
@@ -119,7 +120,7 @@ class NetworkService{
             print("no token")
             return ""
         }
-        let url:URL = URL(string: "\(baseURL)/v1/user/info")!
+        let url:URL = URL(string: "\(baseURL)/v1/user")!
         var request: URLRequest = URLRequest(url:url)
         request.httpMethod = "GET"
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
@@ -167,7 +168,7 @@ class NetworkService{
             print("no token")
             throw AuthorizationError.noToken
         }
-        let url:URL = URL(string: "\(baseURL)v1/user/info/\(id)")!
+        let url:URL = URL(string: "\(baseURL)/v1/user/\(id)")!
         var request: URLRequest = URLRequest(url:url)
         request.httpMethod = "GET"
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
@@ -188,7 +189,7 @@ class NetworkService{
         request.httpMethod = "PUT"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        let encoder: JSONEncoder = JSONEncoder()
+//        let encoder: JSONEncoder = JSONEncoder()
         //request.httpBody = try encoder.encode(data)
         //let (_, response) = try await URLSession.shared.data(for: request)
     }

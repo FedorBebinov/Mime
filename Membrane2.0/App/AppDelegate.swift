@@ -7,11 +7,10 @@
 
 import UIKit
 import Amplitude
+import FirebaseCore
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
-
-
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Enable sending automatic session events
@@ -22,6 +21,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Amplitude.instance().setUserId("userId")
          // Log an event
          Amplitude.instance().logEvent("app_start")
+
+        FirebaseApp.configure()
 
         return true
     }

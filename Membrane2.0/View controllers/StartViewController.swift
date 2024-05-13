@@ -9,17 +9,27 @@ import UIKit
 
 class StartViewController: UIViewController{
     
-    private lazy var loginButton = MainFactory.mainButton(text: "Вход")
+    private lazy var loginButton = MainFactory.mainButton(text: NSLocalizedString("entrance", comment: ""))
     
-    private lazy var registerButton = MainFactory.separatedButton(text: "Регистрация")
+    private lazy var registerButton = MainFactory.separatedButton(text: NSLocalizedString("registration", comment: ""))
     
-    private lazy var welcomeImage = MainFactory.imageView(name: "enterImage")
+    private lazy var welcomeImage: UIImageView = {
+        let image = UIImage(resource: .enter).withRenderingMode(.alwaysTemplate)
+        let imageView = MainFactory.imageView(image: image)
+        imageView.tintColor = .textColor
+        return imageView
+    }()
     
     private lazy var topLine = MainFactory.separator()
     
     private lazy var bottomLine = MainFactory.separator()
     
-    private lazy var mimeImage = MainFactory.imageView(name: "mime")
+    private lazy var mimeImage: UIImageView = {
+        let image = UIImage(resource: .mime).withRenderingMode(.alwaysTemplate)
+        let imageView = MainFactory.imageView(image: image)
+        imageView.tintColor = .textColor
+        return imageView
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()

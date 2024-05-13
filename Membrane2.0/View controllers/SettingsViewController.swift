@@ -11,19 +11,27 @@ class SettingsViewController: UIViewController {
     
     private let networkService = NetworkService()
     
-    private lazy var settingsLabel = MainFactory.topLabel(text: "Настройки")
+    private let notificationService = NotificationService()
     
-    private lazy var evaluateLabel = MainFactory.topLabel(text: "Оценить")
+    private lazy var settingsLabel = MainFactory.topLabel(text: NSLocalizedString("settings", comment: ""))
     
-    private lazy var whiteThemeLabel = MainFactory.topLabel(text: "Светлая тема")
+    private lazy var evaluateLabel: UILabel = {
+        let label = MainFactory.topLabel(text: NSLocalizedString("help", comment: ""))
+        label.isUserInteractionEnabled = true
+        let recognizer = UITapGestureRecognizer(target: self, action: #selector(helpTapped))
+        label.addGestureRecognizer(recognizer)
+        return label
+    }()
+
+    private lazy var whiteThemeLabel = MainFactory.topLabel(text: NSLocalizedString("whiteTheme", comment: ""))
     
-    private lazy var soundLabel = MainFactory.topLabel(text: "Звук")
+    private lazy var soundLabel = MainFactory.topLabel(text: NSLocalizedString("sound", comment: ""))
     
-    private lazy var hapticsLabel = MainFactory.topLabel(text: "Вибрации")
+    private lazy var hapticsLabel = MainFactory.topLabel(text: NSLocalizedString("haptics", comment: ""))
     
-    private lazy var timeLabel = MainFactory.topLabel(text: "Время уведомления")
+    private lazy var timeLabel = MainFactory.topLabel(text: NSLocalizedString("notificationTime", comment: ""))
     
-    private lazy var notificationsLabel = MainFactory.topLabel(text: "Уведомления")
+    private lazy var notificationsLabel = MainFactory.topLabel(text: NSLocalizedString("notifications", comment: ""))
     
     private lazy var switchWhiteTheme = MainFactory.switchButton()
     
@@ -33,9 +41,14 @@ class SettingsViewController: UIViewController {
     
     private lazy var switchNotifications = MainFactory.switchButton()
     
-    private lazy var evaluateButton = MainFactory.imageButton(imageName: "nextLine")
+    private lazy var evaluateButton: UIButton = {
+        let image = UIImage(resource: .nextLine).withRenderingMode(.alwaysTemplate)
+        let button = MainFactory.imageButton(image: image)
+        button.tintColor = .textColor
+        return button
+    }()
     
-    private lazy var exitAccountButton = MainFactory.deleteButton(text: "Выйти из аккаунта")
+    private lazy var exitAccountButton = MainFactory.deleteButton(text: NSLocalizedString("logout", comment: ""))
     
     private lazy var evaluateSeparator = MainFactory.paleSeparator()
     
@@ -65,6 +78,12 @@ class SettingsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .backgroundColor
+        
+        UNUserNotificationCenter.current().requestAuthorization(options: [.sound, .badge, .alert]) { success, error in
+            DispatchQueue.main.async {
+                self.switchNotifications.isEnabled = success
+            }
+        }
         
         view.addSubview(settingsLabel)
         view.addSubview(evaluateLabel)
@@ -205,13 +224,13 @@ class SettingsViewController: UIViewController {
         if switchWhiteTheme.isOn {
             UserDefaults.standard.setValue(switchWhiteTheme.isOn, forKey: "WhiteTheme")
             appearance = .light
-            self.overrideUserInterfaceStyle = appearance
-            navigationController?.navigationBar.tintColor = UIColor(red: 31/255, green: 31/255, blue: 31/255, alpha: 1)
+            navigationController?.navigationBar.tintColor = .textColor //UIColor(red: 31/255, green: 31/255, blue: 31/255, alpha: 1)
+            UIApplication.shared.keyWindow?.overrideUserInterfaceStyle = appearance
         } else {
             UserDefaults.standard.setValue(switchWhiteTheme.isOn, forKey: "WhiteTheme")
             appearance = .dark
-            self.overrideUserInterfaceStyle = appearance
-            navigationController?.navigationBar.tintColor = UIColor(red: 245/255, green: 245/255, blue: 245/255, alpha: 1)
+            UIApplication.shared.keyWindow?.overrideUserInterfaceStyle = appearance
+            navigationController?.navigationBar.tintColor = .textColor //UIColor(red: 245/255, green: 245/255, blue: 245/255, alpha: 1)
         }
     }
     
@@ -243,11 +262,17 @@ class SettingsViewController: UIViewController {
     {
         let time = sender.date
         UserDefaults.standard.setValue(time.timeIntervalSince1970, forKey: "NotificationTime")
+        notificationService.addNotification()
     }
     
     @objc
     private func logoutButtonTapped(){
         networkService.deleteToken()
         navigationController?.setViewControllers([StartViewController()], animated: true)
+    }
+
+    @objc
+    private func helpTapped(){
+        navigationController?.pushViewController(GesturesViewController(), animated: true)
     }
 }

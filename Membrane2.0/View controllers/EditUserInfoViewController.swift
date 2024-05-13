@@ -16,15 +16,15 @@ class EditUserInfoViewController: UIViewController{
     
     private let activityIndicatorView = NVActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: 100, height: 50), type: .ballBeat, color: .textColor, padding: nil)
     
-    private lazy var editLabel = MainFactory.topLabel(text: "Редактирование профиля")
+    private lazy var editLabel = MainFactory.topLabel(text: NSLocalizedString("profileEdit", comment: ""))
     
-    private lazy var nameLabel = MainFactory.miniLabel(text: "Логин")
+    private lazy var nameLabel = MainFactory.miniLabel(text: NSLocalizedString("login", comment: ""))
     
-    private lazy var passwordLabel = MainFactory.miniLabel(text: "Пароль")
+    private lazy var passwordLabel = MainFactory.miniLabel(text: NSLocalizedString("password", comment: ""))
     
-    private lazy var avatarLabel = MainFactory.miniLabel(text: "Аватар")
+    private lazy var avatarLabel = MainFactory.miniLabel(text: NSLocalizedString("avatar", comment: ""))
     
-    private lazy var avatarTextLabel = MainFactory.changeLabel(text: "Выбрать другой")
+    private lazy var avatarTextLabel = MainFactory.changeLabel(text: NSLocalizedString("chooseAnother", comment: ""))
     
     private lazy var nameSeparator = MainFactory.paleSeparator()
     
@@ -44,17 +44,17 @@ class EditUserInfoViewController: UIViewController{
     
     private lazy var nameTextField = MainFactory.textField()
     
-    private lazy var oldPasswordTextField = MainFactory.passwordTextField(placeholder: "Старый пароль")
+    private lazy var oldPasswordTextField = MainFactory.passwordTextField(placeholder: NSLocalizedString("oldPassword", comment: ""))
     
-    private lazy var newPasswordTextField = MainFactory.passwordTextField(placeholder: "Новый пароль")
+    private lazy var newPasswordTextField = MainFactory.passwordTextField(placeholder: NSLocalizedString("newPassword", comment: ""))
     
-    private lazy var nameEditButton = MainFactory.editButton()
+    private lazy var nameEditButton = MainFactory.separatedButton(text: NSLocalizedString("change", comment: ""))
+
+    private lazy var passwordEditButton = MainFactory.separatedButton(text: NSLocalizedString("change", comment: ""))
     
-    private lazy var passwordEditButton = MainFactory.editButton()
+    private lazy var avatarEditButton = MainFactory.separatedButton(text: NSLocalizedString("select", comment: ""))
     
-    private lazy var avatarEditButton = MainFactory.separatedButton(text: "Перейти")
-    
-    private lazy var changeAvatarButton = MainFactory.separatedButton(text: "Сменить фигуру")
+    private lazy var changeAvatarButton = MainFactory.separatedButton(text: NSLocalizedString("changeFigure", comment: ""))
     
     private lazy var topAvatarSeparator = MainFactory.separator()
     
@@ -62,25 +62,26 @@ class EditUserInfoViewController: UIViewController{
     
     private lazy var saveIndicatorImage = MainFactory.hidenImageView(name: "savedChanges")
     
-    private lazy var passwordButton = MainFactory.imageButton(imageName: "showPassword")
+    private lazy var passwordButton: UIButton = {
+        let image = UIImage(resource: .showPassword).withRenderingMode(.alwaysTemplate)
+        let button = MainFactory.imageButton(image: image)
+        button.tintColor = .textColor
+        return button
+    }()
+
+    init(username: String) {
+        super.init(nibName: nil, bundle: nil)
+        nameTextField.text = username
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .backgroundColor
         hideKeyboardWhenTappedAround()
-        activityIndicatorView.startAnimating()
-        Task {
-            do {
-                let username = try await service.getUsername()
-                await MainActor.run {
-                    activityIndicatorView.stopAnimating()
-                    nameTextField.text = username
-                }
-                
-            } catch{
-                print(error)
-            }
-        }
         
         navigationController?.navigationBar.tintColor = .textColor
         

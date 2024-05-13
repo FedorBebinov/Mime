@@ -26,11 +26,16 @@ class AuthorizationViewController: UIViewController {
     
     private lazy var nameTextField = MainFactory.textFieldLogin(placeholder: NSLocalizedString("login", comment: ""))
     
-    private lazy var passwordTextField = MainFactory.textFieldLogin(placeholder: "Пароль")
+    private lazy var passwordTextField = MainFactory.textFieldLogin(placeholder: NSLocalizedString("password", comment: ""))
     
     private lazy var actionButton = MainFactory.mainButton(text: buttonText)
     
-    private lazy var passwordButton = MainFactory.imageButton(imageName: "showPassword")
+    private lazy var passwordButton: UIButton = {
+        let image = UIImage(resource: .showPassword).withRenderingMode(.alwaysTemplate)
+        let button = MainFactory.imageButton(image: image)
+        button.tintColor = .textColor
+        return button
+    }()
     
     private let isLogin: Bool
     private let labelText: String
@@ -39,11 +44,11 @@ class AuthorizationViewController: UIViewController {
     init(isLogin: Bool) {
         self.isLogin = isLogin
         if isLogin {
-            labelText = "Вход"
-            buttonText = "Войти"
+            labelText = NSLocalizedString("entrance", comment: "")
+            buttonText = NSLocalizedString("enter", comment: "")
         } else {
-            labelText = "Регистрация"
-            buttonText = "Зарегестрироваться"
+            labelText = NSLocalizedString("registration", comment: "")
+            buttonText = NSLocalizedString("register", comment: "")
         }
         super.init(nibName: nil, bundle: nil)
     }
@@ -113,7 +118,7 @@ class AuthorizationViewController: UIViewController {
     @objc
     private func actionButtonTapped(){
         guard let name = nameTextField.text, let password = passwordTextField.text, !name.isEmpty, !password.isEmpty else{
-            errorAlert(tittle: "Ошибка", message: "Логин и пароль не должны быть пустыми")
+            errorAlert(tittle: NSLocalizedString("error", comment: ""), message: "Логин и пароль не должны быть пустыми")
             return
         }
         

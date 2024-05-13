@@ -18,20 +18,26 @@ class CallViewController: UIViewController, MessageServiceDelegate {
     private var didComplete = false
     
     private var audioPlayer = AVAudioPlayer()
-    
-    private lazy var enterLabel = MainFactory.hidenLabel(text: "Собеседник подключился")
+
+    private var repeatAudioPlayer: AVAudioPlayer = .init()
+
+    private var soundActive: Bool {
+        UserDefaults.standard.bool(forKey: "SoundActive")
+    }
+
+    private lazy var enterLabel = MainFactory.hidenLabel(text: NSLocalizedString("interlocutorConnected", comment: ""))
     
     private var isEnter: Bool
     
     private var isOnboarding: Bool
     
-    private lazy var onboardingLabel = MainFactory.gestureTextLabel(text: "А теперь попробуем потренировать жесты. Нажмите на экран для распознания жеста\"Касание\"")
+    private lazy var onboardingLabel = MainFactory.gestureRoomTextLabel(text: "А теперь попробуем потренировать жесты. Нажмите на экран для распознания жеста\"Касание\"")
     
     private var tapCounter = 0
     
     private lazy var backMenuButton = MainFactory.mainButton(text: "Вернуться в меню")
     
-    private lazy var roomIdButton = MainFactory.separatedButton(text: "Номер комнаты:")
+    private lazy var roomIdButton = MainFactory.separatedRoomButton(text: NSLocalizedString("roomNumber:", comment: ""))
     
     private lazy var shareButton = MainFactory.imageButton(imageName: "shareButton")
     
@@ -39,7 +45,7 @@ class CallViewController: UIViewController, MessageServiceDelegate {
     
     private lazy var bottomSeparator = MainFactory.separator()
     
-    private lazy var copyLabel = MainFactory.hidenLabel(text: "Код скопирован!")
+    private lazy var copyLabel = MainFactory.hidenLabel(text: NSLocalizedString("codeCopyed", comment: ""))
     
     private lazy var quitDoorButton = MainFactory.imageButton(imageName: "quitDoor")
     
@@ -57,15 +63,7 @@ class CallViewController: UIViewController, MessageServiceDelegate {
         return stackView
     }()
     
-    private var isUserInRoom = false {
-        didSet{
-            if isUserInRoom {
-                doorImage.image = UIImage(named: "activeDoor")
-            } else{
-                doorImage.image = UIImage(named: "inactiveDoor")
-            }
-        }
-    }
+    private var isUserInRoom = false
     
     private lazy var messageService: MessageService = {
         var messageService = MessageService()
@@ -86,9 +84,9 @@ class CallViewController: UIViewController, MessageServiceDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .backgroundColor
+        view.backgroundColor = UIColor(red: 19/255, green: 19/255, blue: 19/255, alpha: 1)
         NotificationCenter.default.addObserver(forName: UIDevice.deviceDidShakeNotification, object: nil, queue: .main) { _ in
-            print("shake")
+            self.playShakeAnimationIfNeeded()
         }
                 
         if let roomId = self.roomId {
@@ -135,7 +133,20 @@ class CallViewController: UIViewController, MessageServiceDelegate {
         NSLayoutConstraint.activate([backMenuButton.centerYAnchor.constraint(equalTo: view.centerYAnchor), backMenuButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20), backMenuButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20), backMenuButton.heightAnchor.constraint(equalToConstant: 80)])
         
         addGestures()
-        
+
+        if let customBackground = UserDefaults.standard.customBackground {
+            let backgroundImageView = UIImageView(image: .init(named: customBackground))
+            backgroundImageView.contentMode = .scaleAspectFill
+            backgroundImageView.translatesAutoresizingMaskIntoConstraints = false
+            view.insertSubview(backgroundImageView, at: 0)
+            NSLayoutConstraint.activate([
+                backgroundImageView.topAnchor.constraint(equalTo: view.topAnchor),
+                backgroundImageView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+                backgroundImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+                backgroundImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+            ])
+        }
+
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -151,14 +162,50 @@ class CallViewController: UIViewController, MessageServiceDelegate {
         twoFingersTap.numberOfTouchesRequired = 2
         view.addGestureRecognizer(twoFingersTap)
         
+        let threeFingersTap = UITapGestureRecognizer(target: self, action: #selector(self.handleThreeFingersTap))
+        threeFingersTap.numberOfTouchesRequired = 3
+        view.addGestureRecognizer(threeFingersTap)
+        
+        let fourFingersTap = UITapGestureRecognizer(target: self, action: #selector(self.handleFourFingersTap))
+        fourFingersTap.numberOfTouchesRequired = 4
+        view.addGestureRecognizer(fourFingersTap)
+        
         let longPress = UILongPressGestureRecognizer(target: self, action:  #selector(self.handleLongPress))
         view.addGestureRecognizer(longPress)
+        
+        let twoFingerslongPress = UILongPressGestureRecognizer(target: self, action:  #selector(self.handleTwoFingersLongPress))
+        twoFingerslongPress.numberOfTouchesRequired = 2
+        view.addGestureRecognizer(twoFingerslongPress)
+        
+        let threeFingerslongPress = UILongPressGestureRecognizer(target: self, action:  #selector(self.handleThreeFingersLongPress))
+        threeFingerslongPress.numberOfTouchesRequired = 3
+        view.addGestureRecognizer(threeFingerslongPress)
+        
+        let fourFingerslongPress = UILongPressGestureRecognizer(target: self, action:  #selector(self.handleFourFingersLongPress))
+        fourFingerslongPress.numberOfTouchesRequired = 4
+        view.addGestureRecognizer(fourFingerslongPress)
         
         let zoomGesture = UIPinchGestureRecognizer(target: self, action: #selector(self.handlePinch))
         view.addGestureRecognizer(zoomGesture)
         
         let moveGesture = UIPanGestureRecognizer(target: self, action: #selector(self.handlePan))
+        moveGesture.maximumNumberOfTouches = 1
         view.addGestureRecognizer(moveGesture)
+        
+        let twoFingersMoveGesture = UIPanGestureRecognizer(target: self, action: #selector(self.handleTwoFingersPan))
+        twoFingersMoveGesture.minimumNumberOfTouches = 2
+        twoFingersMoveGesture.maximumNumberOfTouches = 2
+        view.addGestureRecognizer(twoFingersMoveGesture)
+        
+        let threeFingersMoveGesture = UIPanGestureRecognizer(target: self, action: #selector(self.handleThreeFingersPan))
+        threeFingersMoveGesture.minimumNumberOfTouches = 3
+        threeFingersMoveGesture.maximumNumberOfTouches = 3
+        view.addGestureRecognizer(threeFingersMoveGesture)
+        
+        let fourFingersMoveGesture = UIPanGestureRecognizer(target: self, action: #selector(self.handleFourFingersPan))
+        fourFingersMoveGesture.minimumNumberOfTouches = 4
+        fourFingersMoveGesture.maximumNumberOfTouches = 4
+        view.addGestureRecognizer(fourFingersMoveGesture)
     }
     
     @objc private func handleTap(_ sender: UITapGestureRecognizer?) {
@@ -167,13 +214,16 @@ class CallViewController: UIViewController, MessageServiceDelegate {
         }
         let tapCoordinate = sender.location(in: view)
         drawGesture(gesture: .touch, points: [tapCoordinate])
-        playSound(named: "touchSound", type: "mp3")
+        if !isUserInRoom {
+            playSound(named: "1touch", type: "mp3")
+        }
+        AchievementService.shared.checkMessageType(points: [tapCoordinate], gesture: "tap")
         sendMessage(points: [tapCoordinate], gesture: .touch)
         
         if isOnboarding && tapCounter == 0 {
             let seconds = 1.5
             DispatchQueue.main.asyncAfter(deadline: .now() + seconds) {
-                self.onboardingLabel.text = "Отлично! Теперь попробуйте долго удерживать палец на одном месте экрана для распознания жеста\"Зажатие\""
+                self.onboardingLabel.text = NSLocalizedString("callOnboarding1", comment: "")
                 self.tapCounter += 1
             }
         }
@@ -187,16 +237,55 @@ class CallViewController: UIViewController, MessageServiceDelegate {
         points.append(sender.location(ofTouch: 0, in: view))
         points.append(sender.location(ofTouch: 1, in: view))
         drawGesture(gesture: .touch, points: points)
-        playSound(named: "touchSound", type: "mp3")
+        AchievementService.shared.checkMessageType(points: points, gesture: "tap")
+        if !isUserInRoom {
+            playSound(named: "2touch", type: "mp3")
+        }
         sendMessage(points: points, gesture: .touch)
         
-        if isOnboarding && tapCounter == 0 {
+        if isOnboarding && tapCounter == 4 {
             let seconds = 1.5
             DispatchQueue.main.asyncAfter(deadline: .now() + seconds) {
-                self.onboardingLabel.text = "Отлично! Теперь попробуйте долго удерживать палец на одном месте экрана для распознания жеста\"Зажатие\""
+                self.onboardingLabel.text = NSLocalizedString("callOnboarding1", comment: "")
                 self.tapCounter += 1
+                self.drawCenterZoomGif()
             }
         }
+        
+    }
+    
+    @objc private func handleThreeFingersTap(_ sender: UITapGestureRecognizer?) {
+        guard let sender else {
+            return
+        }
+        var points = [CGPoint]()
+        points.append(sender.location(ofTouch: 0, in: view))
+        points.append(sender.location(ofTouch: 1, in: view))
+        points.append(sender.location(ofTouch: 2, in: view))
+        drawGesture(gesture: .touch, points: points)
+        AchievementService.shared.checkMessageType(points: points, gesture: "tap")
+        if !isUserInRoom {
+            playSound(named: "touchSound", type: "mp3")
+        }
+        sendMessage(points: points, gesture: .touch)
+        
+    }
+    
+    @objc private func handleFourFingersTap(_ sender: UITapGestureRecognizer?) {
+        guard let sender else {
+            return
+        }
+        var points = [CGPoint]()
+        points.append(sender.location(ofTouch: 0, in: view))
+        points.append(sender.location(ofTouch: 1, in: view))
+        points.append(sender.location(ofTouch: 2, in: view))
+        points.append(sender.location(ofTouch: 3, in: view))
+        drawGesture(gesture: .touch, points: points)
+        AchievementService.shared.checkMessageType(points: points, gesture: "tap")
+        if !isUserInRoom {
+            playSound(named: "touchSound", type: "mp3")
+        }
+        sendMessage(points: points, gesture: .touch)
     }
     
     @objc private func handlePinch(_ sender: UIPanGestureRecognizer?) {
@@ -204,23 +293,25 @@ class CallViewController: UIViewController, MessageServiceDelegate {
             print("handlePinch")
             let tapCoordinate = sender?.location(in: view) ?? .zero
             drawGesture(gesture: .zoom, points: [tapCoordinate])
-            playSound(named: "zoomSound", type: "mp3")
+            AchievementService.shared.checkMessageType(points: [tapCoordinate], gesture: "zoom")
+            if !isUserInRoom {
+                playSound(named: "zoomSound", type: "mp3")
+            }
             sendMessage(points: [tapCoordinate], gesture: .zoom)
             
-            if isOnboarding && tapCounter == 2 {
+            if isOnboarding && tapCounter == 3 {
                 let seconds = 6.7
                 DispatchQueue.main.asyncAfter(deadline: .now() + seconds) {
-                    self.onboardingLabel.text = "А теперь попробуйте повторить жест другого пользователя, для появления реакции"
+                    self.onboardingLabel.text = NSLocalizedString("callOnboarding3", comment: "")
                     self.tapCounter += 1
-                    self.drawCenterZoomGif()
                 }
             } 
-            if isOnboarding && tapCounter == 3{
+            if isOnboarding && tapCounter == 5{
                 didComplete = true
                 self.messageService.playVibration(forResourse: "zoomSound", duration: 7.0)
                 let seconds = 6.7
                 DispatchQueue.main.asyncAfter(deadline: .now() + seconds) {
-                    self.onboardingLabel.text = "Поздравляем, обучение пройдено! Приятного времяприпровождения в пространстве Mime"
+                    self.onboardingLabel.text = NSLocalizedString("callOnboarding4", comment: "")
                     self.tapCounter += 1
                     self.backMenuButton.isHidden = false
                 }
@@ -228,17 +319,122 @@ class CallViewController: UIViewController, MessageServiceDelegate {
         }
     }
     
+    @objc private func handleFourFingersLongPress(_ sender: UILongPressGestureRecognizer?) {
+        guard let sender else {
+            return
+        }
+        if sender.state == .began {
+            var points = [CGPoint]()
+            points.append(sender.location(ofTouch: 0, in: view))
+            points.append(sender.location(ofTouch: 1, in: view))
+            points.append(sender.location(ofTouch: 2, in: view))
+            points.append(sender.location(ofTouch: 3, in: view))
+            drawGesture(gesture: .touch, points: points)
+            if !isUserInRoom {
+                playSound(named: "4touch", type: "mp3")
+            }
+            sendMessage(points: points, gesture: .touch)
+            let seconds = 1.0
+            DispatchQueue.main.asyncAfter(deadline: .now() + seconds) {
+                if sender.state != .ended {
+                    //let tapCoordinate = sender.location(in: self.view)
+                    AchievementService.shared.checkMessageType(points: points, gesture: "longPress")
+                    self.drawGesture(gesture: .longPress, points: points)
+                    if !self.isUserInRoom {
+                        self.playSound(named: "4hold", type: "mp3")
+                    }
+                    self.sendMessage(points: points, gesture: .longPress)
+                }
+            }
+        }
+    }
+    
+    @objc private func handleThreeFingersLongPress(_ sender: UILongPressGestureRecognizer?) {
+        guard let sender else {
+            return
+        }
+        if sender.state == .began {
+            var points = [CGPoint]()
+            points.append(sender.location(ofTouch: 0, in: view))
+            points.append(sender.location(ofTouch: 1, in: view))
+            points.append(sender.location(ofTouch: 2, in: view))
+            drawGesture(gesture: .touch, points: points)
+            if !isUserInRoom {
+                playSound(named: "3touch", type: "mp3")
+            }
+            sendMessage(points: points, gesture: .touch)
+            let seconds = 1.0
+            DispatchQueue.main.asyncAfter(deadline: .now() + seconds) {
+                if sender.state != .ended {
+                    //let tapCoordinate = sender.location(in: self.view)
+                    AchievementService.shared.checkMessageType(points: points, gesture: "longPress")
+                    self.drawGesture(gesture: .longPress, points: points)
+                    if !self.isUserInRoom {
+                        self.playSound(named: "3hold", type: "mp3")
+                    }
+                    self.sendMessage(points: points, gesture: .longPress)
+                }
+            }
+        }
+    }
+    
+    @objc private func handleTwoFingersLongPress(_ sender: UILongPressGestureRecognizer?) {
+        guard let sender else {
+            return
+        }
+        if sender.state == .began {
+            var points = [CGPoint]()
+            points.append(sender.location(ofTouch: 0, in: view))
+            points.append(sender.location(ofTouch: 1, in: view))
+            drawGesture(gesture: .touch, points: points)
+            if !isUserInRoom {
+                playSound(named: "2touch", type: "mp3")
+            }
+            sendMessage(points: points, gesture: .touch)
+            let seconds = 1.0
+            DispatchQueue.main.asyncAfter(deadline: .now() + seconds) {
+                if sender.state != .ended {
+                    //let tapCoordinate = sender.location(in: self.view)
+                    AchievementService.shared.checkMessageType(points: points, gesture: "longPress")
+                    self.drawGesture(gesture: .longPress, points: points)
+                    if !self.isUserInRoom {
+                        self.playSound(named: "2hold", type: "mp3")
+                    }
+                    self.sendMessage(points: points, gesture: .longPress)
+                }
+            }
+        }
+    }
+    
     @objc private func handleLongPress(_ sender: UILongPressGestureRecognizer?) {
-        if sender?.state == .began {
-            let tapCoordinate = sender?.location(in: view) ?? .zero
-            drawGesture(gesture: .longPress, points: [tapCoordinate])
-            playSound(named: "longPressSound", type: "mp3")
-            sendMessage(points: [tapCoordinate], gesture: .longPress)
+        guard let sender else {
+            return
+        }
+        
+        if sender.state == .began {
+            let tapCoordinate = sender.location(in: view)
+            drawGesture(gesture: .touch, points: [tapCoordinate])
+            if !isUserInRoom {
+                playSound(named: "1touch", type: "mp3")
+            }
+            sendMessage(points: [tapCoordinate], gesture: .touch)
+            let seconds = 1.2
+            DispatchQueue.main.asyncAfter(deadline: .now() + seconds) {
+                if sender.state != .ended {
+                    //let tapCoordinate = sender.location(in: self.view)
+                    AchievementService.shared.checkMessageType(points: [tapCoordinate], gesture: "longPress")
+                    self.drawGesture(gesture: .longPress, points: [tapCoordinate])
+                    if !self.isUserInRoom {
+                        self.playSound(named: "1hold", type: "mp3")
+                    }
+                    self.sendMessage(points: [tapCoordinate], gesture: .longPress)
+                }
+            }
             
             if isOnboarding && tapCounter == 1 {
                 let seconds = 3.0
                 DispatchQueue.main.asyncAfter(deadline: .now() + seconds) {
-                    self.onboardingLabel.text = "У вас отлично получается! Теперь попробуйте отвести пальцы друг от друга, словно пытаетесь увеличить контент на экране для распознания жеста\"Зум\""
+                    self.onboardingLabel.text = NSLocalizedString("callOnboarding5", comment: "")
                 }
                 tapCounter += 1
             }
@@ -246,25 +442,66 @@ class CallViewController: UIViewController, MessageServiceDelegate {
     }
     
     @objc private func handlePan(_ sender: UIPanGestureRecognizer?) {
+        handleUniversalPan(sender)
+        if isOnboarding && tapCounter == 2 {
+            let seconds = 3.0
+            DispatchQueue.main.asyncAfter(deadline: .now() + seconds) {
+                self.onboardingLabel.text = NSLocalizedString("callOnboarding6", comment: "")
+            }
+            tapCounter += 1
+        }
+        
+    }
+    
+    @objc private func handleTwoFingersPan(_ sender: UIPanGestureRecognizer?) {
+        handleUniversalPan(sender)
+    }
+    
+    @objc private func handleThreeFingersPan(_ sender: UIPanGestureRecognizer?) {
+        handleUniversalPan(sender)
+    }
+    
+    @objc private func handleFourFingersPan(_ sender: UIPanGestureRecognizer?) {
+        handleUniversalPan(sender)
+    }
+    
+    private func handleUniversalPan(_ sender: UIPanGestureRecognizer?) {
         guard let sender else {
             return
         }
         switch sender.state {
-        case .possible:
-            break
         case .began:
-            print("pan began")
+            AchievementService.shared.trackSendMessage()
+            if soundActive, !isUserInRoom {
+                let path: String
+                switch sender.numberOfTouches {
+                case 1:
+                    path = Bundle.main.path(forResource: "1_finger_pan", ofType: "mp3")!
+                case 2:
+                    path = Bundle.main.path(forResource: "2_finger_pan", ofType: "mp3")!
+                case 3:
+                    path = Bundle.main.path(forResource: "3_finger_pan", ofType: "mp3")!
+                case 4:
+                    path = Bundle.main.path(forResource: "4_finger_pan", ofType: "mp3")!
+                default:
+                    path = Bundle.main.path(forResource: "1_finger_pan", ofType: "mp3")!
+                }
+                let url = URL(fileURLWithPath: path)
+                repeatAudioPlayer = try! .init(contentsOf: url)
+                repeatAudioPlayer.numberOfLoops = -1
+                repeatAudioPlayer.play()
+            }
         case .changed:
-            print(sender.location(in: self.view))
-            //drawGesture(gesture: .touch, center: sender.location(in: self.view))
-            drawDot(center: sender.location(in: self.view))
-        case .ended:
-            print("pan ended")
-        case .cancelled:
-            break
-        case .failed:
-            break
-        case .recognized:
+            var points = [CGPoint]()
+            for touch in 0 ..< sender.numberOfTouches {
+                points.append(sender.location(ofTouch: touch, in: view))
+            }
+            drawDot(points: points)
+            sendMessage(points: points, gesture: .pan)
+            AchievementService.shared.checkMessageType(points: points, gesture: "pan")
+        case .ended, .cancelled, .failed:
+            repeatAudioPlayer.stop()
+        default:
             break
         }
     }
@@ -305,50 +542,145 @@ class CallViewController: UIViewController, MessageServiceDelegate {
         navigationController?.pushViewController(MenuViewController(isOnboarding: false), animated: true)
     }
     
+    private func playShakeAnimationIfNeeded(){
+        guard AchievementService.shared.experimenterAchievement.unlocked else {
+            return
+        }
+        do {
+            let gif = try UIImage(gifName: "confetti2")
+            let gifView = UIImageView(gifImage: gif, loopCount: 1)
+            gifView.delegate = self
+            gifView.frame = CGRect(x: 0, y: 0, width: view.bounds.height, height: view.bounds.height)
+            gifView.center = CGPoint(x: self.view.frame.width / 2, y: self.view.frame.height / 2)
+            view.insertSubview(gifView, belowSubview: topElementsStackView)
+        } catch {
+            print(error)
+        }
+        playSound(named: "сonfetti", type: "mp3")
+        UIImpactFeedbackGenerator().impactOccurred()
+    }
+    
     private func drawGesture(gesture: Message.GestureType, points: [CGPoint]){
         do {
             let gifName: String
             switch gesture{
             case.longPress:
-                gifName = "longPress.gif"
+                switch points.count{
+                case 1:
+                    gifName = "hold1_new.gif"
+                case 2:
+                    gifName = "hold-2-new.gif"
+                case 3:
+                    gifName = "long-press3.gif"
+                case 4:
+                    gifName = "hold4_new2.gif"
+                default:
+                    gifName = "hold4.gif"
+                }
             case .touch:
-                gifName = "touch.gif"
+                switch points.count{
+                case 1:
+                    gifName = "touch1_final.gif"
+                case 2:
+                    gifName = "touch-2-neeew.gif"
+                case 3:
+                    gifName = "touch3_1.gif"
+                case 4:
+                    gifName = "touch4_d.gif"
+                default:
+                    gifName = "touch4_d.gif"
+                }
             case .zoom:
                 gifName = "zoom_fast.gif"
+            case .pan:
+                drawDot(points: points)
+                return
             }
-            for point in points {
+            if gifName == "hold4.gif" {
                 let gif = try UIImage(gifName: gifName)
                 let gifView = UIImageView(gifImage: gif, loopCount: 1)
                 gifView.delegate = self
-                gifView.frame = CGRect(x: 0, y: 0, width: 1110 / 5, height: 1110 / 5)
-                gifView.center = point
+                
+                gifView.frame = CGRect(x: 0, y: 0, width: view.bounds.height * 1.5, height: view.bounds.height * 1.5)
+                let minX = points.min { point1, point2 in
+                    point1.x < point2.x
+                }?.x ?? 0
+                let maxX = points.max { point1, point2 in
+                    point1.x < point2.x
+                }?.x ?? 0
+                let minY = points.min { point1, point2 in
+                    point1.y < point2.y
+                }?.y ?? 0
+                let maxY = points.max { point1, point2 in
+                    point1.y < point2.y
+                }?.y ?? 0
+                let center = CGPoint(x: (maxX + minX) / 2, y: (maxY + minY) / 2)
+                gifView.center = center
                 view.insertSubview(gifView, belowSubview: topElementsStackView)
+            } else{
+                for point in points {
+                    let gif = try UIImage(gifName: gifName)
+                    let gifView = UIImageView(gifImage: gif, loopCount: 1)
+                    gifView.delegate = self
+                    if gifName == "hold2_50.gif"{
+                        gifView.frame = CGRect(x: 0, y: 0, width: 400, height: 400)
+                    } else if gifName == "touch3_1.gif"{
+                        gifView.frame = CGRect(x: 0, y: 0, width: 200, height: 200)
+                    }else if gifName == "long-press3.gif"{
+                        gifView.frame = CGRect(x: 0, y: 0, width: 400, height: 400)
+                    }else{
+                        gifView.frame = CGRect(x: 0, y: 0, width: 222, height: 222)
+                    }
+                    gifView.center = point
+                    view.insertSubview(gifView, belowSubview: topElementsStackView)
+                }
             }
         } catch {
             print(error)
         }
     }
     
-    private func drawDot(center: CGPoint) {
-        let view = UIView(frame: CGRect(x: 0, y: 0, width: 40, height: 40))
-        view.backgroundColor = .gray
-        view.layer.shadowColor = UIColor.gray.cgColor
-        view.layer.shadowRadius = 5.0
-        view.layer.shadowOpacity = 1
-        view.layer.cornerRadius = 20
-        view.center = center
-        self.view.addSubview(view)
-        let seconds = 1.5
-        /*DispatchQueue.main.asyncAfter(deadline: .now() + seconds) {
-            view.removeFromSuperview()
-        }*/
-        let animator = UIViewPropertyAnimator(duration: seconds, curve: .linear) {
-            view.alpha = 0
-            view.transform = .init(scaleX: 0.1, y: 0.1)
+    private func drawDot(points: [CGPoint]) {
+        //let view = UIView(frame: CGRect(x: 0, y: 0, width: 40, height: 40))
+        let imageName: String
+        switch points.count{
+        case 1:
+            imageName = "motion1"
+        case 2:
+            imageName = "motion2"
+        case 3:
+            imageName = "motion3"
+        case 4:
+            imageName = "motion4"
+        default:
+            imageName = "motion1"
         }
-        animator.startAnimation()
-        animator.addCompletion { _ in
-            view.removeFromSuperview()
+        
+        
+            /*view.backgroundColor = .gray
+             view.layer.shadowColor = UIColor.gray.cgColor
+             view.layer.shadowRadius = 5.0
+             view.layer.shadowOpacity = 1
+             view.layer.cornerRadius = 20*/
+            //let imageView = UIImageView(image: UIImage(named: "motion1"))
+        
+        for point in points {
+            let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 80, height: 80))
+            imageView.image = UIImage(named: imageName)
+            imageView.center = point
+            self.view.addSubview(imageView)
+            let seconds = 1.5
+            /*DispatchQueue.main.asyncAfter(deadline: .now() + seconds) {
+             view.removeFromSuperview()
+             }*/
+            let animator = UIViewPropertyAnimator(duration: seconds, curve: .linear) {
+                imageView.alpha = 0
+                imageView.transform = .init(scaleX: 0.1, y: 0.1)
+            }
+            animator.startAnimation()
+            animator.addCompletion { _ in
+                imageView.removeFromSuperview()
+            }
         }
     }
     
@@ -393,7 +725,7 @@ class CallViewController: UIViewController, MessageServiceDelegate {
         let url = URL(fileURLWithPath: path)
         do {
             audioPlayer = try AVAudioPlayer(contentsOf: url)
-            if UserDefaults.standard.bool(forKey: "SoundActive"){
+            if soundActive {
                 audioPlayer.play()
             }
         } catch {
@@ -404,7 +736,7 @@ class CallViewController: UIViewController, MessageServiceDelegate {
     func didConnectToRoomId(roomId: String) {
         DispatchQueue.main.async {
             let attributes: [NSAttributedString.Key: Any] = [.font: UIFont.fontWithSize(size: 15)!]
-            let attributedString = NSAttributedString(string: "Номер комнаты: \(roomId)", attributes: attributes)
+            let attributedString = NSAttributedString(string: NSLocalizedString("roomNumber:", comment: "") + roomId, attributes: attributes)
             self.roomIdButton.setAttributedTitle(attributedString, for: .normal)
             self.roomId = roomId
         }
@@ -416,6 +748,40 @@ class CallViewController: UIViewController, MessageServiceDelegate {
                 CGPoint(x: self.view.frame.width * messagePoint.x, y: self.view.frame.height * messagePoint.y)
             }
             self.drawGesture(gesture: message.gesture, points: points)
+            let soundName: String
+            switch message.gesture {
+            case .touch:
+                switch points.count {
+                case 1:
+                    soundName = "1touch"
+                case 2:
+                    soundName = "2touch"
+                case 3:
+                    soundName = "touchSound"
+                case 4:
+                    soundName = "touchSound"
+                default:
+                    return
+                }
+            case .longPress:
+                switch points.count {
+                case 1:
+                    soundName = "1touch"
+                case 2:
+                    soundName = "2touch"
+                case 3:
+                    soundName = "longPressSound"
+                case 4:
+                    soundName = "longPressSound"
+                default:
+                    return
+                }
+            case .zoom:
+                soundName = "zoomSound"
+            case .pan:
+                return
+            }
+            self.playSound(named: soundName, type: "mp3")
         }
     }
     
@@ -425,7 +791,9 @@ class CallViewController: UIViewController, MessageServiceDelegate {
         }
         let message = Message(points: messagePoints, gesture: gesture, date: .now)
         messageService.sendMessage(message: message)
-        AchievementService.shared.trackSendMessage()
+        if gesture != .pan {
+            AchievementService.shared.trackSendMessage()
+        }
     }
     
     func failedConnectToRoom() {
@@ -440,6 +808,7 @@ class CallViewController: UIViewController, MessageServiceDelegate {
     
     func secondUserConnected() {
         DispatchQueue.main.async {
+            self.isUserInRoom = true
             if let roomId = self.roomId {
                 let attributes: [NSAttributedString.Key: Any] = [.font: UIFont.fontWithSize(size: 15)!]
                 let attributedString = NSAttributedString(string: "Номер комнаты: \(roomId)", attributes: attributes)
@@ -460,9 +829,9 @@ class CallViewController: UIViewController, MessageServiceDelegate {
             animation.autoreverses = true
             animation.repeatCount = .infinity
             self.doorImage.layer.add(animation, forKey: animation.keyPath)
-            self.enterLabel.text = "Собеседник подключился"
+            self.enterLabel.text = NSLocalizedString("connected", comment: "")
             if self.isEnter{
-                self.enterLabel.text = "Вы успешно подлючились к комнате"
+                self.enterLabel.text = NSLocalizedString("you_connected", comment: "")
             }
             self.animateEnterLabel()
         }
@@ -470,6 +839,7 @@ class CallViewController: UIViewController, MessageServiceDelegate {
     
     func secondUserDisconnected() {
         DispatchQueue.main.async {
+            self.isUserInRoom = false
             self.roomIdButton.isHidden = false
             self.shareButton.isHidden = false
             self.topSeparator.isHidden = false
@@ -477,7 +847,7 @@ class CallViewController: UIViewController, MessageServiceDelegate {
             self.doorImage.image = UIImage(named: "inactiveDoor")
             self.doorImage.layer.removeAllAnimations()
             self.doorImage.layer.shadowOpacity = 0
-            self.enterLabel.text = "Ваш собеседник покинул комнату"
+            self.enterLabel.text = NSLocalizedString("left_room", comment: "")
             self.animateEnterLabel()
             self.isEnter = false
         }

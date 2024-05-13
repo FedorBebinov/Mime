@@ -9,18 +9,21 @@ import UserNotifications
 
 class NotificationService: NSObject, UNUserNotificationCenterDelegate {
     static let shared = NotificationService()
+    
     func addNotification(){ // TODO: обдумать поведение при первом запуске
+        UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
         let content = UNMutableNotificationContent()
-        content.title = "Время пообщаться"
-        content.subtitle = "Хочу пообщаться с имя"
+        content.title = NSLocalizedString("notificationTitle", comment: "")
+        content.body = NSLocalizedString("notificationBody", comment: "")
         content.sound = UNNotificationSound.default
-        var dateComponent = DateComponents()
-        dateComponent.hour = Int(UserDefaults.standard.double(forKey: "NotificationTime")) / 3600
-        dateComponent.minute = (Int(UserDefaults.standard.double(forKey: "NotificationTime")) / 60) % 60
+        let seconds = UserDefaults.standard.double(forKey: "NotificationTime")
+        let date = Date(timeIntervalSince1970: seconds)
+        let dateComponent = Calendar.current.dateComponents([.hour, .minute], from: date)
         let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponent, repeats: true)
         let request = UNNotificationRequest(identifier: "reminder", content: content, trigger: trigger)
         UNUserNotificationCenter.current().add(request)
     }
+    
     override init() {
         super.init()
         UNUserNotificationCenter.current().delegate = self
