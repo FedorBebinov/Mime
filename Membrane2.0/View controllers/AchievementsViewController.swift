@@ -11,7 +11,7 @@ class AchievementsViewController: UIViewController {
     
     private lazy var achievementsLabel = MainFactory.topLabel(text: NSLocalizedString("achievements", comment: ""))
 
-    private lazy var messagesLabel = MainFactory.topLabel(text: NSLocalizedString("achievements", comment: ""))
+    private lazy var messagesLabel = MainFactory.topLabel(text: NSLocalizedString("communicative", comment: ""))
 
     private lazy var messagesMiniLabel = MainFactory.miniLabel(text: NSLocalizedString("communicativeText", comment: ""))
     

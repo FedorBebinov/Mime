@@ -91,40 +91,40 @@ class AchievementService {
             return []
         }
     }()
-    
+
     func trackCalls(username: String){
-        guard var callsCounter else{
-            callsCounter = [username:1]
-            UserDefaults.standard.set(callsCounter, forKey: "callsCouter")
-            return
-        }
-        if let call = callsCounter[username] as? Int {
-            callsCounter[username] = call + 1
-            UserDefaults.standard.set(callsCounter, forKey: "callsCouter")
-        } else{
-            callsCounter[username] = 1
-            UserDefaults.standard.set(callsCounter, forKey: "callsCouter")
-        }
-        if callsCounter.values.contains(where: { value in
-            if let value = value as? Int {
-                return value >= 5
+            guard var tempCallsCounter = callsCounter else{
+                callsCounter = [username:1]
+                UserDefaults.standard.set(callsCounter, forKey: "callsCouter")
+                return
             }
-            return false
-        }) {
-            if !callsAchievement.unlocked{
-                callsAchievement.unlocked = true
-                UIApplication.shared.keyWindow?.showNotification(achievement: NSLocalizedString("closeConnect", comment: ""))
-                save()
+            if let call = tempCallsCounter[username] as? Int {
+                tempCallsCounter[username] = call + 1
+            } else{
+                tempCallsCounter[username] = 1
+            }
+            self.callsCounter = tempCallsCounter
+            UserDefaults.standard.set(tempCallsCounter, forKey: "callsCouter")
+            if tempCallsCounter.values.contains(where: { value in
+                if let value = value as? Int {
+                    return value >= 5
+                }
+                return false
+            }) {
+                if !callsAchievement.unlocked{
+                    callsAchievement.unlocked = true
+                    UIApplication.shared.keyWindow?.showNotification(achievement: NSLocalizedString("closeConnect", comment: ""))
+                    save()
+                }
+            }
+            if tempCallsCounter.count >= 2 {
+                if !friendsAchievement.unlocked{
+                    friendsAchievement.unlocked = true
+                    UIApplication.shared.keyWindow?.showNotification(achievement: NSLocalizedString("friendly", comment: ""))
+                    save()
+                }
             }
         }
-        if callsCounter.count >= 2 {
-            if !friendsAchievement.unlocked{
-                friendsAchievement.unlocked = true
-                UIApplication.shared.keyWindow?.showNotification(achievement: NSLocalizedString("friendly", comment: ""))
-                save()
-            }
-        }
-    }
     
     func trackSendMessage(){
         messagesCount += 1
@@ -168,8 +168,20 @@ class AchievementService {
     func save(){
         let encoder = JSONEncoder()
         do {
-            let data = try encoder.encode(messageAchievement)
-            UserDefaults.standard.set(data, forKey: "messageAchievement")
+            let messageAchievementData = try encoder.encode(messageAchievement)
+            UserDefaults.standard.set(messageAchievementData, forKey: "messageAchievement")
+            
+            let daysAchievementData = try encoder.encode(daysAchievement)
+            UserDefaults.standard.set(daysAchievementData, forKey: "daysAchievement")
+            
+            let callsAchievementData = try encoder.encode(callsAchievement)
+            UserDefaults.standard.set(callsAchievementData, forKey: "callsAchievement")
+            
+            let friendsAchievementData = try encoder.encode(friendsAchievement)
+            UserDefaults.standard.set(friendsAchievementData, forKey: "friendsAchievement")
+            
+            let experimenterAchievementData = try encoder.encode(experimenterAchievement)
+            UserDefaults.standard.set(experimenterAchievementData, forKey: "experimenterAchievement")
         } catch {
             print(error)
         }

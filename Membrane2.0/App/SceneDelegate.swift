@@ -22,11 +22,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         
         let window = UIWindow(windowScene: windowScene)
-        if UserDefaults.standard.bool(forKey: "WhiteTheme") {
-            window.overrideUserInterfaceStyle = .light
-        } else {
-            window.overrideUserInterfaceStyle = .dark
-        }
+        
         if service.isAuthorized{
             window.rootViewController = UINavigationController(rootViewController: MenuViewController(isOnboarding: false))
         }else {
@@ -40,10 +36,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             UserDefaults.standard.firstLaunchDateSeconds = Date.now.timeIntervalSince1970
         }
 
-        UserDefaults.standard.register(defaults: ["WhiteTheme": true,
+        UserDefaults.standard.register(defaults: ["WhiteTheme": false,
                                                   "HapticsActive": true,
                                                   "SoundActive": true])
-
+        if UserDefaults.standard.bool(forKey: "WhiteTheme") {
+            window.overrideUserInterfaceStyle = .light
+        } else {
+            window.overrideUserInterfaceStyle = .dark
+        }
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
@@ -78,10 +78,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let firstUrl = URLContexts.first?.url else {
                     return
                 }
-        guard firstUrl.host() == "room" else{
+        guard firstUrl.host == "room" else{
             return
         }
-        let path = firstUrl.path()
+        let path = firstUrl.path
         let components = path.split(separator: "/")
         guard components.count == 1 else {
             return

@@ -104,7 +104,7 @@ class CallViewController: UIViewController, MessageServiceDelegate {
         view.addSubview(roomIdButton)
         roomIdButton.isHidden = isEnter
         roomIdButton.addTarget(self, action: #selector(roomIdButtonTapped), for: .touchUpInside)
-        NSLayoutConstraint.activate([roomIdButton.heightAnchor.constraint(equalToConstant: 25), roomIdButton.centerXAnchor.constraint(equalTo: view.centerXAnchor), roomIdButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -60)])
+        NSLayoutConstraint.activate([roomIdButton.heightAnchor.constraint(equalToConstant: 25), roomIdButton.centerXAnchor.constraint(equalTo: view.centerXAnchor), roomIdButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16)])
         
         view.addSubview(copyLabel)
         NSLayoutConstraint.activate([copyLabel.bottomAnchor.constraint(equalTo: roomIdButton.topAnchor, constant: -20), copyLabel.centerXAnchor.constraint(equalTo: roomIdButton.centerXAnchor)])
@@ -265,7 +265,7 @@ class CallViewController: UIViewController, MessageServiceDelegate {
         drawGesture(gesture: .touch, points: points)
         AchievementService.shared.checkMessageType(points: points, gesture: "tap")
         if !isUserInRoom {
-            playSound(named: "touchSound", type: "mp3")
+            playSound(named: "3touch", type: "mp3")
         }
         sendMessage(points: points, gesture: .touch)
         
@@ -283,7 +283,7 @@ class CallViewController: UIViewController, MessageServiceDelegate {
         drawGesture(gesture: .touch, points: points)
         AchievementService.shared.checkMessageType(points: points, gesture: "tap")
         if !isUserInRoom {
-            playSound(named: "touchSound", type: "mp3")
+            playSound(named: "4touch", type: "mp3")
         }
         sendMessage(points: points, gesture: .touch)
     }
@@ -757,22 +757,22 @@ class CallViewController: UIViewController, MessageServiceDelegate {
                 case 2:
                     soundName = "2touch"
                 case 3:
-                    soundName = "touchSound"
+                    soundName = "3touch"
                 case 4:
-                    soundName = "touchSound"
+                    soundName = "4touch"
                 default:
                     return
                 }
             case .longPress:
                 switch points.count {
                 case 1:
-                    soundName = "1touch"
+                    soundName = "1hold"
                 case 2:
-                    soundName = "2touch"
+                    soundName = "2hold"
                 case 3:
-                    soundName = "longPressSound"
+                    soundName = "3hold"
                 case 4:
-                    soundName = "longPressSound"
+                    soundName = "4hold"
                 default:
                     return
                 }
