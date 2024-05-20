@@ -268,6 +268,7 @@ class SettingsViewController: UIViewController {
     @objc
     private func logoutButtonTapped(){
         networkService.deleteToken()
+        UserDefaults.standard.interlocutors = []
         navigationController?.setViewControllers([StartViewController()], animated: true)
     }
 

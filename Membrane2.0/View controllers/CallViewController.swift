@@ -19,7 +19,7 @@ class CallViewController: UIViewController, MessageServiceDelegate {
     
     private var audioPlayer = AVAudioPlayer()
 
-    private var repeatAudioPlayer: AVAudioPlayer = .init()
+    private var repeatAudioPlayer: AVAudioPlayer?
 
     private var soundActive: Bool {
         UserDefaults.standard.bool(forKey: "SoundActive")
@@ -464,7 +464,7 @@ class CallViewController: UIViewController, MessageServiceDelegate {
     @objc private func handleFourFingersPan(_ sender: UIPanGestureRecognizer?) {
         handleUniversalPan(sender)
     }
-    
+
     private func handleUniversalPan(_ sender: UIPanGestureRecognizer?) {
         guard let sender else {
             return
@@ -473,23 +473,7 @@ class CallViewController: UIViewController, MessageServiceDelegate {
         case .began:
             AchievementService.shared.trackSendMessage()
             if soundActive, !isUserInRoom {
-                let path: String
-                switch sender.numberOfTouches {
-                case 1:
-                    path = Bundle.main.path(forResource: "1_finger_pan", ofType: "mp3")!
-                case 2:
-                    path = Bundle.main.path(forResource: "2_finger_pan", ofType: "mp3")!
-                case 3:
-                    path = Bundle.main.path(forResource: "3_finger_pan", ofType: "mp3")!
-                case 4:
-                    path = Bundle.main.path(forResource: "4_finger_pan", ofType: "mp3")!
-                default:
-                    path = Bundle.main.path(forResource: "1_finger_pan", ofType: "mp3")!
-                }
-                let url = URL(fileURLWithPath: path)
-                repeatAudioPlayer = try! .init(contentsOf: url)
-                repeatAudioPlayer.numberOfLoops = -1
-                repeatAudioPlayer.play()
+                playPanSound(numberOfTouches: sender.numberOfTouches)
             }
         case .changed:
             var points = [CGPoint]()
@@ -500,7 +484,8 @@ class CallViewController: UIViewController, MessageServiceDelegate {
             sendMessage(points: points, gesture: .pan)
             AchievementService.shared.checkMessageType(points: points, gesture: "pan")
         case .ended, .cancelled, .failed:
-            repeatAudioPlayer.stop()
+            repeatAudioPlayer?.stop()
+            repeatAudioPlayer = nil
         default:
             break
         }
@@ -779,12 +764,22 @@ class CallViewController: UIViewController, MessageServiceDelegate {
             case .zoom:
                 soundName = "zoomSound"
             case .pan:
+                if self.repeatAudioPlayer == nil {
+                    self.playPanSound(numberOfTouches: points.count)
+                }
+                self.timer?.invalidate()
+                self.timer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: false) { timer in
+                    self.repeatAudioPlayer?.stop()
+                    self.repeatAudioPlayer = nil
+                }
                 return
             }
             self.playSound(named: soundName, type: "mp3")
         }
     }
-    
+
+    private var timer: Timer?
+
     func sendMessage(points: [CGPoint], gesture: Message.GestureType) {
         let messagePoints = points.map { cgPoint in
             return Message.Point(x: cgPoint.x / self.view.frame.width, y: cgPoint.y / self.view.frame.height)
@@ -851,6 +846,26 @@ class CallViewController: UIViewController, MessageServiceDelegate {
             self.animateEnterLabel()
             self.isEnter = false
         }
+    }
+
+    private func playPanSound(numberOfTouches: Int) {
+        let path: String
+        switch numberOfTouches {
+        case 1:
+            path = Bundle.main.path(forResource: "1_finger_pan", ofType: "mp3")!
+        case 2:
+            path = Bundle.main.path(forResource: "2_finger_pan", ofType: "mp3")!
+        case 3:
+            path = Bundle.main.path(forResource: "3_finger_pan", ofType: "mp3")!
+        case 4:
+            path = Bundle.main.path(forResource: "4_finger_pan", ofType: "mp3")!
+        default:
+            path = Bundle.main.path(forResource: "1_finger_pan", ofType: "mp3")!
+        }
+        let url = URL(fileURLWithPath: path)
+        repeatAudioPlayer = try! .init(contentsOf: url)
+        repeatAudioPlayer?.numberOfLoops = -1
+        repeatAudioPlayer?.play()
     }
 }
 
