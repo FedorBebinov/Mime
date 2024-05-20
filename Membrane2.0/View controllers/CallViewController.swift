@@ -246,7 +246,7 @@ class CallViewController: UIViewController, MessageServiceDelegate {
         if isOnboarding && tapCounter == 4 {
             let seconds = 1.5
             DispatchQueue.main.asyncAfter(deadline: .now() + seconds) {
-                self.onboardingLabel.text = NSLocalizedString("callOnboarding1", comment: "")
+                self.onboardingLabel.text = NSLocalizedString("callOnboarding2", comment: "")
                 self.tapCounter += 1
                 self.drawCenterZoomGif()
             }
