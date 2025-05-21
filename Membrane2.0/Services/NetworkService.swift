@@ -11,7 +11,7 @@ import KeychainAccess
 class NetworkService{
     
     var isAuthorized: Bool = false
-    let baseURL = "http://34.32.64.24:8080"
+    let baseURL = "http://localhost:8080"
     let keychain = Keychain(service: "ru.hse.Mime")
     
     init(){
@@ -71,6 +71,22 @@ class NetworkService{
         let (_, _) = try await URLSession.shared.data(for: request)
     }
     
+    func saveSecurityQuestion(data: SecurityQuestion) async throws {
+        guard let token = keychain["token"] else{
+            print("no token")
+            return
+        }
+        let url:URL = URL(string: "\(baseURL)/v1/secret-question")!
+        var request: URLRequest = URLRequest(url:url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        let encoder: JSONEncoder = JSONEncoder()
+        request.httpBody = try encoder.encode(data)
+        let (_, response) = try await URLSession.shared.data(for: request)
+        print(response)
+    }
+    
     func changePassport(data: PasswordData) async throws {
         guard let token = keychain["token"] else{
             print("no token")
@@ -125,6 +141,7 @@ class NetworkService{
         request.httpMethod = "GET"
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         let (data, response) = try await URLSession.shared.data(for: request)
+        print(response)
         try validate(response)
         let decoder: JSONDecoder = JSONDecoder()
         let user = try decoder.decode(UserInfo.self, from: data)
@@ -150,7 +167,7 @@ class NetworkService{
     func getAvatar() async throws -> AvatarData {
         guard let token = keychain["token"] else{
             print("no token")
-            return AvatarData(type: "", color: "")
+            return AvatarData(type: "", color: "", hasBorder: false)
         }
         let url:URL = URL(string: "\(baseURL)/v1/avatar")!
         var request: URLRequest = URLRequest(url:url)
@@ -179,19 +196,36 @@ class NetworkService{
         return userInfo
     }
     
-    func deleteAccount() {
+    func getSecurityInfo() async throws -> SecurityQuestion {
+        guard let token = keychain["token"] else{
+            print("no token")
+            return SecurityQuestion(secretQuestion: "", secretAnswer: "")
+        }
+        let url:URL = URL(string: "\(baseURL)/v1/secret-question")!
+        var request: URLRequest = URLRequest(url:url)
+        request.httpMethod = "GET"
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        let (data, response) = try await URLSession.shared.data(for: request)
+        try validate(response)
+        let decoder: JSONDecoder = JSONDecoder()
+        let securityInfo = try decoder.decode(SecurityQuestion.self, from: data)
+        return securityInfo
+    }
+    
+    func deleteAccount() async throws {
         guard let token = keychain["token"] else{
             print("no token")
             return
         }
-        let url:URL = URL(string: "\(baseURL)/v1/user/0")!
+        let url:URL = URL(string: "\(baseURL)/v1/user")!
         var request: URLRequest = URLRequest(url:url)
-        request.httpMethod = "PUT"
+        request.httpMethod = "DELETE"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
 //        let encoder: JSONEncoder = JSONEncoder()
         //request.httpBody = try encoder.encode(data)
-        //let (_, response) = try await URLSession.shared.data(for: request)
+        let (_, response) = try await URLSession.shared.data(for: request)
+        print(response)
     }
     
     func saveToken(token: String){

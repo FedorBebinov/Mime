@@ -40,15 +40,32 @@ class UserProfileViewController: UIViewController {
         view.addSubview(activityIndicatorView)
         
         editButton.addTarget(self, action: #selector(editButtonTapped), for: .touchUpInside)
-        
-                
         achievementsButton.addTarget(self, action: #selector(achievementsButtonTapped), for: .touchUpInside)
         
         activityIndicatorView.translatesAutoresizingMaskIntoConstraints = false
-        print(UIScreen.main.bounds)
+
         let topInset: CGFloat = UIScreen.main.bounds.height <= 736 ? 30 : 70
         
-        NSLayoutConstraint.activate([achievementsButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16), achievementsButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20), achievementsButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20), achievementsButton.heightAnchor.constraint(equalToConstant: 80),  nameLabel.topAnchor.constraint(equalTo: editButton.bottomAnchor, constant: 30), nameLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor), avatarView.centerXAnchor.constraint(equalTo: view.centerXAnchor), avatarView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: topInset), editButton.heightAnchor.constraint(equalToConstant: 55), editButton.widthAnchor.constraint(equalToConstant: 55), editButton.bottomAnchor.constraint(equalTo: avatarView.bottomAnchor, constant: 40), editButton.centerXAnchor.constraint(equalTo: view.centerXAnchor), activityIndicatorView.centerXAnchor.constraint(equalTo: view.centerXAnchor), activityIndicatorView.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -75)])
+        NSLayoutConstraint.activate([
+            achievementsButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
+            achievementsButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            achievementsButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            achievementsButton.heightAnchor.constraint(equalToConstant: 80),
+            
+            nameLabel.topAnchor.constraint(equalTo: editButton.bottomAnchor, constant: 30),
+            nameLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            
+            avatarView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            avatarView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: topInset),
+            
+            editButton.heightAnchor.constraint(equalToConstant: 55),
+            editButton.widthAnchor.constraint(equalToConstant: 55),
+            editButton.bottomAnchor.constraint(equalTo: avatarView.bottomAnchor, constant: 40),
+            editButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            
+            activityIndicatorView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            activityIndicatorView.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -75)
+        ])
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -68,8 +85,9 @@ class UserProfileViewController: UIViewController {
                     activityIndicatorView.stopAnimating()
                     self.nameLabel.text = name
 
-                    avatarView.avatarImageView.image = AvatarImage(rawValue: avatarInfo.type)?.image
-                    avatarView.maskLayer.contents = avatarView.avatarImageView.image?.cgImage
+                    let image = AvatarImage(rawValue: avatarInfo.type)?.image
+                    avatarView.avatarImageView.image = image
+                    avatarView.applyMask(image: image)
 
                     if let gradient = gradients.first(where: { gradient in gradient.name == avatarInfo.color}){
                         avatarView.apply(gradient: gradient)

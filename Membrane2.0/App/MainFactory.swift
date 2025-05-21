@@ -24,6 +24,28 @@ final class MainFactory{
         return button
     }
     
+    static func disabledMainButton(text: String) -> UIButton {
+        let button: UIButton = UIButton()
+        button.backgroundColor = .buttonColor
+        button.layer.cornerRadius = 40
+        // Создание атрибутированного текста для состояний
+        let normalAttributes: [NSAttributedString.Key: Any] = [
+            .font: UIFont.fontWithSize(size: 18)!,
+            .foregroundColor: UIColor.buttonTextColor]
+        let disabledAttributes: [NSAttributedString.Key: Any] = [
+            .font: UIFont.fontWithSize(size: 18)!,
+            .foregroundColor: UIColor.gray]
+        let attributedStringNormal = NSAttributedString(string: text, attributes: normalAttributes)
+        let attributedStringDisabled = NSAttributedString(string: text, attributes: disabledAttributes)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.layer.borderColor = UIColor.borderColor.cgColor
+        button.layer.borderWidth = 1.5
+        button.isEnabled = false
+        button.setAttributedTitle(attributedStringDisabled, for: .disabled)
+        button.setAttributedTitle(attributedStringNormal, for: .normal)
+        return button
+    }
+    
     static func separatedButton(text: String) -> UIButton {
         let button: UIButton = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -31,6 +53,16 @@ final class MainFactory{
         let attributedString = NSAttributedString(string: text, attributes: attributes)
         button.setAttributedTitle(attributedString, for: .normal)
         button.setTitleColor(.textColor, for: .normal)
+        return button
+    }
+    
+    static func separatedDeleteButton(text: String) -> UIButton {
+        let button: UIButton = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        let attributes: [NSAttributedString.Key: Any] = [.font: UIFont.fontWithSize(size: 12)!]
+        let attributedString = NSAttributedString(string: text, attributes: attributes)
+        button.setAttributedTitle(attributedString, for: .normal)
+        button.setTitleColor(.red, for: .normal)
         return button
     }
     
@@ -79,6 +111,16 @@ final class MainFactory{
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setImage(image, for: .normal)
+        return button
+    }
+    
+    static func imageButtonTemplate(imageName: String) -> UIButton {
+        let button = CustomButton(type: .system)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        let image = UIImage(named: imageName)?.withRenderingMode(.alwaysTemplate)
+        button.setImage(image, for: .normal)
+        button.tintColor = .textColor
+        button.touchAreaInsets = UIEdgeInsets(top: 20, left: 40, bottom: 20, right: 40)
         return button
     }
         
@@ -150,14 +192,16 @@ final class MainFactory{
         return nameTextField
     }
     
-    static func passwordTextField(placeholder: String) -> UITextField {
+    static func passwordTextField(placeholder: String?) -> UITextField {
         let nameTextField = UITextField()
         nameTextField.font = .fontWithSize(size: 18)
         nameTextField.translatesAutoresizingMaskIntoConstraints = false
         nameTextField.textColor = .textColor
         nameTextField.tintColor = nameTextField.textColor
         nameTextField.isSecureTextEntry = true
-        nameTextField.placeholder = placeholder
+        if let placeholder{
+            nameTextField.placeholder = placeholder
+        }
         nameTextField.autocorrectionType = .no
         return nameTextField
     }
@@ -200,6 +244,7 @@ final class MainFactory{
         let label = UILabel()
         label.text = text
         label.font = .fontWithSize(size: 18)
+        label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .textColor
         return label
@@ -247,6 +292,7 @@ final class MainFactory{
         let label = UILabel()
         label.text = text
         label.font = .fontWithSize(size: 12)
+        label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .separatorColor
         return label

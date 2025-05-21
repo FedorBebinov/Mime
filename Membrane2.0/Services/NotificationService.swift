@@ -28,7 +28,15 @@ class NotificationService: NSObject, UNUserNotificationCenterDelegate {
         super.init()
         UNUserNotificationCenter.current().delegate = self
     }
+    
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
-        completionHandler([.alert, .badge, .sound])
+        // Убедитесь, что вы вызываете метод completionHandler с теми опциями уведомления, которые нужны
+            if #available(iOS 14.0, *) {
+                // Уведомление о новом подходе
+                completionHandler([.banner, .badge, .sound]) // исключите .alert, чтобы избежать предупреждения
+            } else {
+                // Для предыдущих версий используйте .alert
+                completionHandler([.alert, .badge, .sound])
+            }
     }
 }

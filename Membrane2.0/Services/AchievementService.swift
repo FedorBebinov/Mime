@@ -186,6 +186,20 @@ class AchievementService {
             print(error)
         }
     }
+    
+    func getAchievements(){
+        guard let url = Bundle.main.url(forResource: "Achievements", withExtension: "json") else {
+            return
+        }
+        do{
+            let data = try Data(contentsOf: url)
+            let decoder = JSONDecoder()
+            let achievementsResponse = try decoder.decode(AchievementsResponse.self, from: data)
+            print(achievementsResponse.achievements)
+        } catch {
+            print(error)
+        }
+    }
 }
 
 class Achievement: Codable {
@@ -196,6 +210,16 @@ class Achievement: Codable {
         self.unlocked = unlocked
         self.id = id
     }
+}
+
+class NewAchievement: Decodable {
+    let id: String
+    let current_value: Int
+    let total_value: Int
+}
+
+class AchievementsResponse: Decodable {
+    let achievements: [NewAchievement]
 }
 
 extension UserDefaults {

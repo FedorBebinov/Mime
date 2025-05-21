@@ -15,13 +15,15 @@ class SettingsViewController: UIViewController {
     
     private lazy var settingsLabel = MainFactory.topLabel(text: NSLocalizedString("settings", comment: ""))
     
-    private lazy var evaluateLabel: UILabel = {
+    private lazy var helpLabel: UILabel = {
         let label = MainFactory.topLabel(text: NSLocalizedString("help", comment: ""))
-        label.isUserInteractionEnabled = true
+        /*label.isUserInteractionEnabled = true
         let recognizer = UITapGestureRecognizer(target: self, action: #selector(helpTapped))
-        label.addGestureRecognizer(recognizer)
+        label.addGestureRecognizer(recognizer)*/
         return label
     }()
+    
+    private lazy var accountLabel: UILabel = MainFactory.topLabel(text: NSLocalizedString("account", comment: ""))
 
     private lazy var whiteThemeLabel = MainFactory.topLabel(text: NSLocalizedString("whiteTheme", comment: ""))
     
@@ -41,16 +43,15 @@ class SettingsViewController: UIViewController {
     
     private lazy var switchNotifications = MainFactory.switchButton()
     
-    private lazy var evaluateButton: UIButton = {
-        let image = UIImage(resource: .nextLine).withRenderingMode(.alwaysTemplate)
-        let button = MainFactory.imageButton(image: image)
-        button.tintColor = .textColor
-        return button
-    }()
+    private lazy var helpButton = MainFactory.imageButtonTemplate(imageName: "nextLine")
+    
+    private lazy var accountButton = MainFactory.imageButtonTemplate(imageName: "nextLine")
     
     private lazy var exitAccountButton = MainFactory.deleteButton(text: NSLocalizedString("logout", comment: ""))
     
-    private lazy var evaluateSeparator = MainFactory.paleSeparator()
+    private lazy var helpSeparator = MainFactory.paleSeparator()
+    
+    private lazy var accountSeparator = MainFactory.paleSeparator()
     
     private lazy var whiteThemeSeparator = MainFactory.paleSeparator()
 
@@ -86,26 +87,29 @@ class SettingsViewController: UIViewController {
         }
         
         view.addSubview(settingsLabel)
-        view.addSubview(evaluateLabel)
+        view.addSubview(helpLabel)
         view.addSubview(whiteThemeLabel)
         view.addSubview(soundLabel)
         view.addSubview(hapticsLabel)
         view.addSubview(notificationsLabel)
         view.addSubview(timeLabel)
+        view.addSubview(accountLabel)
         view.addSubview(switchWhiteTheme)
         view.addSubview(switchSound)
         view.addSubview(switchHaptics)
         view.addSubview(switchNotifications)
         view.addSubview(timePicker)
-        view.addSubview(evaluateButton)
+        view.addSubview(helpButton)
+        view.addSubview(accountButton)
         view.addSubview(exitAccountButton)
-        view.addSubview(evaluateSeparator)
+        view.addSubview(helpSeparator)
         view.addSubview(whiteThemeSeparator)
         view.addSubview(soundSeparator)
         view.addSubview(hapticSeparator)
         view.addSubview(notificationsSeparator)
         view.addSubview(exitTopSeparator)
         view.addSubview(exitBottomSeparator)
+        view.addSubview(accountSeparator)
         
         switchWhiteTheme.isOn = UserDefaults.standard.bool(forKey: "WhiteTheme")
         switchHaptics.isOn = UserDefaults.standard.bool(forKey: "HapticsActive")
@@ -123,21 +127,28 @@ class SettingsViewController: UIViewController {
         switchNotifications.addTarget(self, action: #selector(switchNotificationsButtonTapped), for: .valueChanged)
         timePicker.addTarget(self, action: #selector(timePickerValueChanged), for: .valueChanged)
         exitAccountButton.addTarget(self, action: #selector(logoutButtonTapped), for: .touchUpInside)
+        helpButton.addTarget(self, action: #selector(helpTapped), for: .touchUpInside)
+        accountButton.addTarget(self, action: #selector(accountTapped), for: .touchUpInside)
         
         NSLayoutConstraint.activate([
             settingsLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
             settingsLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30),
             settingsLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 35),
         
-            evaluateLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
-            evaluateLabel.heightAnchor.constraint(equalToConstant: 25),
-            evaluateLabel.widthAnchor.constraint(equalToConstant: 192),
-            evaluateLabel.topAnchor.constraint(equalTo: settingsLabel.bottomAnchor, constant: 64.5),
+            helpLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
+            helpLabel.heightAnchor.constraint(equalToConstant: 25),
+            helpLabel.widthAnchor.constraint(equalToConstant: 192),
+            helpLabel.topAnchor.constraint(equalTo: settingsLabel.bottomAnchor, constant: 64.5),
+            
+            accountLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
+            accountLabel.heightAnchor.constraint(equalToConstant: 25),
+            accountLabel.widthAnchor.constraint(equalToConstant: 192),
+            accountLabel.topAnchor.constraint(equalTo: helpLabel.bottomAnchor, constant: 36),
         
             whiteThemeLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
             whiteThemeLabel.heightAnchor.constraint(equalToConstant: 25),
             whiteThemeLabel.widthAnchor.constraint(equalToConstant: 192),
-            whiteThemeLabel.topAnchor.constraint(equalTo: evaluateLabel.bottomAnchor, constant: 36),
+            whiteThemeLabel.topAnchor.constraint(equalTo: accountLabel.bottomAnchor, constant: 36),
             
             soundLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
             soundLabel.heightAnchor.constraint(equalToConstant: 25),
@@ -157,8 +168,11 @@ class SettingsViewController: UIViewController {
             switchWhiteTheme.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30),
             switchWhiteTheme.centerYAnchor.constraint(equalTo: whiteThemeLabel.centerYAnchor),
         
-            evaluateButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30),
-            evaluateButton.centerYAnchor.constraint(equalTo: evaluateLabel.centerYAnchor),
+            helpButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30),
+            helpButton.centerYAnchor.constraint(equalTo: helpLabel.centerYAnchor),
+            
+            accountButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30),
+            accountButton.centerYAnchor.constraint(equalTo: accountLabel.centerYAnchor),
         
             switchHaptics.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30),
             switchHaptics.centerYAnchor.constraint(equalTo: hapticsLabel.centerYAnchor),
@@ -182,10 +196,15 @@ class SettingsViewController: UIViewController {
             exitAccountButton.widthAnchor.constraint(equalToConstant: 192),
             exitAccountButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -50),
         
-            evaluateSeparator.leadingAnchor.constraint(equalTo: evaluateLabel.leadingAnchor),
-            evaluateSeparator.trailingAnchor.constraint(equalTo: evaluateButton.trailingAnchor),
-            evaluateSeparator.topAnchor.constraint(equalTo: evaluateLabel.bottomAnchor, constant: 18),
-            evaluateSeparator.heightAnchor.constraint(equalToConstant: 1),
+            helpSeparator.leadingAnchor.constraint(equalTo: helpLabel.leadingAnchor),
+            helpSeparator.trailingAnchor.constraint(equalTo: helpButton.trailingAnchor),
+            helpSeparator.topAnchor.constraint(equalTo: helpLabel.bottomAnchor, constant: 18),
+            helpSeparator.heightAnchor.constraint(equalToConstant: 1),
+            
+            accountSeparator.leadingAnchor.constraint(equalTo: accountLabel.leadingAnchor),
+            accountSeparator.trailingAnchor.constraint(equalTo: accountButton.trailingAnchor),
+            accountSeparator.topAnchor.constraint(equalTo: accountLabel.bottomAnchor, constant: 18),
+            accountSeparator.heightAnchor.constraint(equalToConstant: 1),
         
             whiteThemeSeparator.leadingAnchor.constraint(equalTo: whiteThemeLabel.leadingAnchor),
             whiteThemeSeparator.trailingAnchor.constraint(equalTo: switchWhiteTheme.trailingAnchor),
@@ -275,5 +294,10 @@ class SettingsViewController: UIViewController {
     @objc
     private func helpTapped(){
         navigationController?.pushViewController(GesturesViewController(), animated: true)
+    }
+    
+    @objc
+    private func accountTapped(){
+        navigationController?.pushViewController(AccountViewController(), animated: true)
     }
 }

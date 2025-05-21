@@ -44,6 +44,7 @@
 "change" = "Change";
 "changeFigure" = "Change figure";
 "interlocutorConnected" = "Interlocutor connected";
+
 "tryTouch" = "Now let's practice gestures. Tap the screen to recognize the \"Touch\" gesture";
 "backMenu" = "Back to menu";
 "tryLongPress" = "Great! Now try to hold your finger on one spot on the screen for a long time to recognize the \"Long press\" gesture";
@@ -106,12 +107,44 @@
 
 "completed_award" = "%@ achievement is completed!";
 
+"menuSupport" = "The \"Support project\" button is a button for voluntary assistance to the authors of the project";
+"menuProfile" = "The \"Profile\" button opens all information about your account with the ability to edit it";
+"menuCreateRoom" = "The \"Create room\" button creates a room that your interlocutor can join. While waiting, you can practice using gestures";
+"menuJoinRoom" = "The \"Enter the room\" button allows you to enter the room created by your interlocutor using the transmitted code";
+
+
 "callOnboarding1" = "Great! Now try to hold your finger in one place on the screen for a long time to recognize the gesture\"Pinching\"";
 "callOnboarding2" = "And now try to repeat the gesture of another user to get a reaction";
 "callOnboarding3" = "Different emotional colors correspond to different numbers of fingers in the gesture. Tap the screen with two fingers to transmit the rays of happiness";
 "callOnboarding4" = "Congratulations, the training has been completed! Have a nice time in the Mime space";
-"callOnboarding5" = "Great! Now swipe your finger across the screen to recognize the gesture\"Movement\"";
+"callOnboarding5" = "Great! Now swipe your finger across the screen to recognize the gesture\"Move\"";
 "callOnboarding6" = "You're doing great! Now try to move your fingers away from each other, as if you are trying to enlarge the content on the screen to recognize the \"Zoom\" gesture";
 "connected" = "The interlocutor has connected";
 "you_connected" = "You have successfully connected to the room";
 "left_room" = "Your interlocutor has left the room";
+"account" = "Account";
+"actions" = "Actions";
+"deleteAccount" = "Delete account";
+"deleteAlert" = "Are you sure you want to delete your account? All data and achievements will be irretrievably lost";
+"delete" = "Delete";
+"cancel" = "Cancel";
+"enterPassword" = "Enter the password to confirm the action";
+"accountPassword" = "Account Password";
+"warning" = "After deleting an account, it cannot be restored, and the achievements received will be irretrievably lost.";
+"chooseQuestion" = "Select a security question";
+"select" = "Select";
+"explanation" = "This is necessary to regain access to your account if you forget your password";
+"continue" = "Continue";
+"securityQuestion" = "Security question";
+"response" = "Response";
+"characterName" = "The name of your favorite character?";
+"whereToMove" = "Where would you like to move to?";
+"favoriteSubject" = "Favorite subject at school?";
+"childDream" = "Who did you want to become as a child?";
+"petName" = "The pet's name?";
+"forgotPassword" = "Forgot password?";
+"passwordRecovery" = "Password recovery";
+"changePassword" = "Change password";
+"repeatNewPassword" = "Repeat a new password";
+"saveChanges" = "Save changes";
+"enterLogin" = "Enter your username";

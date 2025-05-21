@@ -9,6 +9,8 @@ import UIKit
 
 class MenuViewController: UIViewController {
     
+    private let ac = AchievementService()
+    
     private let notificationService = NotificationService.shared
     
     private var isOnboarding: Bool
@@ -62,6 +64,8 @@ class MenuViewController: UIViewController {
         view.backgroundColor = .backgroundColor
         notificationService.addNotification()
         
+        ac.getAchievements()
+        
         /*var interlocutors = [LastInterlocutors(name: "OGTarget", avatarType: "door" , gradientName: "grayWhite", roomId: "SASD"), LastInterlocutors(name: "IlyaBB", avatarType: "drum" , gradientName: "purplePink", roomId: "SASD"), LastInterlocutors(name: "NekMMM", avatarType: "shield" , gradientName: "pinkWhite", roomId: "SASD"), LastInterlocutors(name: "Fedorer", avatarType: "spinner" , gradientName: "yellowOrange", roomId: "SASD")]
         UserDefaults.standard.interlocutors = interlocutors*/
         
@@ -87,9 +91,39 @@ class MenuViewController: UIViewController {
         nextButton.addTarget(self, action: #selector(nextButtonTapped), for: .touchUpInside)
         skipOnboardingButton.addTarget(self, action: #selector(skipOnboardingButtonTapped), for: .touchUpInside)
         
-        NSLayoutConstraint.activate([menuStackView.centerYAnchor.constraint(equalTo: view.centerYAnchor), menuStackView.centerXAnchor.constraint(equalTo: view.centerXAnchor), skipOnboardingButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -5), skipOnboardingButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 100), skipOnboardingButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -100), topSeparator.bottomAnchor.constraint(equalTo: skipOnboardingButton.topAnchor), topSeparator.heightAnchor.constraint(equalToConstant: 1), topSeparator.leadingAnchor.constraint(equalTo: skipOnboardingButton.leadingAnchor), topSeparator.trailingAnchor.constraint(equalTo: skipOnboardingButton.trailingAnchor), bottomSeparator.topAnchor.constraint(equalTo: skipOnboardingButton.bottomAnchor), bottomSeparator.heightAnchor.constraint(equalToConstant: 1), bottomSeparator.leadingAnchor.constraint(equalTo: skipOnboardingButton.leadingAnchor), bottomSeparator.trailingAnchor.constraint(equalTo: skipOnboardingButton.trailingAnchor), textLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 40), textLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30), textLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30), nextButton.bottomAnchor.constraint(equalTo: topSeparator.topAnchor, constant: -20), nextButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20), nextButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20), nextButton.heightAnchor.constraint(equalToConstant: 80)])
-        
-        NSLayoutConstraint.activate([donateButton.heightAnchor.constraint(equalToConstant: 51), profileButton.heightAnchor.constraint(equalToConstant: 51), createRoomButton.heightAnchor.constraint(equalToConstant: 51), enterRoomButton.heightAnchor.constraint(equalToConstant: 51), changingButton.heightAnchor.constraint(equalToConstant: 55), changingButton.widthAnchor.constraint(equalToConstant: 55)])
+        NSLayoutConstraint.activate([
+            menuStackView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            menuStackView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            
+            skipOnboardingButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -5),
+            skipOnboardingButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            
+            topSeparator.bottomAnchor.constraint(equalTo: skipOnboardingButton.topAnchor),
+            topSeparator.heightAnchor.constraint(equalToConstant: 1),
+            topSeparator.leadingAnchor.constraint(equalTo: skipOnboardingButton.leadingAnchor),
+            topSeparator.trailingAnchor.constraint(equalTo: skipOnboardingButton.trailingAnchor),
+            
+            bottomSeparator.topAnchor.constraint(equalTo: skipOnboardingButton.bottomAnchor),
+            bottomSeparator.heightAnchor.constraint(equalToConstant: 1),
+            bottomSeparator.leadingAnchor.constraint(equalTo: skipOnboardingButton.leadingAnchor), 
+            bottomSeparator.trailingAnchor.constraint(equalTo: skipOnboardingButton.trailingAnchor),
+            
+            textLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 40),
+            textLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
+            textLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30),
+            
+            nextButton.bottomAnchor.constraint(equalTo: topSeparator.topAnchor, constant: -20),
+            nextButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            nextButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            nextButton.heightAnchor.constraint(equalToConstant: 80),
+            
+            donateButton.heightAnchor.constraint(equalToConstant: 51),
+            profileButton.heightAnchor.constraint(equalToConstant: 51),
+            createRoomButton.heightAnchor.constraint(equalToConstant: 51),
+            enterRoomButton.heightAnchor.constraint(equalToConstant: 51),
+            changingButton.heightAnchor.constraint(equalToConstant: 55),
+            changingButton.widthAnchor.constraint(equalToConstant: 55)
+        ])
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -153,8 +187,9 @@ class MenuViewController: UIViewController {
             if let gradient = gradients.first(where: { gradient in gradient.name == interlocutor.gradientName}) {
                 avatarView.apply(gradient: gradient)
         }
-            avatarView.avatarImageView.image = AvatarImage(rawValue: interlocutor.avatarType)?.image
-            avatarView.maskLayer.contents = avatarView.avatarImageView.image?.cgImage
+            let image = AvatarImage(rawValue: interlocutor.avatarType)?.image
+            avatarView.avatarImageView.image = image
+            avatarView.applyMask(image: image)
             nameAvatarViews.append(avatarView)
         }
     }

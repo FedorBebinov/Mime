@@ -20,6 +20,21 @@ class ChooseShapeViewController: UIViewController {
                                                                                                                
     private lazy var avatarView = MainFactory.avatarView()
     
+    private lazy var avatarsCollectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .horizontal
+        layout.minimumLineSpacing = 0
+        layout.minimumInteritemSpacing = 0
+        var collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: layout)
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.isPagingEnabled = true
+        //collectionView.backgroundColor = .white
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        collectionView.register(AvatarView.self, forCellWithReuseIdentifier: "AvatarCell")
+        return collectionView
+    }()
+    
     private lazy var rightButton: UIButton = {
         let image = UIImage(resource: .rightArrow).withRenderingMode(.alwaysTemplate)
         let button = MainFactory.imageButton(image: image)
@@ -64,23 +79,33 @@ class ChooseShapeViewController: UIViewController {
         updateShape()
         updateGradient()
         
-        view.addSubview(chooseShapeLabel)
-        NSLayoutConstraint.activate([chooseShapeLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30), chooseShapeLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30), chooseShapeLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 35)])
-        
-        view.addSubview(doneButton)
-        doneButton.addTarget(self, action: #selector(doneButtonTapped), for: .touchUpInside)
-        NSLayoutConstraint.activate([doneButton.centerXAnchor.constraint(equalTo: view.centerXAnchor), doneButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -25), doneButton.widthAnchor.constraint(equalToConstant: 350), doneButton.heightAnchor.constraint(equalToConstant: 80)])
-        
-        view.addSubview(avatarView)
-        NSLayoutConstraint.activate([avatarView.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor, constant: -50), avatarView.centerXAnchor.constraint(equalTo: view.centerXAnchor)])
-        
         view.addSubview(rightButton)
         rightButton.addTarget(self, action: #selector(rightButtonTapped), for: .touchUpInside)
-        NSLayoutConstraint.activate([rightButton.centerYAnchor.constraint(equalTo: avatarView.centerYAnchor), rightButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -5), rightButton.leadingAnchor.constraint(equalTo: avatarView.trailingAnchor), rightButton.heightAnchor.constraint(equalToConstant: 135)])
+        NSLayoutConstraint.activate([
+            rightButton.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            rightButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -5),
+            //rightButton.leadingAnchor.constraint(equalTo: avatarsCollectionView.trailingAnchor),
+            rightButton.widthAnchor.constraint(equalToConstant: 20),
+            rightButton.heightAnchor.constraint(equalToConstant: 135)
+        ])
         
         view.addSubview(leftButton)
         leftButton.addTarget(self, action: #selector(leftButtonTapped), for: .touchUpInside)
-        NSLayoutConstraint.activate([leftButton.centerYAnchor.constraint(equalTo: avatarView.centerYAnchor), leftButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 5), leftButton.trailingAnchor.constraint(equalTo: avatarView.leadingAnchor), leftButton.heightAnchor.constraint(equalToConstant: 135)])
+        NSLayoutConstraint.activate([
+            leftButton.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            leftButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 5),
+            //leftButton.trailingAnchor.constraint(equalTo: avatarsCollectionView.leadingAnchor),
+            leftButton.widthAnchor.constraint(equalToConstant: 20),
+            leftButton.heightAnchor.constraint(equalToConstant: 135)
+        ])
+        
+        view.addSubview(doneButton)
+        doneButton.addTarget(self, action: #selector(doneButtonTapped), for: .touchUpInside)
+        NSLayoutConstraint.activate([
+            doneButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            doneButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -25),
+            doneButton.widthAnchor.constraint(equalToConstant: 350),
+            doneButton.heightAnchor.constraint(equalToConstant: 80)])
         
         view.addSubview(colorButtonsStackView)
         pinkWhiteButton.addTarget(self, action: #selector(pinkWhiteButtonTapped), for: .touchUpInside)
@@ -88,7 +113,28 @@ class ChooseShapeViewController: UIViewController {
         pinkOrangeButton.addTarget(self, action: #selector(pinkOrangeButtonTapped), for: .touchUpInside)
         yellowOrangeButton.addTarget(self, action: #selector(yellowOrangeButtonTapped), for: .touchUpInside)
         purplePinkButton.addTarget(self, action: #selector(purplePinkButtonTapped), for: .touchUpInside)
-        NSLayoutConstraint.activate([colorButtonsStackView.centerXAnchor.constraint(equalTo: view.centerXAnchor), colorButtonsStackView.bottomAnchor.constraint(equalTo: doneButton.topAnchor, constant: -20)])
+        NSLayoutConstraint.activate([
+            colorButtonsStackView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            colorButtonsStackView.bottomAnchor.constraint(equalTo: doneButton.topAnchor, constant: -20)])
+        
+        view.addSubview(chooseShapeLabel)
+        NSLayoutConstraint.activate([
+            chooseShapeLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
+            chooseShapeLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30),
+            chooseShapeLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 35)])
+        
+        view.addSubview(avatarsCollectionView)
+        NSLayoutConstraint.activate([
+            avatarsCollectionView.leadingAnchor.constraint(equalTo: leftButton.trailingAnchor, constant: 25),
+            avatarsCollectionView.trailingAnchor.constraint(equalTo: rightButton.leadingAnchor, constant: -25),
+            avatarsCollectionView.topAnchor.constraint(equalTo: chooseShapeLabel.bottomAnchor, constant: 67),
+            avatarsCollectionView.bottomAnchor.constraint(equalTo: colorButtonsStackView.topAnchor, constant: -30)])
+        
+       
+        
+        /*view.addSubview(avatarView)
+        NSLayoutConstraint.activate([avatarView.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor, constant: -50), avatarView.centerXAnchor.constraint(equalTo: view.centerXAnchor)])*/
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -96,20 +142,28 @@ class ChooseShapeViewController: UIViewController {
         super.viewWillAppear(animated)
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        let indexPath = IndexPath(item: shapeIndex, section: 0)
+        avatarsCollectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: false)
+    }
+    
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        let page = Int(round(scrollView.contentOffset.x / scrollView.frame.width))
+        shapeIndex = page
+    }
+    
     private func updateShape(){
-        let shape = shapes[shapeIndex]
-        avatarView.avatarImageView.image = shape.image
-        avatarView.maskLayer.contents = avatarView.avatarImageView.image?.cgImage
+        avatarsCollectionView.reloadData()
     }
     
     private func updateGradient(){
-        let gradient = gradients[gradientIndex]
-        avatarView.apply(gradient: gradient)
+        avatarsCollectionView.reloadData()
     }
     
     @objc
     private func doneButtonTapped(){
-        let avatar: AvatarData = AvatarData(type: shapes[shapeIndex].rawValue, color: gradients[gradientIndex].name)
+        let avatar: AvatarData = AvatarData(type: shapes[shapeIndex].rawValue, color: gradients[gradientIndex].name, hasBorder: false)
         Task {
             do {
                 try await service.saveAvatar(data: avatar)
@@ -129,17 +183,16 @@ class ChooseShapeViewController: UIViewController {
     
     @objc
     private func rightButtonTapped(){
-        shapeIndex = (shapeIndex + 1) % 5
+        shapeIndex = (shapeIndex + 1) % shapes.count
         updateShape()
+        avatarsCollectionView.scrollToItem(at: IndexPath(item: shapeIndex, section: 0), at: .centeredHorizontally, animated: true)
     }
     
     @objc
     private func leftButtonTapped(){
-        shapeIndex = shapeIndex - 1
-        if shapeIndex < 0 {
-            shapeIndex = shapes.count - 1
-        }
+        shapeIndex = (shapeIndex - 1 + shapes.count) % shapes.count
         updateShape()
+        avatarsCollectionView.scrollToItem(at: IndexPath(item: shapeIndex, section: 0), at: .centeredHorizontally, animated: true)
     }
     
     @objc
@@ -171,4 +224,26 @@ class ChooseShapeViewController: UIViewController {
         gradientIndex = 4
         updateGradient()
     }
+}
+
+extension ChooseShapeViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout{
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return shapes.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "AvatarCell", for: indexPath) as! AvatarView
+        let gradient = gradients[gradientIndex]
+        let shapeImage = shapes[indexPath.item].image
+        cell.avatarImageView.image = shapeImage
+        cell.apply(gradient: gradient)
+        cell.applyMask(image: shapeImage)
+        cell.avatarImageView.backgroundColor = .backgroundColor
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: collectionView.frame.width, height: collectionView.frame.height)
+        }
 }

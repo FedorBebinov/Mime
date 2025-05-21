@@ -11,7 +11,8 @@ import CoreHaptics
 
 class MessageService: NSObject, URLSessionWebSocketDelegate {
     
-    let baseUrl = "ws://34.32.64.24:8080"
+    //let baseUrl = "ws://34.32.64.24:8080"
+    let baseUrl = "ws://localhost:8080"
     let keychain = Keychain(service: "ru.hse.Mime")
     let zoomLength = 7.0
     let longPressLength = 2.5

@@ -11,6 +11,32 @@ import AVFoundation
 
 class CallViewController: UIViewController, MessageServiceDelegate {
     
+    private var oneFingerTapRecognizer: UIGestureRecognizer?
+    
+    private var twoFingerTapRecognizer: UIGestureRecognizer?
+    
+    private var threeFingerTapRecognizer: UIGestureRecognizer?
+    
+    private var fourFingerTapRecognizer: UIGestureRecognizer?
+    
+   // private var oneFingerMoveRecognizer: UIGestureRecognizer?
+    
+    private var twoFingerMoveRecognizer: UIGestureRecognizer?
+    
+    private var threeFingerMoveRecognizer: UIGestureRecognizer?
+    
+    private var fourFingerMoveRecognizer: UIGestureRecognizer?
+    
+    private var oneFingerPressRecognizer: UIGestureRecognizer?
+    
+    private var twoFingerPressRecognizer: UIGestureRecognizer?
+    
+    private var threeFingerPressRecognizer: UIGestureRecognizer?
+    
+    private var fourFingerPressRecognizer: UIGestureRecognizer?
+    
+    private var zoomRecognizer: UIGestureRecognizer?
+    
     private var roomId: String?
     
     private var zoomGif: UIImageView?
@@ -31,11 +57,11 @@ class CallViewController: UIViewController, MessageServiceDelegate {
     
     private var isOnboarding: Bool
     
-    private lazy var onboardingLabel = MainFactory.gestureRoomTextLabel(text: "А теперь попробуем потренировать жесты. Нажмите на экран для распознания жеста\"Касание\"")
+    private lazy var onboardingLabel = MainFactory.gestureRoomTextLabel(text: NSLocalizedString("tryTouch", comment: ""))
     
     private var tapCounter = 0
     
-    private lazy var backMenuButton = MainFactory.mainButton(text: "Вернуться в меню")
+    private lazy var backMenuButton = MainFactory.mainButton(text: NSLocalizedString("backMenu", comment: ""))
     
     private lazy var roomIdButton = MainFactory.separatedRoomButton(text: NSLocalizedString("roomNumber:", comment: ""))
     
@@ -84,7 +110,8 @@ class CallViewController: UIViewController, MessageServiceDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor(red: 19/255, green: 19/255, blue: 19/255, alpha: 1)
+        //view.backgroundColor = UIColor(red: 19/255, green: 19/255, blue: 19/255, alpha: 1)
+        view.backgroundColor = .backgroundColor
         NotificationCenter.default.addObserver(forName: UIDevice.deviceDidShakeNotification, object: nil, queue: .main) { _ in
             self.playShakeAnimationIfNeeded()
         }
@@ -116,6 +143,7 @@ class CallViewController: UIViewController, MessageServiceDelegate {
         view.addSubview(bottomSeparator)
         topSeparator.isHidden = isEnter
         bottomSeparator.isHidden = isEnter
+        
         NSLayoutConstraint.activate([topSeparator.heightAnchor.constraint(equalToConstant: 1), topSeparator.leadingAnchor.constraint(equalTo: roomIdButton.leadingAnchor), topSeparator.trailingAnchor.constraint(equalTo: roomIdButton.trailingAnchor), topSeparator.bottomAnchor.constraint(equalTo: roomIdButton.topAnchor), bottomSeparator.heightAnchor.constraint(equalToConstant: 1), bottomSeparator.trailingAnchor.constraint(equalTo: roomIdButton.trailingAnchor), bottomSeparator.leadingAnchor.constraint(equalTo: roomIdButton.leadingAnchor), bottomSeparator.topAnchor.constraint(equalTo: roomIdButton.bottomAnchor)])
         
         view.addSubview(shareButton)
@@ -157,55 +185,83 @@ class CallViewController: UIViewController, MessageServiceDelegate {
     private func addGestures() {
         let singleTap = UITapGestureRecognizer(target: self, action: #selector(self.handleTap))
         view.addGestureRecognizer(singleTap)
+        oneFingerTapRecognizer = singleTap
         
         let twoFingersTap = UITapGestureRecognizer(target: self, action: #selector(self.handleTwoFingersTap))
         twoFingersTap.numberOfTouchesRequired = 2
         view.addGestureRecognizer(twoFingersTap)
+        twoFingerTapRecognizer = twoFingersTap
         
         let threeFingersTap = UITapGestureRecognizer(target: self, action: #selector(self.handleThreeFingersTap))
         threeFingersTap.numberOfTouchesRequired = 3
         view.addGestureRecognizer(threeFingersTap)
+        threeFingerTapRecognizer = threeFingersTap
         
         let fourFingersTap = UITapGestureRecognizer(target: self, action: #selector(self.handleFourFingersTap))
         fourFingersTap.numberOfTouchesRequired = 4
         view.addGestureRecognizer(fourFingersTap)
+        fourFingerTapRecognizer = fourFingersTap
         
         let longPress = UILongPressGestureRecognizer(target: self, action:  #selector(self.handleLongPress))
         view.addGestureRecognizer(longPress)
+        oneFingerPressRecognizer = longPress
         
         let twoFingerslongPress = UILongPressGestureRecognizer(target: self, action:  #selector(self.handleTwoFingersLongPress))
         twoFingerslongPress.numberOfTouchesRequired = 2
         view.addGestureRecognizer(twoFingerslongPress)
+        twoFingerPressRecognizer = twoFingerslongPress
         
         let threeFingerslongPress = UILongPressGestureRecognizer(target: self, action:  #selector(self.handleThreeFingersLongPress))
         threeFingerslongPress.numberOfTouchesRequired = 3
         view.addGestureRecognizer(threeFingerslongPress)
+        threeFingerPressRecognizer = threeFingerslongPress
         
         let fourFingerslongPress = UILongPressGestureRecognizer(target: self, action:  #selector(self.handleFourFingersLongPress))
         fourFingerslongPress.numberOfTouchesRequired = 4
         view.addGestureRecognizer(fourFingerslongPress)
+        fourFingerPressRecognizer = fourFingerslongPress
         
         let zoomGesture = UIPinchGestureRecognizer(target: self, action: #selector(self.handlePinch))
         view.addGestureRecognizer(zoomGesture)
+        zoomRecognizer = zoomGesture
         
         let moveGesture = UIPanGestureRecognizer(target: self, action: #selector(self.handlePan))
         moveGesture.maximumNumberOfTouches = 1
         view.addGestureRecognizer(moveGesture)
+       // oneFingerMoveRecognizer = moveGesture
         
         let twoFingersMoveGesture = UIPanGestureRecognizer(target: self, action: #selector(self.handleTwoFingersPan))
         twoFingersMoveGesture.minimumNumberOfTouches = 2
         twoFingersMoveGesture.maximumNumberOfTouches = 2
         view.addGestureRecognizer(twoFingersMoveGesture)
+        twoFingerMoveRecognizer = twoFingersMoveGesture
         
         let threeFingersMoveGesture = UIPanGestureRecognizer(target: self, action: #selector(self.handleThreeFingersPan))
         threeFingersMoveGesture.minimumNumberOfTouches = 3
         threeFingersMoveGesture.maximumNumberOfTouches = 3
         view.addGestureRecognizer(threeFingersMoveGesture)
+        threeFingerMoveRecognizer = threeFingersMoveGesture
         
         let fourFingersMoveGesture = UIPanGestureRecognizer(target: self, action: #selector(self.handleFourFingersPan))
         fourFingersMoveGesture.minimumNumberOfTouches = 4
         fourFingersMoveGesture.maximumNumberOfTouches = 4
         view.addGestureRecognizer(fourFingersMoveGesture)
+        fourFingerMoveRecognizer = fourFingersMoveGesture
+        
+        if isOnboarding {
+            twoFingerTapRecognizer?.isEnabled = false
+            threeFingerTapRecognizer?.isEnabled = false
+            fourFingerTapRecognizer?.isEnabled = false
+            oneFingerPressRecognizer?.isEnabled = false
+            twoFingerPressRecognizer?.isEnabled = false
+            threeFingerPressRecognizer?.isEnabled = false
+            fourFingerPressRecognizer?.isEnabled = false
+            //oneFingerMoveRecognizer?.isEnabled = false
+            twoFingerMoveRecognizer?.isEnabled = false
+            threeFingerMoveRecognizer?.isEnabled = false
+            fourFingerMoveRecognizer?.isEnabled = false
+            zoomRecognizer?.isEnabled = false
+        }
     }
     
     @objc private func handleTap(_ sender: UITapGestureRecognizer?) {
@@ -224,8 +280,10 @@ class CallViewController: UIViewController, MessageServiceDelegate {
             let seconds = 1.5
             DispatchQueue.main.asyncAfter(deadline: .now() + seconds) {
                 self.onboardingLabel.text = NSLocalizedString("callOnboarding1", comment: "")
-                self.tapCounter += 1
             }
+            tapCounter += 1
+            oneFingerTapRecognizer?.isEnabled = false
+            oneFingerPressRecognizer?.isEnabled = true
         }
     }
     
@@ -247,9 +305,11 @@ class CallViewController: UIViewController, MessageServiceDelegate {
             let seconds = 1.5
             DispatchQueue.main.asyncAfter(deadline: .now() + seconds) {
                 self.onboardingLabel.text = NSLocalizedString("callOnboarding2", comment: "")
-                self.tapCounter += 1
                 self.drawCenterZoomGif()
             }
+            tapCounter += 1
+            twoFingerTapRecognizer?.isEnabled = false
+            zoomRecognizer?.isEnabled = true
         }
         
     }
@@ -303,9 +363,11 @@ class CallViewController: UIViewController, MessageServiceDelegate {
                 let seconds = 6.7
                 DispatchQueue.main.asyncAfter(deadline: .now() + seconds) {
                     self.onboardingLabel.text = NSLocalizedString("callOnboarding3", comment: "")
-                    self.tapCounter += 1
                 }
-            } 
+                tapCounter += 1
+                zoomRecognizer?.isEnabled = false
+                twoFingerTapRecognizer?.isEnabled = true
+            }
             if isOnboarding && tapCounter == 5{
                 didComplete = true
                 self.messageService.playVibration(forResourse: "zoomSound", duration: 7.0)
@@ -315,6 +377,7 @@ class CallViewController: UIViewController, MessageServiceDelegate {
                     self.tapCounter += 1
                     self.backMenuButton.isHidden = false
                 }
+                zoomRecognizer?.isEnabled = false
             }
         }
     }
@@ -437,6 +500,8 @@ class CallViewController: UIViewController, MessageServiceDelegate {
                     self.onboardingLabel.text = NSLocalizedString("callOnboarding5", comment: "")
                 }
                 tapCounter += 1
+                oneFingerPressRecognizer?.isEnabled = false
+                //oneFingerMoveRecognizer?.isEnabled = true
             }
         }
     }
@@ -449,6 +514,8 @@ class CallViewController: UIViewController, MessageServiceDelegate {
                 self.onboardingLabel.text = NSLocalizedString("callOnboarding6", comment: "")
             }
             tapCounter += 1
+            //oneFingerMoveRecognizer?.isEnabled = false
+            zoomRecognizer?.isEnabled = true
         }
         
     }
@@ -471,7 +538,9 @@ class CallViewController: UIViewController, MessageServiceDelegate {
         }
         switch sender.state {
         case .began:
-            AchievementService.shared.trackSendMessage()
+            if isUserInRoom { AchievementService.shared.trackSendMessage()
+            }
+            
             if soundActive, !isUserInRoom {
                 playPanSound(numberOfTouches: sender.numberOfTouches)
             }
@@ -558,7 +627,11 @@ class CallViewController: UIViewController, MessageServiceDelegate {
                 case 3:
                     gifName = "long-press3.gif"
                 case 4:
-                    gifName = "hold4_new2.gif"
+                    if traitCollection.userInterfaceStyle == .dark {
+                        gifName = "hold4_new2.gif"
+                    } else {
+                        gifName = "hold4_white"
+                    }
                 default:
                     gifName = "hold4.gif"
                 }
@@ -571,7 +644,11 @@ class CallViewController: UIViewController, MessageServiceDelegate {
                 case 3:
                     gifName = "touch3_1.gif"
                 case 4:
-                    gifName = "touch4_d.gif"
+                    if traitCollection.userInterfaceStyle == .dark {
+                        gifName = "touch4_d.gif"
+                    } else {
+                        gifName = "touch4_white"
+                    }
                 default:
                     gifName = "touch4_d.gif"
                 }
@@ -636,7 +713,11 @@ class CallViewController: UIViewController, MessageServiceDelegate {
         case 3:
             imageName = "motion3"
         case 4:
-            imageName = "motion4"
+            if traitCollection.userInterfaceStyle == .dark {
+                imageName = "motion4"
+            } else {
+                imageName = "motion4White"
+            }
         default:
             imageName = "motion1"
         }
@@ -786,7 +867,7 @@ class CallViewController: UIViewController, MessageServiceDelegate {
         }
         let message = Message(points: messagePoints, gesture: gesture, date: .now)
         messageService.sendMessage(message: message)
-        if gesture != .pan {
+        if gesture != .pan, isUserInRoom {
             AchievementService.shared.trackSendMessage()
         }
     }

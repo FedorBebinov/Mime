@@ -29,9 +29,7 @@ class EditUserInfoViewController: UIViewController{
     private lazy var nameSeparator = MainFactory.paleSeparator()
     
     private lazy var oldPasswordSeparator = MainFactory.paleSeparator()
-    
-    private lazy var newPasswordSeparator = MainFactory.paleSeparator()
-    
+        
     private lazy var avatarSeparator = MainFactory.paleSeparator()
     
     private lazy var topNameSeparator = MainFactory.separator()
@@ -44,29 +42,24 @@ class EditUserInfoViewController: UIViewController{
     
     private lazy var nameTextField = MainFactory.textField()
     
-    private lazy var oldPasswordTextField = MainFactory.passwordTextField(placeholder: NSLocalizedString("oldPassword", comment: ""))
-    
-    private lazy var newPasswordTextField = MainFactory.passwordTextField(placeholder: NSLocalizedString("newPassword", comment: ""))
-    
+    private lazy var oldPasswordTextField = MainFactory.changeLabel(text: "••••••••••")
+        
     private lazy var nameEditButton = MainFactory.separatedButton(text: NSLocalizedString("change", comment: ""))
 
     private lazy var passwordEditButton = MainFactory.separatedButton(text: NSLocalizedString("change", comment: ""))
     
     private lazy var avatarEditButton = MainFactory.separatedButton(text: NSLocalizedString("select", comment: ""))
-    
-    private lazy var changeAvatarButton = MainFactory.separatedButton(text: NSLocalizedString("changeFigure", comment: ""))
-    
+        
     private lazy var topAvatarSeparator = MainFactory.separator()
     
     private lazy var bottomAvatarSeparator = MainFactory.separator()
     
     private lazy var saveIndicatorImage = MainFactory.hidenImageView(name: "savedChanges")
     
-    private lazy var passwordButton: UIButton = {
-        let image = UIImage(resource: .showPassword).withRenderingMode(.alwaysTemplate)
-        let button = MainFactory.imageButton(image: image)
-        button.tintColor = .textColor
-        return button
+    private lazy var layoutView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
     }()
 
     init(username: String) {
@@ -101,14 +94,11 @@ class EditUserInfoViewController: UIViewController{
         view.addSubview(oldPasswordTextField)
         NSLayoutConstraint.activate([oldPasswordTextField.topAnchor.constraint(equalTo: nameTextField.bottomAnchor, constant: 40), oldPasswordTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30), oldPasswordTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30), oldPasswordTextField.heightAnchor.constraint(equalToConstant: 50)])
         
-        view.addSubview(newPasswordTextField)
-        NSLayoutConstraint.activate([newPasswordTextField.topAnchor.constraint(equalTo: oldPasswordTextField.bottomAnchor, constant: 3), newPasswordTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30), newPasswordTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30), newPasswordTextField.heightAnchor.constraint(equalToConstant: 50)])
-        
         view.addSubview(avatarTextLabel)
         NSLayoutConstraint.activate([
-            avatarTextLabel.topAnchor.constraint(equalTo: newPasswordTextField.bottomAnchor, constant: 40),
-            avatarTextLabel.leadingAnchor.constraint(equalTo: newPasswordTextField.leadingAnchor),
-            avatarTextLabel.trailingAnchor.constraint(equalTo: newPasswordTextField.trailingAnchor),
+            avatarTextLabel.topAnchor.constraint(equalTo: oldPasswordTextField.bottomAnchor, constant: 40),
+            avatarTextLabel.leadingAnchor.constraint(equalTo: oldPasswordTextField.leadingAnchor),
+            avatarTextLabel.trailingAnchor.constraint(equalTo: oldPasswordTextField.trailingAnchor),
             avatarTextLabel.heightAnchor.constraint(equalToConstant: 50)])
         
         view.addSubview(avatarLabel)
@@ -135,9 +125,6 @@ class EditUserInfoViewController: UIViewController{
         view.addSubview(oldPasswordSeparator)
         NSLayoutConstraint.activate([oldPasswordSeparator.topAnchor.constraint(equalTo: oldPasswordTextField.bottomAnchor), oldPasswordSeparator.leadingAnchor.constraint(equalTo: oldPasswordTextField.leadingAnchor), oldPasswordSeparator.trailingAnchor.constraint(equalTo: oldPasswordTextField.trailingAnchor), oldPasswordSeparator.heightAnchor.constraint(equalToConstant: 1)])
         
-        view.addSubview(newPasswordSeparator)
-        NSLayoutConstraint.activate([newPasswordSeparator.topAnchor.constraint(equalTo: newPasswordTextField.bottomAnchor), newPasswordSeparator.leadingAnchor.constraint(equalTo: newPasswordTextField.leadingAnchor), newPasswordSeparator.trailingAnchor.constraint(equalTo: newPasswordTextField.trailingAnchor), newPasswordSeparator.heightAnchor.constraint(equalToConstant: 1)])
-        
         view.addSubview(avatarSeparator)
         NSLayoutConstraint.activate([avatarSeparator.topAnchor.constraint(equalTo: avatarTextLabel.bottomAnchor), avatarSeparator.leadingAnchor.constraint(equalTo: avatarTextLabel.leadingAnchor), avatarSeparator.trailingAnchor.constraint(equalTo: avatarTextLabel.trailingAnchor), avatarSeparator.heightAnchor.constraint(equalToConstant: 1)])
                 
@@ -153,7 +140,7 @@ class EditUserInfoViewController: UIViewController{
         
         view.addSubview(passwordEditButton)
         passwordEditButton.addTarget(self, action: #selector(passwordEditButtonTapped), for: .touchUpInside)
-        NSLayoutConstraint.activate([passwordEditButton.centerYAnchor.constraint(equalTo: newPasswordTextField.centerYAnchor), passwordEditButton.heightAnchor.constraint(equalToConstant: 25), passwordEditButton.widthAnchor.constraint(equalToConstant: 78), passwordEditButton.trailingAnchor.constraint(equalTo: newPasswordTextField.trailingAnchor)])
+        NSLayoutConstraint.activate([passwordEditButton.centerYAnchor.constraint(equalTo: oldPasswordTextField.centerYAnchor), passwordEditButton.heightAnchor.constraint(equalToConstant: 25), passwordEditButton.widthAnchor.constraint(equalToConstant: 78), passwordEditButton.trailingAnchor.constraint(equalTo: oldPasswordTextField.trailingAnchor)])
         
         view.addSubview(topPasswordSeparator)
         NSLayoutConstraint.activate([topPasswordSeparator.bottomAnchor.constraint(equalTo: passwordEditButton.topAnchor), topPasswordSeparator.leadingAnchor.constraint(equalTo: passwordEditButton.leadingAnchor), topPasswordSeparator.trailingAnchor.constraint(equalTo: passwordEditButton.trailingAnchor), topPasswordSeparator.heightAnchor.constraint(equalToConstant: 1)])
@@ -167,12 +154,22 @@ class EditUserInfoViewController: UIViewController{
         view.addSubview(passwordLabel)
         NSLayoutConstraint.activate([passwordLabel.bottomAnchor.constraint(equalTo: oldPasswordTextField.topAnchor), passwordLabel.leadingAnchor.constraint(equalTo: oldPasswordTextField.leadingAnchor), passwordLabel.heightAnchor.constraint(equalToConstant: 15)])
         
-        view.addSubview(saveIndicatorImage)
-        NSLayoutConstraint.activate([saveIndicatorImage.topAnchor.constraint(equalTo: avatarTextLabel.bottomAnchor, constant: 40), saveIndicatorImage.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 73), saveIndicatorImage.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -73)])
+        view.addSubview(layoutView)
+        NSLayoutConstraint.activate([
+            layoutView.topAnchor.constraint(equalTo: avatarSeparator.bottomAnchor),
+            layoutView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            layoutView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            layoutView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+        ])
         
-        view.addSubview(passwordButton)
-        passwordButton.addTarget(self, action: #selector(passwordButtonTapped), for: .touchUpInside)
-        NSLayoutConstraint.activate([passwordButton.trailingAnchor.constraint(equalTo: oldPasswordTextField.trailingAnchor), passwordButton.centerYAnchor.constraint(equalTo: oldPasswordTextField.centerYAnchor)])
+        view.addSubview(saveIndicatorImage)
+        let topInset: CGFloat = UIScreen.main.bounds.height <= 736 ? 20 : 71
+        NSLayoutConstraint.activate([
+            saveIndicatorImage.centerXAnchor.constraint(equalTo: layoutView.centerXAnchor),
+            saveIndicatorImage.centerYAnchor.constraint(equalTo: layoutView.centerYAnchor)
+            //saveIndicatorImage.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 73),
+            //saveIndicatorImage.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -73)
+        ])
 
     }
     
@@ -231,20 +228,8 @@ class EditUserInfoViewController: UIViewController{
     }
     
     @objc
-    private func passwordButtonTapped() {
-        isPasswordHidden.toggle()
-        oldPasswordTextField.isSecureTextEntry.toggle()
-        newPasswordTextField.isSecureTextEntry.toggle()
-        if isPasswordHidden{
-            passwordButton.setImage(UIImage(named: "showPassword"), for: .normal)
-        } else {
-            passwordButton.setImage(UIImage(named: "hidePassword"), for: .normal)
-        }
-    }
-    
-    @objc
     private func passwordEditButtonTapped() {
-        guard let oldPassword = oldPasswordTextField.text, let newPassword = newPasswordTextField.text, !oldPassword.isEmpty, !newPassword.isEmpty else{
+        /*guard let oldPassword = oldPasswordTextField.text, let newPassword = newPasswordTextField.text, !oldPassword.isEmpty, !newPassword.isEmpty else{
             errorAlert(tittle: "Ошибка", message: "Старый и новый пароли не должны быть пустыми")
             return
         }
@@ -273,7 +258,8 @@ class EditUserInfoViewController: UIViewController{
                     return
                     })
             }
-        }
+        }*/
+        navigationController?.pushViewController(ChangePasswordViewController(wasForgotten: false), animated: true)
     }
     
     @objc

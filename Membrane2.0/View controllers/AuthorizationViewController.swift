@@ -20,9 +20,9 @@ class AuthorizationViewController: UIViewController {
     
     private lazy var nameLabel = MainFactory.topLabel(text: labelText)
     
-    private lazy var topSeparator = MainFactory.separator()
+    private lazy var topSeparator = MainFactory.paleSeparator()
     
-    private lazy var bottomSeparator = MainFactory.separator()
+    private lazy var bottomSeparator = MainFactory.paleSeparator()
     
     private lazy var nameTextField = MainFactory.textFieldLogin(placeholder: NSLocalizedString("login", comment: ""))
     
@@ -30,12 +30,13 @@ class AuthorizationViewController: UIViewController {
     
     private lazy var actionButton = MainFactory.mainButton(text: buttonText)
     
-    private lazy var passwordButton: UIButton = {
-        let image = UIImage(resource: .showPassword).withRenderingMode(.alwaysTemplate)
-        let button = MainFactory.imageButton(image: image)
-        button.tintColor = .textColor
-        return button
-    }()
+    private lazy var passwordButton = MainFactory.imageButtonTemplate(imageName: "showPassword")
+    
+    private lazy var forgottenPasswordButton = MainFactory.separatedButton(text: NSLocalizedString("forgotPassword", comment: ""))
+    
+    private lazy var forgotTopSeparator = MainFactory.separator()
+    
+    private lazy var forgotBottomSeparator = MainFactory.separator()
     
     private let isLogin: Bool
     private let labelText: String
@@ -66,9 +67,11 @@ class AuthorizationViewController: UIViewController {
         NSLayoutConstraint.activate([nameLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30), nameLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30), nameLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10)])
         
         view.addSubview(nameTextField)
+        nameTextField.delegate = self
         NSLayoutConstraint.activate([nameTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30), nameTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30), nameTextField.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 88), nameTextField.heightAnchor.constraint(equalToConstant: 50)])
         
         view.addSubview(passwordTextField)
+        passwordTextField.delegate = self
         passwordTextField.isSecureTextEntry = true
         NSLayoutConstraint.activate([passwordTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30), passwordTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30), passwordTextField.topAnchor.constraint(equalTo: nameTextField.bottomAnchor, constant: 16), passwordTextField.heightAnchor.constraint(equalToConstant: 50)])
         
@@ -94,11 +97,38 @@ class AuthorizationViewController: UIViewController {
         view.addSubview(loadingView)
         NSLayoutConstraint.activate([loadingView.topAnchor.constraint(equalTo: view.topAnchor), loadingView.leadingAnchor.constraint(equalTo: view.leadingAnchor), loadingView.bottomAnchor.constraint(equalTo: view.bottomAnchor), loadingView.trailingAnchor.constraint(equalTo: view.trailingAnchor)])
         
+        view.addSubview(forgottenPasswordButton)
+        forgottenPasswordButton.addTarget(self, action: #selector(forgotButtonTapped), for: .touchUpInside)
+        NSLayoutConstraint.activate([
+            forgottenPasswordButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            forgottenPasswordButton.topAnchor.constraint(equalTo: bottomSeparator.bottomAnchor, constant: 20)
+        ])
+        
+        view.addSubview(forgotTopSeparator)
+        NSLayoutConstraint.activate(
+            [forgotTopSeparator.bottomAnchor.constraint(equalTo: forgottenPasswordButton.topAnchor),
+             forgotTopSeparator.leadingAnchor.constraint(equalTo: forgottenPasswordButton.leadingAnchor),
+             forgotTopSeparator.trailingAnchor.constraint(equalTo: forgottenPasswordButton.trailingAnchor),
+             forgotTopSeparator.heightAnchor.constraint(equalToConstant: 1)])
+        
+        view.addSubview(forgotBottomSeparator)
+        NSLayoutConstraint.activate(
+            [forgotBottomSeparator.topAnchor.constraint(equalTo: forgottenPasswordButton.bottomAnchor),
+             forgotBottomSeparator.leadingAnchor.constraint(equalTo: forgottenPasswordButton.leadingAnchor),
+             forgotBottomSeparator.trailingAnchor.constraint(equalTo: forgottenPasswordButton.trailingAnchor),
+             forgotBottomSeparator.heightAnchor.constraint(equalToConstant: 1)])
+        
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(false, animated: false)
         nameTextField.becomeFirstResponder()
+        
+        if !isLogin{
+            forgottenPasswordButton.isHidden = true
+            forgotTopSeparator.isHidden = true
+            forgotBottomSeparator.isHidden = true
+        }
     }
     
     private func isPasswordStrongEnough(password: String) -> Bool {
@@ -160,7 +190,7 @@ class AuthorizationViewController: UIViewController {
                     } else {
                         do{
                             try await service.register(data: user)
-                            await MainActor.run {navigationController?.pushViewController(ChooseShapeViewController(), animated: true)}
+                            await MainActor.run {navigationController?.pushViewController(SecurityQuestionViewController(isRecovery: false), animated: true)}
                         } catch AuthorizationError.userAlreadyExists {
                             await MainActor.run(body: {
                                 errorAlert(tittle: "Ошибка", message: "Пользователь с таким никнеймом уже существует")
@@ -186,10 +216,27 @@ class AuthorizationViewController: UIViewController {
         isPasswordHidden.toggle()
         passwordTextField.isSecureTextEntry.toggle()
         if isPasswordHidden{
-            passwordButton.setImage(UIImage(named: "showPassword"), for: .normal)
+            passwordButton.setImage(UIImage(named: "showPassword")?.withRenderingMode(.alwaysTemplate), for: .normal)
         } else {
-            passwordButton.setImage(UIImage(named: "hidePassword"), for: .normal)
+            passwordButton.setImage(UIImage(named: "hidePassword")?.withRenderingMode(.alwaysTemplate), for: .normal)
         }
+    }
+    
+    @objc
+    private func forgotButtonTapped(){
+        navigationController?.pushViewController(LoginCheckViewController(), animated: true)
+    }
+}
+
+extension AuthorizationViewController: UITextFieldDelegate{
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if textField == nameTextField {
+            passwordTextField.becomeFirstResponder()
+        } else if textField == passwordTextField {
+            actionButtonTapped()
+        }
+        return true
     }
 }
 

@@ -10,4 +10,5 @@ import Foundation
 struct AvatarData: Codable {
     let type: String
     let color: String
+    let hasBorder: Bool
 }

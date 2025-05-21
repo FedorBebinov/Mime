@@ -1,0 +1,30 @@
+{
+  "achievements": [
+    {
+      "id": "communicative",
+      "currentValue": 26,
+      "totalValue": 100
+    },
+    {
+      "id": "habitue",
+      "currentValue": 8,
+      "totalValue": 15
+    },
+    {
+      "id": "closeConnect",
+      "currentValue": 1,
+      "totalValue": 5
+    },
+    {
+      "id": "friendly",
+      "currentValue": 2,
+      "totalValue": 2
+    },
+    {
+      "id": "experimenter",
+      "currentValue": 6,
+      "totalValue": 8
+    }
+  ]
+}
+

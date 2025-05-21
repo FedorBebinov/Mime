@@ -124,11 +124,37 @@ class GesturesViewController: UIViewController {
         gesturesButton.addTarget(self, action: #selector(gesturesButtonTapped), for: .touchUpInside)
         
         NSLayoutConstraint.activate([
-            gesturesTextLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 43),
+            gesturesButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 50),
+            gesturesButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 43),
+
+            fingersButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -50),
+            fingersButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 43),
+
+            fingersTopSeparator.leadingAnchor.constraint(equalTo: fingersButton.leadingAnchor),
+            fingersTopSeparator.trailingAnchor.constraint(equalTo: fingersButton.trailingAnchor),
+            fingersTopSeparator.bottomAnchor.constraint(equalTo: fingersButton.topAnchor),
+            fingersTopSeparator.heightAnchor.constraint(equalToConstant: 1),
+
+            fingersBottomeparator.leadingAnchor.constraint(equalTo: fingersButton.leadingAnchor),
+            fingersBottomeparator.trailingAnchor.constraint(equalTo: fingersButton.trailingAnchor),
+            fingersBottomeparator.topAnchor.constraint(equalTo: fingersButton.bottomAnchor),
+            fingersBottomeparator.heightAnchor.constraint(equalToConstant: 1),
+
+            gesturesBottomSeparator.leadingAnchor.constraint(equalTo: gesturesButton.leadingAnchor),
+            gesturesBottomSeparator.trailingAnchor.constraint(equalTo: gesturesButton.trailingAnchor),
+            gesturesBottomSeparator.topAnchor.constraint(equalTo: gesturesButton.bottomAnchor),
+            gesturesBottomSeparator.heightAnchor.constraint(equalToConstant: 1),
+
+            gesturesTopSeparator.leadingAnchor.constraint(equalTo: gesturesButton.leadingAnchor),
+            gesturesTopSeparator.trailingAnchor.constraint(equalTo: gesturesButton.trailingAnchor),
+            gesturesTopSeparator.bottomAnchor.constraint(equalTo: gesturesButton.topAnchor),
+            gesturesTopSeparator.heightAnchor.constraint(equalToConstant: 1),
+            
+            gesturesTextLabel.topAnchor.constraint(equalTo: fingersButton.bottomAnchor, constant: 52),
             gesturesTextLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
             gesturesTextLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30),
 
-            fingersTextLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 43),
+            fingersTextLabel.topAnchor.constraint(equalTo: fingersButton.bottomAnchor, constant: 52),
             fingersTextLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
             fingersTextLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30),
 
@@ -162,33 +188,7 @@ class GesturesViewController: UIViewController {
 
             fourfingersImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30),
             fourfingersImageView.topAnchor.constraint(equalTo: twofingersImageView.bottomAnchor, constant: 20),
-            fourfingersImageView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 230/844),
-
-            gesturesButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 50),
-            gesturesButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -32),
-
-            fingersButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -50),
-            fingersButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -32),
-
-            fingersTopSeparator.leadingAnchor.constraint(equalTo: fingersButton.leadingAnchor),
-            fingersTopSeparator.trailingAnchor.constraint(equalTo: fingersButton.trailingAnchor),
-            fingersTopSeparator.bottomAnchor.constraint(equalTo: fingersButton.topAnchor),
-            fingersTopSeparator.heightAnchor.constraint(equalToConstant: 1),
-
-            fingersBottomeparator.leadingAnchor.constraint(equalTo: fingersButton.leadingAnchor),
-            fingersBottomeparator.trailingAnchor.constraint(equalTo: fingersButton.trailingAnchor),
-            fingersBottomeparator.topAnchor.constraint(equalTo: fingersButton.bottomAnchor),
-            fingersBottomeparator.heightAnchor.constraint(equalToConstant: 1),
-
-            gesturesBottomSeparator.leadingAnchor.constraint(equalTo: gesturesButton.leadingAnchor),
-            gesturesBottomSeparator.trailingAnchor.constraint(equalTo: gesturesButton.trailingAnchor),
-            gesturesBottomSeparator.topAnchor.constraint(equalTo: gesturesButton.bottomAnchor),
-            gesturesBottomSeparator.heightAnchor.constraint(equalToConstant: 1),
-
-            gesturesTopSeparator.leadingAnchor.constraint(equalTo: gesturesButton.leadingAnchor),
-            gesturesTopSeparator.trailingAnchor.constraint(equalTo: gesturesButton.trailingAnchor),
-            gesturesTopSeparator.bottomAnchor.constraint(equalTo: gesturesButton.topAnchor),
-            gesturesTopSeparator.heightAnchor.constraint(equalToConstant: 1)
+            fourfingersImageView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 230/844)
         ])
     }
     

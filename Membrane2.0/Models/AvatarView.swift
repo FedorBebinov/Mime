@@ -7,50 +7,87 @@
 
 import UIKit
 
-class AvatarView: UIView {
-
-    private(set) lazy var avatarImageView: UIImageView = {
-        var doorImage = UIImageView()
-        doorImage.contentMode = .scaleAspectFit
-        doorImage.translatesAutoresizingMaskIntoConstraints = false
-        return doorImage
+//class AvatarView: UIView
+class AvatarView: UICollectionViewCell {
+    lazy var avatarImageView: UIImageView = {
+        let view = UIImageView()
+        view.contentMode = .scaleAspectFit
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
     }()
-    
-    private(set) lazy var gradient: CAGradientLayer =  CAGradientLayer()
-    
-    private(set) lazy var maskLayer: CALayer =  {
-        var maskLayer = CALayer()
-        return maskLayer
-    }()
-    
-    func apply(gradient: Gradient){
-        self.gradient.colors = gradient.colors.map(\.cgColor)
-        self.gradient.startPoint = CGPoint(x: 0.3, y: 0.0)
-        self.gradient.endPoint = CGPoint(x: 0.7, y: 1.0)
-    }
+    private let gradientLayer = CAGradientLayer()
+    private var maskImage: UIImage?
+    private var gradient: Gradient?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
-        self.addSubview(avatarImageView)
-        NSLayoutConstraint.activate([avatarImageView.topAnchor.constraint(equalTo: self.topAnchor), avatarImageView.leadingAnchor.constraint(equalTo: self.leadingAnchor), avatarImageView.trailingAnchor.constraint(equalTo: self.trailingAnchor), avatarImageView.bottomAnchor.constraint(equalTo: self.bottomAnchor)])
-
-        gradient.mask = maskLayer
-        avatarImageView.layer.insertSublayer(gradient, at: 0)
-        
+        setupUI()
+    }
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        setupUI()
     }
     
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+    private func setupUI() {
+        addSubview(avatarImageView)
+        NSLayoutConstraint.activate([
+            avatarImageView.topAnchor.constraint(equalTo: topAnchor),
+            avatarImageView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            avatarImageView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            avatarImageView.bottomAnchor.constraint(equalTo: bottomAnchor)
+        ])
+        avatarImageView.layer.insertSublayer(gradientLayer, at: 0)
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        let width = avatarImageView.bounds.width
-        let height = avatarImageView.bounds.height
-        gradient.frame = CGRect(x: 0, y: 0, width: width, height: height)
-        maskLayer.frame = gradient.frame
-
+        gradientLayer.frame = avatarImageView.bounds
+        updateGradientAndMask()
     }
     
+    func apply(gradient: Gradient) {
+        self.gradient = gradient
+        updateGradientAndMask()
+    }
+    func applyMask(image: UIImage?) {
+        self.maskImage = image
+        updateGradientAndMask()
+    }
+    private func updateGradientAndMask() {
+        // Обновление градиента
+        if let gradient = self.gradient {
+            gradientLayer.colors = gradient.colors.map(\.cgColor)
+            gradientLayer.startPoint = CGPoint(x: 0.3, y: 0.0)
+            gradientLayer.endPoint = CGPoint(x: 0.7, y: 1.0)
+        }
+        // Обновление маски
+        guard let image = maskImage, let cgImage = image.cgImage else {
+            gradientLayer.mask = nil
+            return
+        }
+        let bounds = gradientLayer.bounds
+        let maskRect = aspectFitFrame(for: CGSize(width: cgImage.width, height: cgImage.height), in: bounds)
+        let maskLayer = CALayer()
+        maskLayer.contents = cgImage
+        maskLayer.frame = maskRect
+        gradientLayer.mask = maskLayer
+    }
+    private func aspectFitFrame(for imageSize: CGSize, in boundingRect: CGRect) -> CGRect {
+        guard imageSize.width > 0 && imageSize.height > 0 else { return boundingRect }
+        let imageAspect = imageSize.width / imageSize.height
+        let viewAspect = boundingRect.width / boundingRect.height
+        var fitSize = CGSize()
+        if imageAspect > viewAspect {
+            fitSize.width = boundingRect.width
+            fitSize.height = boundingRect.width / imageAspect
+        } else {
+            fitSize.height = boundingRect.height
+            fitSize.width = boundingRect.height * imageAspect
+        }
+        let origin = CGPoint(
+            x: boundingRect.midX - fitSize.width/2,
+            y: boundingRect.midY - fitSize.height/2
+        )
+        return CGRect(origin: origin, size: fitSize)
+    }
 }
