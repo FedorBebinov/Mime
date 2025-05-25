@@ -204,7 +204,7 @@ class EditUserInfoViewController: UIViewController{
     @objc
     private func nameEditButtonTapped() {
         guard let newName = nameTextField.text, !newName.isEmpty else{
-            errorAlert(tittle: "Ошибка", message: "Новый логин не может быть пустым")
+            errorAlert(tittle: NSLocalizedString("error", comment: ""), message: NSLocalizedString("emptyLog", comment: ""))
             return
         }
         dismissKeyboard()
@@ -219,7 +219,7 @@ class EditUserInfoViewController: UIViewController{
                 print("Wrong body")
             } catch {
                 await MainActor.run(body: {
-                    errorAlert(tittle: "Ошибка", message: "Что-то пошло не так")
+                    errorAlert(tittle: NSLocalizedString("error", comment: ""), message: NSLocalizedString("smthWentWrong", comment: ""))
                     return
                     })
             }

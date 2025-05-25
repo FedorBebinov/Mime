@@ -49,15 +49,16 @@
 "backMenu" = "Back to menu";
 "tryLongPress" = "Great! Now try to hold your finger on one spot on the screen for a long time to recognize the \"Long press\" gesture";
 "tryCopy" = "Now try to replicate another user's gesture to see the reaction";
-"tutorCompleted" = "Congratulations, training is complete! Enjoy your time in Mime space";
+"tutorCompleted" = "Congratulations, the tutorial is complete! Enjoy your time in Mime.";
 "tryZoom" = "You're doing great! Now try to spread your fingers apart as if trying to enlarge the content on the screen to recognize the \"Zoom\" gesture";
 "welcomeLink" = "Hi! Come to my room in the Mime app mime://room/(roomId)";
 "roomNumber" = "Room number";
 "roomNumber:" = "Room number: ";
-"codeCopyed" = "Code was copyed!";
+"roomNumberFormat" = "Room number: %@";
+"codeCopyed" = "Code copied!";
 "wrongRoom" = "Room with this code does not exist. Please try again";
 "youConnected" = "You have successfully connected to the room";
-"interlocutorConnected" = "Your interlocutor has left the room";
+//"interlocutorConnected" = "Your interlocutor has left the room";
 "enterRoomNumber" = "Enter room number";
 "emptyRoomNumber" = "Room code cannot be empty";
 "gestureText" = "There are 3 different gestures available for any combination of fingers. \"Zoom\" is a standalone gesture with its own meaning.";
@@ -79,7 +80,7 @@
 "communicativeText" = "Send 100 messages";
 "doneVypoln" = "Done";
 "habitue" = "Regular";
-"habitueText" = "Enter the app for 15 days";
+"habitueText" = "Launch the app for 15 days in total";
 "closeConnect" = "Close connection";
 "closeConnectText" = "Have 5 calls with one interlocutor";
 "friendly" = "Friendly";
@@ -113,9 +114,9 @@
 "menuJoinRoom" = "The \"Enter the room\" button allows you to enter the room created by your interlocutor using the transmitted code";
 
 
-"callOnboarding1" = "Great! Now try to hold your finger in one place on the screen for a long time to recognize the gesture\"Pinching\"";
+"callOnboarding1" = "Great! Now try to hold your finger in one place on the screen for a long time to recognize the gesture\"Long press\"";
 "callOnboarding2" = "And now try to repeat the gesture of another user to get a reaction";
-"callOnboarding3" = "Different emotional colors correspond to different numbers of fingers in the gesture. Tap the screen with two fingers to transmit the rays of happiness";
+"callOnboarding3" = "Different numbers of fingers in a gesture convey different emotions. Tap the screen with two fingers to send rays of happiness";
 "callOnboarding4" = "Congratulations, the training has been completed! Have a nice time in the Mime space";
 "callOnboarding5" = "Great! Now swipe your finger across the screen to recognize the gesture\"Move\"";
 "callOnboarding6" = "You're doing great! Now try to move your fingers away from each other, as if you are trying to enlarge the content on the screen to recognize the \"Zoom\" gesture";
@@ -145,6 +146,8 @@
 "forgotPassword" = "Forgot password?";
 "passwordRecovery" = "Password recovery";
 "changePassword" = "Change password";
-"repeatNewPassword" = "Repeat a new password";
+"repeatNewPassword" = "Repeat new password";
 "saveChanges" = "Save changes";
 "enterLogin" = "Enter your username";
+"securityQuestionDismatch" = "The security question does not match the one set";
+"wrongSecurityAnswer" = "Incorrect answer to the security question";

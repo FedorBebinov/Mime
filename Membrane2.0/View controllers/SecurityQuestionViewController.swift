@@ -43,12 +43,7 @@ class SecurityQuestionViewController: UIViewController{
         return recognizer
     }()
     
-    private lazy var dropDownButton: UIButton = {
-        let image = UIImage(resource: .dropDown).withRenderingMode(.alwaysTemplate)
-        let button = MainFactory.imageButton(image: image)
-        button.tintColor = .textColor
-        return button
-    }()
+    private lazy var dropDownButton = MainFactory.imageButtonTemplate(imageName: "dropDown")
     
     private lazy var questionsTableView: UITableView = {
         let tableView = UITableView()
@@ -227,13 +222,13 @@ class SecurityQuestionViewController: UIViewController{
                     let securityInfo = try await networkingService.getSecurityInfo()
                     if securityInfo.secretQuestion != selectLabel.text {
                         await MainActor.run(body: {
-                            errorAlert(tittle: "Ошибка", message: "Секретный вопрос не совпадает с заданным")
+                            errorAlert(tittle: NSLocalizedString("error", comment: ""), message: NSLocalizedString("securityQuestionDismatch", comment: ""))
                             return
                             })
                     }
                     else if securityInfo.secretAnswer != responseTextField.text {
                         await MainActor.run(body: {
-                            errorAlert(tittle: "Ошибка", message: "Неверный ответ на секретный вопрос")
+                            errorAlert(tittle: NSLocalizedString("error", comment: ""), message: NSLocalizedString("wrongSecurityAnswer", comment: ""))
                             return
                             })
                     } else {
@@ -265,6 +260,7 @@ extension SecurityQuestionViewController: UITableViewDelegate, UITableViewDataSo
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = questionsTableView.dequeueReusableCell(withIdentifier: "SecurityQuestionCell") as! SecurityQuestionCell
         cell.setText(text: securityQuestions[indexPath.row])
+        cell.backgroundColor = .backgroundColor
         return cell
     }
     

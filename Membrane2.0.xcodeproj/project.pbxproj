@@ -20,6 +20,7 @@
 		0657328C2BF26F7A006B5ADF /* 4hold.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 065732882BF26F7A006B5ADF /* 4hold.mp3 */; };
 		0657328D2BF26F7A006B5ADF /* 4touch.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 065732892BF26F7A006B5ADF /* 4touch.mp3 */; };
 		0657328E2BF26F7A006B5ADF /* 3touch.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 0657328A2BF26F7A006B5ADF /* 3touch.mp3 */; };
+		852992DD2DE334980087B5F9 /* hold4_last_white.gif in Resources */ = {isa = PBXBuildFile; fileRef = 852992DC2DE334980087B5F9 /* hold4_last_white.gif */; };
 		853B4DC82A97C0DA00198532 /* UIFont + AppFonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853B4DC72A97C0DA00198532 /* UIFont + AppFonts.swift */; };
 		853B4DCC2A9CF73600198532 /* AvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853B4DCB2A9CF73600198532 /* AvatarView.swift */; };
 		853B4DCE2B20A2F000198532 /* UserData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853B4DCD2B20A2F000198532 /* UserData.swift */; };
@@ -120,6 +121,7 @@
 		065732882BF26F7A006B5ADF /* 4hold.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = 4hold.mp3; sourceTree = "<group>"; };
 		065732892BF26F7A006B5ADF /* 4touch.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = 4touch.mp3; sourceTree = "<group>"; };
 		0657328A2BF26F7A006B5ADF /* 3touch.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = 3touch.mp3; sourceTree = "<group>"; };
+		852992DC2DE334980087B5F9 /* hold4_last_white.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = hold4_last_white.gif; path = ../../../../Downloads/hold4_last_white.gif; sourceTree = "<group>"; };
 		853B4DC72A97C0DA00198532 /* UIFont + AppFonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont + AppFonts.swift"; sourceTree = "<group>"; };
 		853B4DCB2A9CF73600198532 /* AvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarView.swift; sourceTree = "<group>"; };
 		853B4DCD2B20A2F000198532 /* UserData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserData.swift; sourceTree = "<group>"; };
@@ -239,6 +241,7 @@
 				857708922BE97FB4001D22FE /* touch1_final.gif */,
 				85B4BD1F2BE59B1B003F27E5 /* long-press3.gif */,
 				85B927962BE3F6BE0065D635 /* hold4_new2.gif */,
+				852992DC2DE334980087B5F9 /* hold4_last_white.gif */,
 				85B4BD1D2BE59B13003F27E5 /* touch3_1.gif */,
 				85B927922BE373B40065D635 /* hold4_new.gif */,
 				85B9279A2BE3F6CC0065D635 /* hold2_50.gif */,
@@ -497,6 +500,7 @@
 				85B4486A2BE2A84700219EBB /* touch4.gif in Resources */,
 				0657328C2BF26F7A006B5ADF /* 4hold.mp3 in Resources */,
 				85B927942BE373B40065D635 /* confetti2.gif in Resources */,
+				852992DD2DE334980087B5F9 /* hold4_last_white.gif in Resources */,
 				0657328D2BF26F7A006B5ADF /* 4touch.mp3 in Resources */,
 				857708932BE97FB4001D22FE /* touch1_final.gif in Resources */,
 				065732802BF26E5A006B5ADF /* 2_finger_pan.mp3 in Resources */,
@@ -770,8 +774,8 @@
 				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "Приложение использует Bluetooth для обмена сообщениями";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_UIUserInterfaceStyle = Dark;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -801,8 +805,8 @@
 				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "Приложение использует Bluetooth для обмена сообщениями";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_UIUserInterfaceStyle = Dark;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (

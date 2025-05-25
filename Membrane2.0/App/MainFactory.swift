@@ -62,7 +62,7 @@ final class MainFactory{
         let attributes: [NSAttributedString.Key: Any] = [.font: UIFont.fontWithSize(size: 12)!]
         let attributedString = NSAttributedString(string: text, attributes: attributes)
         button.setAttributedTitle(attributedString, for: .normal)
-        button.setTitleColor(.red, for: .normal)
+        button.setTitleColor(.destructiveRed, for: .normal)
         return button
     }
     
@@ -72,7 +72,7 @@ final class MainFactory{
         let attributes: [NSAttributedString.Key: Any] = [.font: UIFont.fontWithSize(size: 12)!]
         let attributedString = NSAttributedString(string: text, attributes: attributes)
         button.setAttributedTitle(attributedString, for: .normal)
-        button.setTitleColor(.buttonTextColor, for: .normal)
+        button.setTitleColor(.roomIdButtonTextColor, for: .normal)
         return button
     }
     
@@ -96,7 +96,7 @@ final class MainFactory{
         let attributes: [NSAttributedString.Key: Any] = [.font: UIFont.fontWithSize(size: 18)!]
         let attributedString = NSAttributedString(string: text, attributes: attributes)
         button.setAttributedTitle(attributedString, for: .normal)
-        button.setTitleColor(.red, for: .normal)
+        button.setTitleColor(.destructiveRed, for: .normal)
         return button
     }
     
@@ -275,7 +275,7 @@ final class MainFactory{
         label.font = .fontWithSize(size: 18)
         label.translatesAutoresizingMaskIntoConstraints = false
         label.numberOfLines = 6
-        label.textColor = UIColor(red: 245/255, green: 245/255, blue: 245/255, alpha: 1)
+        label.textColor = .textColor
         return label
     }
     
@@ -362,8 +362,8 @@ final class MainFactory{
     static func loadingView() -> UIView{
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = .backgroundColor
-        view.alpha = 0.5
+        view.backgroundColor = .shadowColor
+        //view.alpha = 0.5
         view.isHidden = true
         return view
     }

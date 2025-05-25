@@ -585,7 +585,7 @@ class CallViewController: UIViewController, MessageServiceDelegate {
             return
         }
         
-        let content = "Привет! Заходи в мою комнату в приложении Mime mime://room/\(roomId)" /* если приложение не установлено, сначала скачай его по ссылке: https://apps.apple.com/ru/app/microsoft-word/id462054704?mt=12"*/
+        let content = NSLocalizedString("welcomeLink", comment: "")
         
         let activityVC = UIActivityViewController.init(activityItems: [content], applicationActivities: nil)
         present(activityVC, animated: true)
@@ -874,7 +874,7 @@ class CallViewController: UIViewController, MessageServiceDelegate {
     
     func failedConnectToRoom() {
         DispatchQueue.main.async {
-            let allert = UIAlertController(title: "Ошибка", message: "Комнаты с таким кодом не существует. Попробуйте ещё раз", preferredStyle: .alert)
+            let allert = UIAlertController(title: NSLocalizedString("error", comment: ""), message: NSLocalizedString("wrongRoom", comment: ""), preferredStyle: .alert)
             allert.addAction(UIAlertAction(title: "OK", style: .default, handler: { _ in
                 self.navigationController?.popViewController(animated: true)
             }))
@@ -887,7 +887,7 @@ class CallViewController: UIViewController, MessageServiceDelegate {
             self.isUserInRoom = true
             if let roomId = self.roomId {
                 let attributes: [NSAttributedString.Key: Any] = [.font: UIFont.fontWithSize(size: 15)!]
-                let attributedString = NSAttributedString(string: "Номер комнаты: \(roomId)", attributes: attributes)
+                let attributedString = NSAttributedString(string: String(format: NSLocalizedString("roomNumberFormat", comment: ""), roomId), attributes: attributes)
                 self.roomIdButton.setAttributedTitle(attributedString, for: .normal)
             }
             self.roomIdButton.isHidden = true

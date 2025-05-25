@@ -114,9 +114,9 @@ class AchievementsViewController: UIViewController {
         NSLayoutConstraint.activate([
             achievementsLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
             achievementsLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            achievementsLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 35),
+            achievementsLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 27),
         
-            messagesLabel.topAnchor.constraint(equalTo: achievementsLabel.bottomAnchor, constant: 32),
+            messagesLabel.topAnchor.constraint(equalTo: achievementsLabel.bottomAnchor, constant: 52),
             messagesLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 27),
             
             messagesRadioImage.centerYAnchor.constraint(equalTo: messagesLabel.centerYAnchor),

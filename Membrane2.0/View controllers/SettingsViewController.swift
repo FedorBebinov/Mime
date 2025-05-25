@@ -47,6 +47,22 @@ class SettingsViewController: UIViewController {
     
     private lazy var accountButton = MainFactory.imageButtonTemplate(imageName: "nextLine")
     
+    private lazy var helpLineButton: UIButton = {
+        let button = UIButton(type: .custom)
+        button.backgroundColor = .clear
+        button.addTarget(self, action: #selector(helpTapped), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+
+    private lazy var accountLineButton: UIButton = {
+        let button = UIButton(type: .custom)
+        button.backgroundColor = .clear
+        button.addTarget(self, action: #selector(accountTapped), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
     private lazy var exitAccountButton = MainFactory.deleteButton(text: NSLocalizedString("logout", comment: ""))
     
     private lazy var helpSeparator = MainFactory.paleSeparator()
@@ -86,6 +102,8 @@ class SettingsViewController: UIViewController {
             }
         }
         
+        view.addSubview(helpLineButton)
+        view.addSubview(accountLineButton)
         view.addSubview(settingsLabel)
         view.addSubview(helpLabel)
         view.addSubview(whiteThemeLabel)
@@ -129,6 +147,8 @@ class SettingsViewController: UIViewController {
         exitAccountButton.addTarget(self, action: #selector(logoutButtonTapped), for: .touchUpInside)
         helpButton.addTarget(self, action: #selector(helpTapped), for: .touchUpInside)
         accountButton.addTarget(self, action: #selector(accountTapped), for: .touchUpInside)
+        exitAccountButton.setContentHuggingPriority(.required, for: .horizontal)
+        exitAccountButton.setContentCompressionResistancePriority(.required, for: .horizontal)
         
         NSLayoutConstraint.activate([
             settingsLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
@@ -140,10 +160,20 @@ class SettingsViewController: UIViewController {
             helpLabel.widthAnchor.constraint(equalToConstant: 192),
             helpLabel.topAnchor.constraint(equalTo: settingsLabel.bottomAnchor, constant: 64.5),
             
+            helpLineButton.leadingAnchor.constraint(equalTo: helpLabel.leadingAnchor),
+            helpLineButton.trailingAnchor.constraint(equalTo: helpButton.trailingAnchor),
+            helpLineButton.topAnchor.constraint(equalTo: helpLabel.topAnchor),
+            helpLineButton.bottomAnchor.constraint(equalTo: helpLabel.bottomAnchor),
+            
             accountLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
             accountLabel.heightAnchor.constraint(equalToConstant: 25),
             accountLabel.widthAnchor.constraint(equalToConstant: 192),
             accountLabel.topAnchor.constraint(equalTo: helpLabel.bottomAnchor, constant: 36),
+            
+            accountLineButton.leadingAnchor.constraint(equalTo: accountLabel.leadingAnchor),
+            accountLineButton.trailingAnchor.constraint(equalTo: accountButton.trailingAnchor),
+            accountLineButton.topAnchor.constraint(equalTo: accountLabel.topAnchor),
+            accountLineButton.bottomAnchor.constraint(equalTo: accountLabel.bottomAnchor),
         
             whiteThemeLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
             whiteThemeLabel.heightAnchor.constraint(equalToConstant: 25),
@@ -193,7 +223,7 @@ class SettingsViewController: UIViewController {
         
             exitAccountButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             exitAccountButton.heightAnchor.constraint(equalToConstant: 25),
-            exitAccountButton.widthAnchor.constraint(equalToConstant: 192),
+            //exitAccountButton.widthAnchor.constraint(equalToConstant: 192),
             exitAccountButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -50),
         
             helpSeparator.leadingAnchor.constraint(equalTo: helpLabel.leadingAnchor),

@@ -168,22 +168,22 @@ class AuthorizationViewController: UIViewController {
                             }
                         } catch AuthorizationError.userDoesNotExist {
                             await MainActor.run(body: {
-                                errorAlert(tittle: "Ошибка", message: "Пользователя с таким никнеймом не существует")
+                                errorAlert(tittle: NSLocalizedString("error", comment: ""), message: NSLocalizedString("logNotExist", comment: ""))
                                 return
                             })
                         } catch AuthorizationError.wrongPassword {
                             await MainActor.run(body: {
-                                errorAlert(tittle: "Ошибка", message: "Неверный пароль или логин пользователя")
+                                errorAlert(tittle: NSLocalizedString("error", comment: ""), message: NSLocalizedString("wrongAuth", comment: ""))
                                 return
                                 })
                         } catch BackendError.badResponse {
                             await MainActor.run(body: {
-                                errorAlert(tittle: "Ошибка", message: "Сервер не отвечает")
+                                errorAlert(tittle: NSLocalizedString("error", comment: ""), message: NSLocalizedString("serverDisable", comment: ""))
                                 return
                                 })
                         } catch {
                             await MainActor.run(body: {
-                                errorAlert(tittle: "Ошибка", message: "Что-то пошло не так")
+                                errorAlert(tittle: NSLocalizedString("error", comment: ""), message: NSLocalizedString("smthWentWrong", comment: ""))
                                 return
                                 })
                         }
@@ -193,17 +193,17 @@ class AuthorizationViewController: UIViewController {
                             await MainActor.run {navigationController?.pushViewController(SecurityQuestionViewController(isRecovery: false), animated: true)}
                         } catch AuthorizationError.userAlreadyExists {
                             await MainActor.run(body: {
-                                errorAlert(tittle: "Ошибка", message: "Пользователь с таким никнеймом уже существует")
+                                errorAlert(tittle: NSLocalizedString("error", comment: ""), message: NSLocalizedString("logAlreadyExis", comment: ""))
                                 return
                                 })
                             } catch BackendError.badResponse {
                                 await MainActor.run(body: {
-                                    errorAlert(tittle: "Ошибка", message: "Сервер не отвечает")
+                                    errorAlert(tittle: NSLocalizedString("error", comment: ""), message: NSLocalizedString("serverDisable", comment: ""))
                                     return
                                     })
                             } catch {
                                 await MainActor.run(body: {
-                                    errorAlert(tittle: "Ошибка", message: "Что-то пошло не так")
+                                    errorAlert(tittle: NSLocalizedString("error", comment: ""), message: NSLocalizedString("smthWentWrong", comment: ""))
                                     return
                                     })
                             }
