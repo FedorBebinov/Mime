@@ -50,6 +50,13 @@ extension UIColor{
         return UIColor(red: 0/255, green: 0/255, blue: 0/255, alpha: 0.3)
     }
     
+    static let buttonSelectColor = UIColor { traitCollection in
+        if traitCollection.userInterfaceStyle == .dark {
+            return UIColor(red: 31/255, green: 31/255, blue: 31/255, alpha: 1)
+        }
+        return UIColor(red: 245/255, green: 245/255, blue: 245/255, alpha: 1)
+    }
+    
     static let buttonTextColor = UIColor(red: 245/255, green: 245/255, blue: 245/255, alpha: 1)
     static let borderColor = UIColor(red: 54/255, green: 54/255, blue: 54/255, alpha: 1)
     static let separatorColor = UIColor(red: 90/255, green: 90/255, blue: 90/255, alpha: 1)

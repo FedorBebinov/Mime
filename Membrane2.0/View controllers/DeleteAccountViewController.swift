@@ -35,7 +35,7 @@ class DeleteAccountViewController: UIViewController{
         return button
     }()
     
-    private lazy var deleteAccountButton = MainFactory.mainButton(text: NSLocalizedString("deleteAccount", comment: ""))
+    private lazy var deleteAccountButton = MainFactory.redMainButton(text: NSLocalizedString("deleteAccount", comment: ""))
     
     override func viewDidLoad() {
         super.viewDidLoad()

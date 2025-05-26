@@ -163,7 +163,7 @@ class EditUserInfoViewController: UIViewController{
         ])
         
         view.addSubview(saveIndicatorImage)
-        let topInset: CGFloat = UIScreen.main.bounds.height <= 736 ? 20 : 71
+        //let topInset: CGFloat = UIScreen.main.bounds.height <= 736 ? 20 : 71
         NSLayoutConstraint.activate([
             saveIndicatorImage.centerXAnchor.constraint(equalTo: layoutView.centerXAnchor),
             saveIndicatorImage.centerYAnchor.constraint(equalTo: layoutView.centerYAnchor)

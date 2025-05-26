@@ -24,6 +24,20 @@ final class MainFactory{
         return button
     }
     
+    static func redMainButton(text: String) -> UIButton {
+        let button: UIButton = UIButton()
+        button.backgroundColor = .buttonColor
+        let attributes: [NSAttributedString.Key: Any] = [.font: UIFont.fontWithSize(size: 18)!]
+        let attributedString = NSAttributedString(string: text, attributes: attributes)
+        button.layer.cornerRadius = 40
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setAttributedTitle(attributedString, for: .normal)
+        button.layer.borderColor = UIColor.borderColor.cgColor
+        button.layer.borderWidth = 1.5
+        button.setTitleColor(.destructiveRed, for: .normal)
+        return button
+    }
+    
     static func disabledMainButton(text: String) -> UIButton {
         let button: UIButton = UIButton()
         button.backgroundColor = .buttonColor
@@ -120,7 +134,7 @@ final class MainFactory{
         let image = UIImage(named: imageName)?.withRenderingMode(.alwaysTemplate)
         button.setImage(image, for: .normal)
         button.tintColor = .textColor
-        button.touchAreaInsets = UIEdgeInsets(top: 20, left: 40, bottom: 20, right: 40)
+        button.touchAreaInsets = UIEdgeInsets(top: 25, left: 40, bottom: 25, right: 40)
         return button
     }
         

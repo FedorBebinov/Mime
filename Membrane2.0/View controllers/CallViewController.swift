@@ -581,7 +581,7 @@ class CallViewController: UIViewController, MessageServiceDelegate {
     
     @objc
     private func shareButtonTapped(){
-        guard let roomId = self.roomId else{
+        guard self.roomId != nil else{
             return
         }
         

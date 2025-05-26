@@ -17,7 +17,7 @@ class ChooseShapeViewController: UIViewController {
     
     private var shapeIndex = 0
     private var gradientIndex = 0
-                                                                                                               
+    
     private lazy var avatarView = MainFactory.avatarView()
     
     private lazy var avatarsCollectionView: UICollectionView = {
@@ -28,26 +28,15 @@ class ChooseShapeViewController: UIViewController {
         var collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: layout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.isPagingEnabled = true
-        //collectionView.backgroundColor = .white
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.register(AvatarView.self, forCellWithReuseIdentifier: "AvatarCell")
         return collectionView
     }()
     
-    private lazy var rightButton: UIButton = {
-        let image = UIImage(resource: .rightArrow).withRenderingMode(.alwaysTemplate)
-        let button = MainFactory.imageButton(image: image)
-        button.tintColor = .textColor
-        return button
-    }()
+    private lazy var rightButton = MainFactory.imageButtonTemplate(imageName: "rightArrow")
     
-    private lazy var leftButton: UIButton = {
-        let image = UIImage(resource: .leftArrow).withRenderingMode(.alwaysTemplate)
-        let button = MainFactory.imageButton(image: image)
-        button.tintColor = .textColor
-        return button
-    }()
+    private lazy var leftButton =  MainFactory.imageButtonTemplate(imageName: "leftArrow")
     
     private lazy var pinkWhiteButton = MainFactory.imageButton(imageName: "pinkWhiteCircle")
     
@@ -63,8 +52,32 @@ class ChooseShapeViewController: UIViewController {
     
     private lazy var chooseShapeLabel = MainFactory.topLabel(text: NSLocalizedString("chooseFigure", comment: ""))
     
+    private var colorButtonContainers: [UIView] = []
+    
+    private lazy var colorButtons: [UIButton] = [
+        pinkWhiteButton,
+        grayWhiteButton,
+        pinkOrangeButton,
+        yellowOrangeButton,
+        purplePinkButton
+    ]
+
     private lazy var colorButtonsStackView: UIStackView = {
-        var stackView = UIStackView(arrangedSubviews: [pinkWhiteButton, grayWhiteButton, pinkOrangeButton, yellowOrangeButton, purplePinkButton])
+        colorButtonContainers = colorButtons.map { button in
+            let container = UIView()
+            container.translatesAutoresizingMaskIntoConstraints = false
+            container.addSubview(button)
+            NSLayoutConstraint.activate([
+                button.centerXAnchor.constraint(equalTo: container.centerXAnchor),
+                button.centerYAnchor.constraint(equalTo: container.centerYAnchor),
+                button.widthAnchor.constraint(equalToConstant: 40),   // Размер круга
+                button.heightAnchor.constraint(equalToConstant: 40)
+            ])
+            container.widthAnchor.constraint(equalToConstant: 60).isActive = true // чуть больше, для бордера
+            container.heightAnchor.constraint(equalToConstant: 60).isActive = true
+            return container
+        }
+        let stackView = UIStackView(arrangedSubviews: colorButtonContainers)
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .horizontal
         stackView.spacing = 15
@@ -113,6 +126,7 @@ class ChooseShapeViewController: UIViewController {
         pinkOrangeButton.addTarget(self, action: #selector(pinkOrangeButtonTapped), for: .touchUpInside)
         yellowOrangeButton.addTarget(self, action: #selector(yellowOrangeButtonTapped), for: .touchUpInside)
         purplePinkButton.addTarget(self, action: #selector(purplePinkButtonTapped), for: .touchUpInside)
+        
         NSLayoutConstraint.activate([
             colorButtonsStackView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             colorButtonsStackView.bottomAnchor.constraint(equalTo: doneButton.topAnchor, constant: -20)])
@@ -130,10 +144,10 @@ class ChooseShapeViewController: UIViewController {
             avatarsCollectionView.topAnchor.constraint(equalTo: chooseShapeLabel.bottomAnchor, constant: 67),
             avatarsCollectionView.bottomAnchor.constraint(equalTo: colorButtonsStackView.topAnchor, constant: -30)])
         
-       
         
+        updateColorSelection()
         /*view.addSubview(avatarView)
-        NSLayoutConstraint.activate([avatarView.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor, constant: -50), avatarView.centerXAnchor.constraint(equalTo: view.centerXAnchor)])*/
+         NSLayoutConstraint.activate([avatarView.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor, constant: -50), avatarView.centerXAnchor.constraint(equalTo: view.centerXAnchor)])*/
         
     }
     
@@ -159,6 +173,25 @@ class ChooseShapeViewController: UIViewController {
     
     private func updateGradient(){
         avatarsCollectionView.reloadData()
+    }
+    
+    private func updateColorSelection(animated: Bool = true) {
+        for (index, container) in colorButtonContainers.enumerated() {
+            if index == gradientIndex {
+                container.layer.borderColor = UIColor.buttonSelectColor.cgColor
+                container.layer.borderWidth = 10
+                container.layer.cornerRadius = 30
+                container.layer.masksToBounds = false
+                container.layer.shadowColor = UIColor.shadowColor.cgColor
+                container.layer.shadowOpacity = 0.22
+                container.layer.shadowOffset = CGSize(width: 0, height: 2)
+                container.layer.shadowRadius = 4
+            } else {
+                container.layer.borderWidth = 0
+                container.layer.borderColor = nil
+                container.layer.shadowOpacity = 0
+            }
+        }
     }
     
     @objc
@@ -199,30 +232,35 @@ class ChooseShapeViewController: UIViewController {
     private func pinkWhiteButtonTapped(){
         gradientIndex = 0
         updateGradient()
+        updateColorSelection()
     }
     
     @objc
     private func grayWhiteButtonTapped(){
         gradientIndex = 1
         updateGradient()
+        updateColorSelection()
     }
     
     @objc
     private func pinkOrangeButtonTapped(){
         gradientIndex = 2
         updateGradient()
+        updateColorSelection()
     }
     
     @objc
     private func yellowOrangeButtonTapped(){
         gradientIndex = 3
         updateGradient()
+        updateColorSelection()
     }
     
     @objc
     private func purplePinkButtonTapped(){
         gradientIndex = 4
         updateGradient()
+        updateColorSelection()
     }
 }
 
@@ -245,5 +283,5 @@ extension ChooseShapeViewController: UICollectionViewDelegate, UICollectionViewD
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: collectionView.frame.width, height: collectionView.frame.height)
-        }
+    }
 }

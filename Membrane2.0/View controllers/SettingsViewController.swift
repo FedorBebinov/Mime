@@ -63,7 +63,7 @@ class SettingsViewController: UIViewController {
         return button
     }()
     
-    private lazy var exitAccountButton = MainFactory.deleteButton(text: NSLocalizedString("logout", comment: ""))
+    private lazy var logoutButton = MainFactory.mainButton(text: NSLocalizedString("logout", comment: ""))
     
     private lazy var helpSeparator = MainFactory.paleSeparator()
     
@@ -77,9 +77,9 @@ class SettingsViewController: UIViewController {
     
     private lazy var notificationsSeparator = MainFactory.paleSeparator()
     
-    private lazy var exitTopSeparator = MainFactory.separator()
+   // private lazy var exitTopSeparator = MainFactory.separator()
 
-    private lazy var exitBottomSeparator = MainFactory.separator()
+    //private lazy var exitBottomSeparator = MainFactory.separator()
 
     
     private lazy var timePicker: UIDatePicker = {
@@ -119,14 +119,14 @@ class SettingsViewController: UIViewController {
         view.addSubview(timePicker)
         view.addSubview(helpButton)
         view.addSubview(accountButton)
-        view.addSubview(exitAccountButton)
+        view.addSubview(logoutButton)
         view.addSubview(helpSeparator)
         view.addSubview(whiteThemeSeparator)
         view.addSubview(soundSeparator)
         view.addSubview(hapticSeparator)
         view.addSubview(notificationsSeparator)
-        view.addSubview(exitTopSeparator)
-        view.addSubview(exitBottomSeparator)
+        //view.addSubview(exitTopSeparator)
+        //view.addSubview(exitBottomSeparator)
         view.addSubview(accountSeparator)
         
         switchWhiteTheme.isOn = UserDefaults.standard.bool(forKey: "WhiteTheme")
@@ -144,11 +144,9 @@ class SettingsViewController: UIViewController {
         switchSound.addTarget(self, action: #selector(switchSoundButtonTapped), for: .valueChanged)
         switchNotifications.addTarget(self, action: #selector(switchNotificationsButtonTapped), for: .valueChanged)
         timePicker.addTarget(self, action: #selector(timePickerValueChanged), for: .valueChanged)
-        exitAccountButton.addTarget(self, action: #selector(logoutButtonTapped), for: .touchUpInside)
+        logoutButton.addTarget(self, action: #selector(logoutButtonTapped), for: .touchUpInside)
         helpButton.addTarget(self, action: #selector(helpTapped), for: .touchUpInside)
         accountButton.addTarget(self, action: #selector(accountTapped), for: .touchUpInside)
-        exitAccountButton.setContentHuggingPriority(.required, for: .horizontal)
-        exitAccountButton.setContentCompressionResistancePriority(.required, for: .horizontal)
         
         NSLayoutConstraint.activate([
             settingsLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
@@ -221,10 +219,10 @@ class SettingsViewController: UIViewController {
             timePicker.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -15),
             timePicker.centerYAnchor.constraint(equalTo: timeLabel.centerYAnchor),
         
-            exitAccountButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            exitAccountButton.heightAnchor.constraint(equalToConstant: 25),
-            //exitAccountButton.widthAnchor.constraint(equalToConstant: 192),
-            exitAccountButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -50),
+            logoutButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            logoutButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            logoutButton.heightAnchor.constraint(equalToConstant: 80),
+            logoutButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -39),
         
             helpSeparator.leadingAnchor.constraint(equalTo: helpLabel.leadingAnchor),
             helpSeparator.trailingAnchor.constraint(equalTo: helpButton.trailingAnchor),
@@ -256,7 +254,7 @@ class SettingsViewController: UIViewController {
             notificationsSeparator.topAnchor.constraint(equalTo: notificationsLabel.bottomAnchor, constant: 12.5),
             notificationsSeparator.heightAnchor.constraint(equalToConstant: 1),
         
-            exitTopSeparator.heightAnchor.constraint(equalToConstant: 1),
+            /*exitTopSeparator.heightAnchor.constraint(equalToConstant: 1),
             exitTopSeparator.leadingAnchor.constraint(equalTo: exitAccountButton.leadingAnchor),
             exitTopSeparator.trailingAnchor.constraint(equalTo: exitAccountButton.trailingAnchor),
             exitTopSeparator.bottomAnchor.constraint(equalTo: exitAccountButton.topAnchor),
@@ -264,7 +262,7 @@ class SettingsViewController: UIViewController {
             exitBottomSeparator.heightAnchor.constraint(equalToConstant: 1),
             exitBottomSeparator.trailingAnchor.constraint(equalTo: exitAccountButton.trailingAnchor),
             exitBottomSeparator.leadingAnchor.constraint(equalTo: exitAccountButton.leadingAnchor),
-            exitBottomSeparator.topAnchor.constraint(equalTo: exitAccountButton.bottomAnchor)])
+            exitBottomSeparator.topAnchor.constraint(equalTo: exitAccountButton.bottomAnchor)*/])
     }
     
     @objc
@@ -273,13 +271,16 @@ class SettingsViewController: UIViewController {
         if switchWhiteTheme.isOn {
             UserDefaults.standard.setValue(switchWhiteTheme.isOn, forKey: "WhiteTheme")
             appearance = .light
-            navigationController?.navigationBar.tintColor = .textColor //UIColor(red: 31/255, green: 31/255, blue: 31/255, alpha: 1)
-            UIApplication.shared.keyWindow?.overrideUserInterfaceStyle = appearance
+            navigationController?.navigationBar.tintColor = .textColor
         } else {
             UserDefaults.standard.setValue(switchWhiteTheme.isOn, forKey: "WhiteTheme")
             appearance = .dark
-            UIApplication.shared.keyWindow?.overrideUserInterfaceStyle = appearance
-            navigationController?.navigationBar.tintColor = .textColor //UIColor(red: 245/255, green: 245/255, blue: 245/255, alpha: 1)
+            navigationController?.navigationBar.tintColor = .textColor
+        }
+        
+        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+           let window = windowScene.windows.first {
+            window.overrideUserInterfaceStyle = appearance
         }
     }
     
